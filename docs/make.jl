@@ -38,8 +38,12 @@ for (i, (title, filename)) in enumerate(tutorials)
     tutorial_title = string("# # Tutorial ", i, ": ", title)
     tutorial_file = string(i, "_", splitext(filename)[1])
     notebook_filename = string(tutorial_file, ".ipynb")
-    binder_url = replace(joinpath("@__BINDER_ROOT_URL__", "..", "examples", notebook_filename), "gh-pages" => "main")
-    nbviwer_url = replace(joinpath("@__NBVIEWER_ROOT_URL__", "..", "examples", notebook_filename), "gh-pages" => "main")
+
+    pages2main = Base.Fix2(replace, "gh-pages" => "main")
+    fixpath = Base.Fix2(replace, r"filepath=.*"=>"filepath=examples/$notebook_filename")
+
+    binder_url = "@__BINDER_ROOT_URL__" |> pages2main |> fixpath
+    nbviwer_url = "@__NBVIEWER_ROOT_URL__" |> pages2main |> fixpath
     binder_badge = string("# [![](", binder_logo, ")](", binder_url, ")")
     nbviwer_badge = string("# [![](", nbviwer_logo, ")](", nbviwer_url, ")")
 

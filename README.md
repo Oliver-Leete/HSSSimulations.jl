@@ -1,6 +1,6 @@
 # HSSSimulations.jl
 
-[![Stable docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://Oliver-Leete.github.io/HSSSimulations.jl/stable)
+[![Stable docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://Oliver-Leete.github.io/HSSSimulations.jl)
 [![Dev docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://Oliver-Leete.github.io/HSSSimulations.jl/dev)
 
 A package to simulate High Speed Sintering (HSS) by treating the powder bed as
