@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Boundaries · Powder Model Documentation</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Powder Model Documentation</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../../tutorials/1_full_tut/">1 Full Build</a></li><li><a class="tocitem" href="../../tutorials/2_basic_tut/">2 Warm-up and Cool-down only</a></li><li><a class="tocitem" href="../../tutorials/3_material_tut/">3 A Melt Rate Based Material Model</a></li><li><a class="tocitem" href="../../tutorials/4_res_tut/">4 Saving More Results</a></li></ul></li><li><span class="tocitem">Reference</span><ul><li><input class="collapse-toggle" id="menuitem-3-1" type="checkbox"/><label class="tocitem" for="menuitem-3-1"><span class="docs-label">Public API</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/api/">Main API</a></li><li><a class="tocitem" href="../../reference/api_adv/">Advanced API</a></li><li><a class="tocitem" href="../../reference/BoundaryExamples/">HSS Boundary</a></li><li><a class="tocitem" href="../../reference/PostProcessing/">Post proccessing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3-2" type="checkbox"/><label class="tocitem" for="menuitem-3-2"><span class="docs-label">Internals</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/internal_api/">Internal APIs</a></li><li><a class="tocitem" href="../../reference/internals/">Private Internals</a></li></ul></li></ul></li><li><span class="tocitem">Recipes</span><ul><li><a class="tocitem" href="../howto_ink/">Ink Patterns</a></li><li><a class="tocitem" href="../howto_subsets/">Simulate Subsets of a Build</a></li><li><a class="tocitem" href="../howto_mat/">Materials</a></li><li><a class="tocitem" href="../howto_matprop/">Material Models</a></li><li><a class="tocitem" href="../howto_result/">Results</a></li><li><a class="tocitem" href="../howto_load/">Loads and Load Sets</a></li><li class="is-active"><a class="tocitem" href>Boundaries</a><ul class="internal"><li><a class="tocitem" href="#A-Fixed-Heat-Flux-Boundary"><span>A Fixed Heat Flux Boundary</span></a></li><li><a class="tocitem" href="#A-Variable-Heat-Flux-Boundary"><span>A Variable Heat Flux Boundary</span></a></li><li><a class="tocitem" href="#A-Cooling-Recoat-Boundary"><span>A Cooling Recoat Boundary</span></a></li><li><a class="tocitem" href="#A-Cooling-Recoat-Return-Boundary"><span>A Cooling Recoat Return Boundary</span></a></li></ul></li><li><a class="tocitem" href="../howto_param/">Problem Parameters</a></li><li><a class="tocitem" href="../howto_loadset/">Load Set Types</a></li><li><a class="tocitem" href="../howto_problem/">Problem Solvers</a></li></ul></li><li><span class="tocitem">Explanation</span><ul><li><a class="tocitem" href="../../explanation/HSSBoundary/">HSS Boundary</a></li><li><a class="tocitem" href="../../reference/MaterialExamples/">Material examples</a></li><li><a class="tocitem" href="../../explanation/faqs/">FAQs</a></li></ul></li><li><a class="tocitem" href="../../doc_index/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Recipes</a></li><li class="is-active"><a href>Boundaries</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Boundaries</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/Oliver-Leete/HSSSimulations.jl/blob/main/docs/src/howtos/howto_bound.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Boundary-Recipes"><a class="docs-heading-anchor" href="#Boundary-Recipes">Boundary Recipes</a><a id="Boundary-Recipes-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-Recipes" title="Permalink"></a></h1><p><a href="../../reference/api_adv/#HSSSimulations.Types.AbstractBoundary"><code>AbstractBoundary</code></a> and <a href="../../reference/api_adv/#HSSSimulations.Types.boundaryHeatTransferRate"><code>boundaryHeatTransferRate</code></a> are your places to go for more information.</p><h2 id="A-Fixed-Heat-Flux-Boundary"><a class="docs-heading-anchor" href="#A-Fixed-Heat-Flux-Boundary">A Fixed Heat Flux Boundary</a><a id="A-Fixed-Heat-Flux-Boundary-1"></a><a class="docs-heading-anchor-permalink" href="#A-Fixed-Heat-Flux-Boundary" title="Permalink"></a></h2><pre><code class="language-julia hljs">struct FixedHeatFluxBoundary &lt;: AbstractBoundary
+    # Here goes the parameters that we will have access to in this boundaries
+    # method for the boundaryHeatTransferRate. We wont actually have any for
+    # this boundary
+    # heat flux we want to use as the fixed value.
+
+    # Our new boundary has to have a constructor that meets the signature
+    # requirements detailed in the AbstractBoundary documentation. For this
+    # boundary we don&#39;t need any of the inputs so we&#39;ll just discard them.
+    FixedHeatFluxBoundary(_, _, _, _) = new()
+end</code></pre><p>This boundary needs to implement a method for the <a href="../../reference/api_adv/#HSSSimulations.Types.boundaryHeatTransferRate"><code>boundaryHeatTransferRate</code></a> function. This is what will be called on each node of the simulation that is on the boundary. As with the constructor, our simple boundary can ignore all the fields.</p><pre><code class="language-julia hljs">function Types.boundaryHeatTransferRate(_, _, _::FixedHeatFluxBoundary)
+    # Return a floating point representing the heat flux density
+    return 10.0
+end</code></pre><h2 id="A-Variable-Heat-Flux-Boundary"><a class="docs-heading-anchor" href="#A-Variable-Heat-Flux-Boundary">A Variable Heat Flux Boundary</a><a id="A-Variable-Heat-Flux-Boundary-1"></a><a class="docs-heading-anchor-permalink" href="#A-Variable-Heat-Flux-Boundary" title="Permalink"></a></h2><p>Let&#39;s raise the stakes a little (but not much), we&#39;ll make a new boundary that has a heat flux density that changes depending only on the current time of the simulation. We&#39;ll have to make a new <a href="../../reference/api_adv/#HSSSimulations.Types.AbstractProblemParams"><code>AbstractProblemParams</code></a> (the one used here is from <a href="../howto_param/#A-Variable-Heat-Flux-Parameter-Set">A Variable Heat Flux Parameter Set</a>)</p><pre><code class="language-julia hljs">struct FixedHeatFluxBoundary &lt;: AbstractBoundary
+    # All we need for this one is the heat flux we want to.
+    heatFluxDensity::Float64
+
+    # Our new boundary has to have a constructor that meets the signature
+    # requirements detailed in the AbstractBoundary documentation. For this
+    # boundary we only actually need two of the inputs, so we&#39;ll just discard
+    # the rest of them.
+    function RecoatCoolBoundary(_, cts, G::GVars, _)
+        # Normally a boundary&#39;s constructor would use the params field that we
+        # gave to the problem quite a bit, so it&#39;s handy to make it easier to
+        # access. In this case it will only be used once, but I&#39;ll keep this
+        # here out of good habit anyway.
+        param = G.params
+
+        # The current time step (cts) is given in, so lets grab its time to use
+        # in our heat flux function.
+        time = cts.t
+
+        heatflux = param.heatflux(time)
+
+        # Another useful field in G is the problems geometry. Here we&#39;ll use
+        # this to find out the area of a node, to convert our heat flux into a
+        # heat flux density.
+        geom = G.geometry
+        # Finding the area of the face of a node parallel to the y-axis
+        area = geom.X * geom.Z
+        heatfluxdensity = heatflux / area
+
+        return new(heatfluxdensity)
+    end
+end</code></pre><pre><code class="language-julia hljs">function Types.boundaryHeatTransferRate(_, _, p::FixedHeatFluxBoundary)
+    # Return a floating point representing the heat flux density
+    return p.heatfluxdensity
+end</code></pre><h2 id="A-Cooling-Recoat-Boundary"><a class="docs-heading-anchor" href="#A-Cooling-Recoat-Boundary">A Cooling Recoat Boundary</a><a id="A-Cooling-Recoat-Boundary-1"></a><a class="docs-heading-anchor-permalink" href="#A-Cooling-Recoat-Boundary" title="Permalink"></a></h2><p>This boundary behaves very similarly to the built-in boundary <a href="../../reference/api_adv/#HSSSimulations.HSSBound.RecoatBoundary"><code>RecoatBoundary</code></a>, but it uses the temperatures for the air and internal surfaces. It also conditionally calls <a href="../../reference/BoundaryExamples/#HSSSimulations.HSSBound.coolingStart"><code>coolingStart</code></a> to make sure that the start time of the cool down stage is set. And the lamp is turned off (even if there is a recoat lamp power set).</p><pre><code class="language-julia hljs">struct RecoatCoolBoundary &lt;: AbstractBoundary
+    # All of the parameters we need to pass into the boundaryHeatTransferRate function
+    overheadTemp::Float64
+    surfaceTemp::Float64
+    eₗ::Array{Float64,3}
+    ε::Float64
+    airTemp::Float64
+    h::Float64
+    shadow::Vector{Bool}
+    Po::Float64
+
+    function RecoatCoolBoundary(pts, cts, G::GVars, ls::LoadStep)
+        param = G.params
+
+        # Use an overhead power of 0 w
+        param.overheadTemp = overheadTemp = param.overheadHeatupFunc(0.0, param.overheadTemp, cts)
+
+        # If the coolStart hasn&#39;t been set, set it
+        if isnan(G.params.coolStart)
+            coolingStart(pts.t, cts.t, G.params)
+        end
+
+        # Find how far through the cooling parameters the current time step is
+        tAir = (cts.t - G.params.coolStart) + G.params.airCoolStart
+        tSurface = (cts.t - G.params.coolStart) + G.params.surfaceCoolStart
+
+        # Use the *Cool parameters to find the air and surface temperatures
+        airTemp = param.airCool(tAir)
+        surfaceTemp = param.surfaceCool(tSurface)
+
+        # Get the other parameters to pass through
+        eₗ = G.eᵗ
+        ε = G.matProp.ε
+        h = param.convectionCoef
+        Po = param.percentOverhead
+
+        # Calculate the position of the carriage and therefor its shadow
+        pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * cts.tₚ)
+        shadowPos = (pos - param.carriageWidth, pos)
+        shadow = movingObjOverlap(G.geometry, true, shadowPos)
+
+        # Calculate the distance across the bed the recoater has traveled, and
+        # use it to set the new nodes
+        recoatDist = pos - param.recoatOffset
+        if G.geometry.Y_OFFSET &lt; recoatDist &lt;= G.geometry.Y_OFFSET + G.geometry.Y
+            recoatDist = recoatDist - G.geometry.Y_OFFSET
+            recoating!(pts, cts, G, ls, recoatDist, surfaceTemp)
+        end
+
+        # Any new powder put down is set to have the machines ambient air
+        # temperature as it&#39;s initial temperature
+        z₂ᵣ = map(first, ls.ind.z₂)
+        for i in z₂ᵣ
+            if pts.T[i] == G.init.T[i]
+                pts.T[i] = airTemp
+            end
+        end
+
+        return new(overheadTemp, surfaceTemp, eₗ, ε, airTemp, h, shadow, Po)
+    end
+end</code></pre><p>The new method for the <a href="../../reference/api_adv/#HSSSimulations.Types.boundaryHeatTransferRate"><code>boundaryHeatTransferRate</code></a> is the same as the method use for the <a href="../../reference/api_adv/#HSSSimulations.HSSBound.RecoatBoundary"><code>RecoatBoundary</code></a> but without the lamp logic.</p><pre><code class="language-julia hljs">function Types.boundaryHeatTransferRate(T, i, p::RecoatCoolBoundary)
+    shadow = p.shadow[i[2]]
+    eₗ = p.eₗ[i]
+    return (
+        convectionFlow(T, p.airTemp, p.h) +
+        radiationFlow(T, p.surfaceTemp, p.ε) * (shadow || (1 - p.Po)) +
+        radiationFlow(T, p.overheadTemp, p.ε) * !shadow * p.Po
+    )
+end</code></pre><p>Have a look at <a href="../howto_load/#A-Cooling-Recoat-Load-and-Load-Set">A Cooling Recoat Load and Load Set</a> to see how to use this in a load.</p><h2 id="A-Cooling-Recoat-Return-Boundary"><a class="docs-heading-anchor" href="#A-Cooling-Recoat-Return-Boundary">A Cooling Recoat Return Boundary</a><a id="A-Cooling-Recoat-Return-Boundary-1"></a><a class="docs-heading-anchor-permalink" href="#A-Cooling-Recoat-Return-Boundary" title="Permalink"></a></h2><p>To make use of the above boundary, it would be handy to have a load that represents the recoat carriage returning to its initial position (going in the other direction to the above load).</p><pre><code class="language-julia hljs">struct RecoatCoolReturnBoundary &lt;: AbstractBoundary
+    overheadTemp::Float64
+    surfaceTemp::Float64
+    eₗ::Array{Float64,3}
+    ε::Float64
+    airTemp::Float64
+    h::Float64
+    shadow::Vector{Bool}
+    Po::Float64
+
+    function RecoatCoolReturnBoundary(pts, cts, G::GVars, ls::LoadStep)
+        param = G.params
+        param.overheadTemp = overheadTemp = param.overheadHeatupFunc(0.0, param.overheadTemp, cts)
+
+        # We&#39;ll still call this, in case we want to use this boundary before the previous one
+        if isnan(G.params.coolStart)
+            coolingStart(pts.t, cts.t, G.params)
+        end
+
+        tAir = (cts.t - G.params.coolStart) + G.params.airCoolStart
+        tSurface = (cts.t - G.params.coolStart) + G.params.surfaceCoolStart
+        airTemp = param.airCool(tAir)
+        surfaceTemp = param.surfaceCool(tSurface)
+        eₗ = G.eᵗ
+        ε = G.matProp.ε
+        h = param.convectionCoef
+        Po = param.percentOverhead
+
+        # Calculate the position of the carriage on its return stroke
+        pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * (1 - cts.tₚ))
+        shadowPos = (pos - param.carriageWidth, pos)
+        shadow = movingObjOverlap(G.geometry, true, shadowPos)
+
+        # No need to run any of the recoat logic for this one
+        return new(overheadTemp, surfaceTemp, eₗ, ε, airTemp, h, shadow, Po)
+    end
+end
+
+function Types.boundaryHeatTransferRate(T, i, p::RecoatCoolReturnBoundary)
+    shadow = p.shadow[i[2]]
+    eₗ = p.eₗ[i]
+    return (
+        convectionFlow(T, p.airTemp, p.h) +
+        radiationFlow(T, p.surfaceTemp, p.ε) * (shadow || (1 - p.Po)) +
+        radiationFlow(T, p.overheadTemp, p.ε) * !shadow * p.Po
+    )
+end</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../howto_load/">« Loads and Load Sets</a><a class="docs-footer-nextpage" href="../howto_param/">Problem Parameters »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Monday 19 June 2023 14:40">Monday 19 June 2023</span>. Using Julia version 1.9.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

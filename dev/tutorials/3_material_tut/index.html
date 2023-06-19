@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>3 A Melt Rate Based Material Model · Powder Model Documentation</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Powder Model Documentation</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../1_full_tut/">1 Full Build</a></li><li><a class="tocitem" href="../2_basic_tut/">2 Warm-up and Cool-down only</a></li><li class="is-active"><a class="tocitem" href>3 A Melt Rate Based Material Model</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Making-the-Material-Property-Struct"><span>Making the Material Property Struct</span></a></li><li><a class="tocitem" href="#Adding-The-New-Logic"><span>Adding The New Logic</span></a></li><li><a class="tocitem" href="#Making-a-New-Material"><span>Making a New Material</span></a></li><li><a class="tocitem" href="#The-Rest-of-the-Setup"><span>The Rest of the Setup</span></a></li></ul></li><li><a class="tocitem" href="../4_res_tut/">4 Saving More Results</a></li></ul></li><li><span class="tocitem">Reference</span><ul><li><input class="collapse-toggle" id="menuitem-3-1" type="checkbox"/><label class="tocitem" for="menuitem-3-1"><span class="docs-label">Public API</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/api/">Main API</a></li><li><a class="tocitem" href="../../reference/api_adv/">Advanced API</a></li><li><a class="tocitem" href="../../reference/BoundaryExamples/">HSS Boundary</a></li><li><a class="tocitem" href="../../reference/PostProcessing/">Post proccessing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3-2" type="checkbox"/><label class="tocitem" for="menuitem-3-2"><span class="docs-label">Internals</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/internal_api/">Internal APIs</a></li><li><a class="tocitem" href="../../reference/internals/">Private Internals</a></li></ul></li></ul></li><li><span class="tocitem">Recipes</span><ul><li><a class="tocitem" href="../../howtos/howto_ink/">Ink Patterns</a></li><li><a class="tocitem" href="../../howtos/howto_subsets/">Simulate Subsets of a Build</a></li><li><a class="tocitem" href="../../howtos/howto_mat/">Materials</a></li><li><a class="tocitem" href="../../howtos/howto_matprop/">Material Models</a></li><li><a class="tocitem" href="../../howtos/howto_result/">Results</a></li><li><a class="tocitem" href="../../howtos/howto_load/">Loads and Load Sets</a></li><li><a class="tocitem" href="../../howtos/howto_bound/">Boundaries</a></li><li><a class="tocitem" href="../../howtos/howto_param/">Problem Parameters</a></li><li><a class="tocitem" href="../../howtos/howto_loadset/">Load Set Types</a></li><li><a class="tocitem" href="../../howtos/howto_problem/">Problem Solvers</a></li></ul></li><li><span class="tocitem">Explanation</span><ul><li><a class="tocitem" href="../../explanation/HSSBoundary/">HSS Boundary</a></li><li><a class="tocitem" href="../../reference/MaterialExamples/">Material examples</a></li><li><a class="tocitem" href="../../explanation/faqs/">FAQs</a></li></ul></li><li><a class="tocitem" href="../../doc_index/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>3 A Melt Rate Based Material Model</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>3 A Melt Rate Based Material Model</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/Oliver-Leete/HSSSimulations.jl/blob/main/docs/lit/material_tut.jl" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial-3:-A-Melt-Rate-Based-Material-Model"><a class="docs-heading-anchor" href="#Tutorial-3:-A-Melt-Rate-Based-Material-Model">Tutorial 3: A Melt Rate Based Material Model</a><a id="Tutorial-3:-A-Melt-Rate-Based-Material-Model-1"></a><a class="docs-heading-anchor-permalink" href="#Tutorial-3:-A-Melt-Rate-Based-Material-Model" title="Permalink"></a></h1><p><a href="https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/gh-pages?filepath=dev/../examples/3_material_tut.ipynb"><img src="https://mybinder.org/badge_logo.svg" alt/></a> <a href="https://nbviewer.jupyter.org/github/Oliver-Leete/HSSSimulations.jl/blob/gh-pages/dev/../examples/3_material_tut.ipynb"><img src="https://img.shields.io/badge/show-nbviewer-579ACA.svg" alt/></a></p><pre><code class="language-julia hljs">using HSSSimulations</code></pre><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>This tutorial will cover how to implement the time dependent melt state model introduced in my thesis. To do this, this tutorial builds on top of the full build tutorial by adding a new material property type.</p><p>This is a proposed solution for the poor results of the melt state results found in my thesis is to model the melt state similarly to how the default material model treats the Consolidation state, making it time dependent. This has not been implemented as the default model as I don&#39;t currently have the required data, but if you have the data then you can use this implementation (my thesis should include an idea for how to get the data).</p><h2 id="Making-the-Material-Property-Struct"><a class="docs-heading-anchor" href="#Making-the-Material-Property-Struct">Making the Material Property Struct</a><a id="Making-the-Material-Property-Struct-1"></a><a class="docs-heading-anchor-permalink" href="#Making-the-Material-Property-Struct" title="Permalink"></a></h2><p>First up is the addition of a new material property struct and constructor. This is the same as the default one with the only change being the name (for dispatch reasons), and changing the <code>Mᵣ</code> and <code>Rᵣ</code> fields to <code>Ṁ</code> and <code>Ṙ</code>.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>There is not actually any functional difference (for this use case, some of the fields have been removed so this struct wouldn&#39;t work with the normal <code>meltUpdate</code> function) between this and the built in <a href="../../reference/api_adv/#HSSSimulations.Material.MatProp"><code>MatProp</code></a> type, other than the change of documentation. But by having a new type we can dispatch on it later on, to allow for our custom logic.</p></div></div><pre><code class="language-julia hljs">struct MatPropTD{T1,T2,T3,T4,T5,T6,T7,T8,T9} &lt;: Types.AbstractMatProp
+    ρ::T1
+    c::T2
+    κ::T3
+    &quot;&quot;&quot; Melting rate to temp and melt state relationship.
+    A 2d interpolation, with the first input axis being the temperature adn the
+    second the current melt state. The output is the melt rate.
+    &quot;&quot;&quot;
+    Ḟ::T4
+    &quot;&quot;&quot; Crystallisation rate to temp, melt state and maximum melt state relationship.
+    A 3d interpolation, with the first input axis being the node temperature,
+    the second the current melt state and the third the maximum melt state
+    reached. The output is the recrystalisation rate.
+    &quot;&quot;&quot;
+    Ṙ::T5
+    Hf::T6
+    Hr::T7
+    Ċ::T8
+    eₚ::Float64
+    eᵢ::Float64
+    ε::Float64
+    name::String
+    Mₘ::T9
+end</code></pre><p>As well as copying the old type, we&#39;ll also copy its constructor, to give us a more convineient way of constructing it from our experimental data. Again, this is the same as before, just with a change of name.</p><pre><code class="language-julia hljs">function MatPropTD(ρ, c, κ, Ṁ, Ṙ, Hf, Hr, Ċ, eₚ, eᵢ, ε, name, geometry)
+    geomSize = (geometry.X, geometry.Y, geometry.Z)
+    Mₘ = zeros(geomSize)
+
+    return MatPropTD{
+        typeof(ρ), typeof(c), typeof(κ),
+        typeof(Ṁ), typeof(Ṙ), typeof(Hf), typeof(Hr),
+        typeof(Ċ), typeof(Mₘ),
+    }(
+        ρ, c, κ,
+        Ṁ, Ṙ, Hf, Hr,
+        Ċ,
+        eₚ, eᵢ, ε,
+        name, Mₘ,
+    )
+end</code></pre><h2 id="Adding-The-New-Logic"><a class="docs-heading-anchor" href="#Adding-The-New-Logic">Adding The New Logic</a><a id="Adding-The-New-Logic-1"></a><a class="docs-heading-anchor-permalink" href="#Adding-The-New-Logic" title="Permalink"></a></h2><p>Now we have the new type, we can use it with julia&#39;s multiple dispatch to change what method is called when the simulation goes to update the melt state. This is done by making a new method for <a href="../../reference/api_adv/#HSSSimulations.Material.meltUpdate"><code>Material.meltUpdate</code></a> that specifies our new type in place of the default <a href="../../reference/api_adv/#HSSSimulations.Material.MatProp"><code>MatProp</code></a> type. Refer to my thesis if you need an explanation as to what has changed here from the default method.</p><pre><code class="language-julia hljs">function Material.meltUpdate(Mᵗ⁻¹, T, Mₘ, Δt, mp::MatPropTD)
+    ṀF = mp.Ḟ(T, Mᵗ⁻¹)
+    ṀR = mp.Ṙ(T, Mᵗ⁻¹, Mₘ)
+
+    if ṀF &gt; -ṀR
+        ΔM = ṀF * Δt
+        ΔH = ΔM * mp.Hf
+    else
+        ΔM = ṀR * Δt
+        ΔH = ΔM * mp.Hr(Mₘ)
+    end
+    Mᵗ = min(max(Mᵗ⁻¹ + ΔM, 0), 1)
+    Mₘ = max(Mᵗ, Mₘ)
+
+    return Mᵗ, Mₘ, Δh
+end</code></pre><p>If we needed more arguments to be passed in to this function, or wanted to change other properties of the material model, we could define a new method for <a href="../../reference/api_adv/#HSSSimulations.Material.calcMatProps!"><code>Material.calcMatProps!</code></a>. For an example of this, you can check out <a href="../../howtos/howto_matprop/#A-Basic-Material-Model">A Basic Material Model</a>. <a href="../../reference/api_adv/#HSSSimulations.Material.consUpdate"><code>Material.consUpdate</code></a> is also dispatched on the material property struct, so that can also be modified sepreatly without having to rewrite the entire material model.</p><h2 id="Making-a-New-Material"><a class="docs-heading-anchor" href="#Making-a-New-Material">Making a New Material</a><a id="Making-a-New-Material-1"></a><a class="docs-heading-anchor-permalink" href="#Making-a-New-Material" title="Permalink"></a></h2><p>We&#39;ll use PA2200 as our material, using most of the values from the default type. The only changes will be our two melt rate relationship fields. To fill in the values for these fields we&#39;ll use interpolated arrays, so first lets add the interpolations package:</p><pre><code class="language-julia hljs">using Interpolations</code></pre><p>Then we can use this to create a 2D interpolation for <code>Ṁ</code> that does what we said we want it to do.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The data presented here is totally fictional and should be replaced with actual data.</p></div></div><p>To do this you will need the values corrisponding to the inputs of the data, so for example if we recorded the melt rate at temperatures of 170°C, 180°C and 190°C then we could define</p><pre><code class="language-julia hljs">melt_temps = [170, 180, 190]</code></pre><p>And if we made those measurements at melt states of 0 and 1</p><pre><code class="language-julia hljs">melt_state = [0, 1]</code></pre><p>We can then define the outputs, what the value of the melt rates measured for each of those states, where the x-axis of the array is the temperature and the y-axis is the melt state. So for this example, we have a melt rate of <code>0.03</code> at <code>M=0</code> at a temperature of 190°C.</p><pre><code class="language-julia hljs">melt_rate = [
+    0 0.02 0.03
+    0 0.01 0.02
+]</code></pre><p>Then we can use these to make the linear interpolation that will be used in the simulation. Where the first argument is a tuple of our inputs and the second is our outputs. The key word argument defines how the values should be extrapolated if an input is given outside of the range of the inputs we&#39;ve provided. Check out <a href="https://juliamath.github.io/Interpolations.jl/latest/extrapolation/">the Interpolations.jl docs</a> for more info on these.</p><pre><code class="language-julia hljs">PA_Ṁ = linear_interpolation(
+    (melt_temps, melt_state),
+    melt_rate;
+    extrapolation_bc=Flat(),
+)</code></pre><p>You can test out what this does by trying to index into it with values other than those given, it should return values linearly interpolated between the ones you gave.</p><pre><code class="language-julia hljs">PA_Ṁ[175, 0.5]</code></pre><p>Then we can do a similar thing for the recrystalisation rate. Although here we need an extra input, the maximum melt state that was reached before recrystalisation began.</p><pre><code class="language-julia hljs">recryst_temps = [150, 180]
+melt_state = [0, 1]
+melt_max = [0, 1]</code></pre><p>And because we have an extra input, the output needs to have an extra dimension. The triple semicolon is used to concatinate in the 3rd dimension. So the 2×2 array befor the triple semicolon is the melt rate for a melt max of 0 and the one after is for a melt max of 1.</p><pre><code class="language-julia hljs">recryst_rate = [
+    0.1 0;
+    0.5 0
+    ;;;
+    0.2 0;
+    0.8 0
+]
+
+PA_Ṙ = linear_interpolation(
+    (recryst_temps, melt_state, melt_max),
+    recryst_rate;
+    extrapolation_bc=Flat(),
+)</code></pre><p>And like before, we can gives this a go.</p><pre><code class="language-julia hljs">PA_Ṙ[160, 0.2, 0.733]</code></pre><p>And finally this can all go together to make our material, but like before we need to make a geometry to pass in to the material propetry constructor.</p><pre><code class="language-julia hljs">geometry = Geometry(
+    (0.016, 0.016, 0.0122),
+    0.001,
+    1.5e-3;
+    Δz=0.003 / 90,
+    Δh=0.0001,
+    offset=(0.0925, 0.1425),
+    buildSize=(0.200, 0.300),
+    name=&quot;30 layers preheat, 50 pre square pad layers 32 layer thich square and 10 post square padding layers&quot;,
+)
+
+material = MatPropTD(
+    Material.PA_ρ(),
+    Material.PA_c(),
+    Material.PA_κ(),
+    PA_TD_M,
+    PA_TD_R,
+    Material.PA_Hf(),
+    Material.PA_Hr(),
+    Material.PA_Ċ,
+    Material.PA_eₚ,
+    Material.PA_eᵢ,
+    Material.PA_ε,
+    &quot;Time dependent PA2200&quot;,
+    geometry,
+)</code></pre><h2 id="The-Rest-of-the-Setup"><a class="docs-heading-anchor" href="#The-Rest-of-the-Setup">The Rest of the Setup</a><a id="The-Rest-of-the-Setup-1"></a><a class="docs-heading-anchor-permalink" href="#The-Rest-of-the-Setup" title="Permalink"></a></h2><p>From here on it&#39;s just the same as our other simulations.</p><pre><code class="language-julia hljs">params = HSSParams(geometry)
+loadSets = HSSLoads(4, geometry; nrPreheat=90, lenPreheat=10.0, nrCool=90, lenCool=10.0)
+
+size = (geometry.X, geometry.Y, geometry.Z)
+init = Result(size, 25.0, 0.0, 0.0, 0.0, 0)
+initialLayer = 10
+
+inkArray = fill(material.eₚ, size)
+inkArray[5:end-4, 5:end-4, 60:end-10] .= material.eᵢ
+ink = Ink(inkArray, &quot;Sample square&quot;)
+
+file = &quot;material_model_tutorial.jld2&quot;
+description = &quot;A simulation to test a time dependent melt model&quot;
+
+problem = Problem(;
+    geometry=geometry,
+    matProp=material,
+    params=params,
+    preheatLoads=preheatLoads,
+    buildLoads=buildLoads,
+    cooldownLoads=cooldownLoads,
+    init=init,
+    initLay=initialLayer,
+    ink=ink,
+    file=file,
+    description=description,
+)
+
+resultFile, finalResults = problemSolver(problem)</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../2_basic_tut/">« 2 Warm-up and Cool-down only</a><a class="docs-footer-nextpage" href="../4_res_tut/">4 Saving More Results »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Monday 19 June 2023 14:40">Monday 19 June 2023</span>. Using Julia version 1.9.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
