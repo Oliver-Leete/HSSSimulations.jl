@@ -1,5 +1,7 @@
 module PlottingExt
 
+# TODO : split up the plotting functions into subfiles, and generalise them a bit better
+
 using HSSSimulations
 
 using LaTeXStrings

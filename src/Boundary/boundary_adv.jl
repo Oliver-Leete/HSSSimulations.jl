@@ -11,7 +11,7 @@ function recoating!(
     pts::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    ls::LoadStep,
+    ls::Types.LoadStep,
     recoatDist,
     temp,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}

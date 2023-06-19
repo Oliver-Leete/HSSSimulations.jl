@@ -29,7 +29,7 @@ function InkBoundary(
     _::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    ls::LoadStep,
+    ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     param = G.params
 

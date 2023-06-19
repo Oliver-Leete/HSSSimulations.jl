@@ -42,7 +42,7 @@ function OverheadsBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    ls::LoadStep,
+    ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     param = G.params
 
@@ -122,7 +122,7 @@ function OverheadsCoolBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    _::LoadStep,
+    _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     param = G.params
 

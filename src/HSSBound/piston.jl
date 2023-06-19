@@ -25,7 +25,7 @@ function PistonBoundary(
     _::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    _::LoadStep,
+    _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     pistonTemp = G.params.pistonHeat(cts.t)
     @debug "PistonBoundary" _group = "hss" pistonTemp
@@ -53,7 +53,7 @@ function PistonCoolBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
     G::GVars{T,Gh,Mp,R,OR,B},
-    _::LoadStep,
+    _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     if isnan(G.params.coolStart)
         coolingStart(pts.t, cts.t, G.params)

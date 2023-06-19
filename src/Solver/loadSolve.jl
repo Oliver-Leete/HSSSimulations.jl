@@ -3,7 +3,7 @@ $(TYPEDSIGNATURES)
 
 Solves a single load and returns an array of the results.
 """
-function loadSolver!(ls::LoadStep, results, G::GVars)
+function loadSolver!(ls::Types.LoadStep, results, G::GVars)
     @debug "Starting loadStep $(ls.name) t=$(ls.time.tₛ)" _group = "core"
 
     # Obey the progress bar option

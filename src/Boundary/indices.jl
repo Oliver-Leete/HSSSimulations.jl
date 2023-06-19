@@ -36,7 +36,7 @@ function calcInds(res, ghost, ΔH, recoatLoadSet)
 
     iₘ = iᵣ[cld(length(iᵣ), 2)]
 
-    return Indices(iᵣ, iᵢ, x₁, x₂, y₁, y₂, z₁, z₂, iₘ, ΔH)
+    return Types.Indices(iᵣ, iᵢ, x₁, x₂, y₁, y₂, z₁, z₂, iₘ, ΔH)
 end
 
 @testitem "calcInds" begin
@@ -109,7 +109,7 @@ Updates an indices struct during a load step. Used to update the real and imagin
 recoat of the powder layer based on the `recoatDist` (how far through the layer the powder has
 been deposited in number of nodes into the simulation area).
 """
-function updateInds!(indStruct::Indices, recoatDist, resSize, ghost)
+function updateInds!(indStruct::Types.Indices, recoatDist, resSize, ghost)
     ind = CartesianIndices(resSize)
     x, y, z = resSize
     gInd = CartesianIndices(ghost)

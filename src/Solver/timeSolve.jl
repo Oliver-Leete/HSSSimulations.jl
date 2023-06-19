@@ -13,12 +13,12 @@ load specifies). The results are stored in the Results struct cr that is passed 
 function timeSolver!(
     cts::AbstractResult,
     pts::AbstractResult,
-    ls::LoadStep,
+    ls::Types.LoadStep,
     G::GVars,
 )
     @debug "Starting timestep t=$(cts.t)" _group = "core"
     calcMatProps!(pts, cts, G, ls.ind.iᵣ)
-    padWithGhost!(pts, cts, ls, G)
+    Boundary.padWithGhost!(pts, cts, ls, G)
     fdmSolver!(cts, ls.ind.iᵣ, G)
     @debug "FDM solver" _group = "solver" cts.T[ls.ind.iₘ]
     nanfiller!(cts, ls.ind.iᵢ)

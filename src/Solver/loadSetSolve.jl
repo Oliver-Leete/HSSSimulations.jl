@@ -121,15 +121,15 @@ function innerLoadSetSolver!(
     result.M[:, :, zInit] = initResult.M[:, :, zInit]
     result.C[:, :, zInit] = initResult.C[:, :, zInit]
 
-    inds = calcInds(resultSize, G.Tᵗ⁻¹, G.geometry.ΔH, recoat)
+    inds = Boundary.calcInds(resultSize, G.Tᵗ⁻¹, G.geometry.ΔH, recoat)
 
     for (index, load) in enumerate(loads)
         resultDirectory = "$(name)/$(index)"
         push!(G.resultsIndex, resultDirectory)
 
-        loadStep = LoadStep(;
+        loadStep = Types.LoadStep(;
             load=load,
-            time=LoadTime(result.t, load.tₗ, G.geometry.Δt, load.skip),
+            time=Types.LoadTime(result.t, load.tₗ, G.geometry.Δt, load.skip),
             size=resultSize,
             ind=inds,
             init=result,

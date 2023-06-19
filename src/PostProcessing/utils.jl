@@ -1,6 +1,4 @@
 # TODO : move general post processing (non plottng) stuff in to their own file
-# TODO : split up the plotting functions into subfiles, and generalise them a bit better
-# TODO : find a way to conditionally load the plotting stuff, don't want to have plots as a dep
 # TODO : Refactor to use loadsets and steps seperatly
 struct TI
     loadStep::String

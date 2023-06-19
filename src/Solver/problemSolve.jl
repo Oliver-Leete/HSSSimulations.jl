@@ -28,7 +28,7 @@ Base.@kwdef struct Problem
     "The thickness of powder to use for preheat loads, given in number of layers thick"
     initLay::Int
     "Results struct used to save data only once at the end"
-    otherResults::AbstractOtherResults = otherResults()
+    otherResults::AbstractOtherResults = Res.OtherResults()
     "See [`Ink`](@ref)"
     ink::Ink
     "The filepath to save the results to"
@@ -129,7 +129,7 @@ function problemSolver(problem::Problem)
     with_logger(logger) do
         @debug "Starting Problem: $(problem)" _group = "core"
 
-        G = GVars(problem)
+        G = Types.GVars(problem)
         println("Starting simulation: Results will be saved to $(problem.file)")
 
         jldopen(G.file, "a+"; compress=G.options.compress) do file

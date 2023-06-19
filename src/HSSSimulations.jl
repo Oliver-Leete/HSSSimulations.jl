@@ -26,9 +26,6 @@ module Types
     include("Types/boundaryTypes.jl")
     include("Types/internalTypes.jl")
 
-    # Internal Interface
-    export GVars, LoadTime, LoadStep, Indices
-
     # External Advanced
     export AbstractResult, AbstractOtherResults
     export AbstractMatProp
@@ -43,15 +40,14 @@ end
 export Types
 
 module Res
+    import ..Types.GVars
+
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Types
     using Reexport
     @reexport using StructArrays
 
     include("results.jl")
-
-    # Internal Interface
-    export OtherResults
 
     # External Advanced
     export loadStepSaver
@@ -64,6 +60,8 @@ end
 export Res
 
 module Material
+    import ..Types.GVars
+
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..MaxMin
     using ..Types
@@ -91,6 +89,8 @@ end
 export Material
 
 module Boundary
+    import ..Types.GVars
+
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material: calcMatProps!
     using ..Types
@@ -102,9 +102,6 @@ module Boundary
     include("Boundary/loads.jl")
     include("Boundary/ghosts.jl")
     include("Boundary/boundary_adv.jl")
-
-    # Internal Interface
-    export padWithGhost!, calcInds
 
     # External Advanced
     export conductionFlow, convectionFlow, radiationFlow
@@ -118,6 +115,8 @@ end
 export Boundary
 
 module Solver
+    import ..Types.GVars
+
     using ..Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material
@@ -152,6 +151,8 @@ end
 export Solver
 
 module HSSBound
+    import ..Types.GVars
+
     using ..Boundary
     using ..DocExt
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
