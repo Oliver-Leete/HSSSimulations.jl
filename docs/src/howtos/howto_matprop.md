@@ -1,0 +1,59 @@
+# Material Model Recipes
+
+## A Basic Material Model
+
+This material model just acts like a normal temperature dependent solid. Useful
+for comparing against to see the impact of your model. As it does not save the
+melt or consolidation state it can be combined with [Basic Results](@ref) to
+save on storage space.
+
+```julia
+"""
+A basic material model that doesn't include any melting or consolidation.
+
+# Fields
+
+  - `ρ, c, κ`: Density, Specific heat capacity and Thermal conductivity
+  - `eₚ`: Emmisivity of the powder
+    This is the emmisivity relative to the lamp. So the emmisivity over the range of the wavelengths
+    that the lamp outputs, scaled by the relative output power of the lamp at those wavelengths.
+  - `eₚ`: Emmisivity of the powder with ink on it
+    This is the emmisivity relative to the lamp. So the emmisivity over the range of the wavelengths
+    that the lamp outputs, scaled by the relative output power of the lamp at those wavelengths.
+  - `Mₘ`: Used by the material model to track the maximum melt state reached per node.
+"""
+struct BasicMatProp{T1,T2,T3} <: Material.AbstractMatProp
+    ρ::T1
+    c::T2
+    κ::T3
+    eₚ::Float64
+    eᵢ::Float64
+    name::String
+    Mₘ::Array{Float64,3}
+end
+```
+
+```julia
+function Material.calcMatProps!(
+    pts::AbstractResult,
+    cts::AbstractResult,
+    G::GVars{T,Gh,Mp,R,OR,B},
+    ind,
+) where {T<:Any,Gh<:Any,Mp<:BasicMatProp,OR<:Any,R<:Any,B<:Any}
+    mp = G.matProp
+    (; Δx, Δy, Δz, Δt) = G.geometry
+
+    Threads.@threads for i in ind
+        ρ = mp.ρ(0, 0)
+        G.κ[i] = mp.κ(0, pts.T[i], 0)
+        c = mp.c(pts.T[i])
+
+        α = G.κ[i] / (ρ * c)
+        G.Fx[i] = α * (Δt / (Δx^2))
+        G.Fy[i] = α * (Δt / (Δy^2))
+        G.Fz[i] = α * (Δt / (Δz^2))
+    end
+    @debug "material properties" _group = "mat" G.Fx[ind[end]] G.Fy[ind[end]] G.Fz[ind[end]] G.κ[ind[end]]
+    return
+end
+```
