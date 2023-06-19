@@ -3,8 +3,8 @@ EditURL = "<unknown>/docs/lit/res_tut.jl"
 ```
 
 # Tutorial 4: Saving More Results
-[![](https://mybinder.org/badge_logo.svg)](<unknown>/../examples/4_res_tut.ipynb)
-[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>/../examples/4_res_tut.ipynb)
+[![](https://mybinder.org/badge_logo.svg)](<unknown>)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>)
 
 ```julia
 using HSSSimulations

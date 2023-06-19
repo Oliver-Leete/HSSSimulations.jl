@@ -3,8 +3,8 @@ EditURL = "<unknown>/docs/lit/material_tut.jl"
 ```
 
 # Tutorial 3: A Melt Rate Based Material Model
-[![](https://mybinder.org/badge_logo.svg)](<unknown>/../examples/3_material_tut.ipynb)
-[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>/../examples/3_material_tut.ipynb)
+[![](https://mybinder.org/badge_logo.svg)](<unknown>)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>)
 
 ```julia
 using HSSSimulations
