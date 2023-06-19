@@ -69,6 +69,7 @@ module Material
     using ..Types
     using Interpolations: Flat, Line, bounds, linear_interpolation
     using JLD2
+    using Pkg.Artifacts
     using TestItems: @testitem
 
     include("Material/materialProps.jl")
@@ -160,6 +161,7 @@ module HSSBound
     using Interpolations: AbstractInterpolation, Flat, bounds, linear_interpolation
     using JLD2
     using LoggingExtras
+    using Pkg.Artifacts
     using TestItems: @testitem
 
     include("HSSBound/piston.jl")

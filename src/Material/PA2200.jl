@@ -34,7 +34,7 @@ PA_ρ() = linear_interpolation(
     extrapolation_bc=Flat(),
 )
 
-cPath() = jldopen(joinpath(@__DIR__, "../../data/PA2200_c.jld2"))
+cPath() = jldopen(joinpath(artifact"PA2200", "../../data/PA2200_c.jld2"))
 """
 Data taken from stepscan of PA2200, processed by perkin-elmer dsc software. Melt region is interpolated over to avoide issuse with .
 """
@@ -44,7 +44,7 @@ PA_c() = linear_interpolation(
     extrapolation_bc=Line(),
 )
 
-meltPath() = jldopen(joinpath(@__DIR__, "../../data/PA2200_Melt.jld2"))
+meltPath() = jldopen(joinpath(artifact"PA2200", "../../data/PA2200_Melt.jld2"))
 """
 A normalized cumulative integral of the energy in to a system during melting from a DSC
 curves.
@@ -63,7 +63,7 @@ interpolated line drawn between the sections of heating outside of the melt regi
 """
 PA_Hf() = meltPath()["Total Heat of Melting"]
 
-coolPath() = jldopen(joinpath(@__DIR__, "../../data/PA2200_Cool.jld2"))
+coolPath() = jldopen(joinpath(artifact"PA2200", "../../data/PA2200_Cool.jld2"))
 coolKeys() = Vector{Float64}(coolPath()["Keys"])
 """
 A normalized cumulative integral of the energy out of a system during recrystallization from DSC

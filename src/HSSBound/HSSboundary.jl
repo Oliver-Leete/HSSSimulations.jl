@@ -190,9 +190,9 @@ that will match the target temperature. Same if the preheat bed is thicker than 
 function HSSParams(
     geometry::Geometry;
     name                 = "HSS example problem boundary",
-    pistonPath           = joinpath(@__DIR__, "../../data/piston.jld2"),
-    airPath              = joinpath(@__DIR__, "../../data/surface.jld2"),
-    surfacePath          = joinpath(@__DIR__, "../../data/air.jld2"),
+    pistonPath           = joinpath(artifact"HSS", "../../data/HSS_Piston.jld2"),
+    airPath              = joinpath(artifact"HSS", "../../data/HSS_Surface.jld2"),
+    surfacePath          = joinpath(artifact"HSS", "../../data/HSS_Air.jld2"),
     conductionCoef       = 7500.0,
     lampVector           = [0.0, 1, 2, 2, 2, 2, 2, 1, 0],
     lampWidth            = 0.100,

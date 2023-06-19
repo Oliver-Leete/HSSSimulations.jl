@@ -1,0 +1,13 @@
+[PA2200]
+git-tree-sha1 = "d279b36b170d4b9d2686176fd4bf66cfa1f3bbbb"
+
+    [[PA2200.download]]
+    sha256 = "04ce78e083e3eb3c0bdf3555979915d297132853ac8f12250198d71658b71795"
+    url = "https://gist.github.com/Oliver-Leete/b9eb681863041b113703d5e17e3fa6ab#file-pa2200-tar-gz"
+
+[HSS]
+git-tree-sha1 = "1354ed6941ab9f1fde943c800a97b232cc721b3b"
+
+    [[PA2200.download]]
+    sha256 = "0b854231fdffcd382b474e8645a93df5eef2d261c4f5a88e31982b1a37cde5ff"
+    url = "https://gist.github.com/Oliver-Leete/dee324a95ac81786542c068c7250c9a5#file-hss-tar-gz"
