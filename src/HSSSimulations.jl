@@ -191,14 +191,9 @@ module PostProcessing
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using CodecZlib
     using JLD2
-    using LaTeXStrings
-    using Measures
-    using Plots
-    using ProgressMeter
     using Statistics
-    using StatsPlots
     using TestItems: @testitem
-    include("PostProcessing/plotting.jl")
+    include("PostProcessing/utils.jl")
     export timeList, timeFilter, loadFilter
     export realRange
     export topSurfaceTime, volTime
@@ -207,13 +202,10 @@ module PostProcessing
     export meanLayerNodes
     export diffusivityVol
     export getTime
-    export densDistributionPlot
-    export multiLayerPlot
-    export singleLayComparePlot
-    export meltConsComparePlot
-    export loadTopTempPlots
-    export tmcaSidePlot, tmcaTopPlot
-    export zSlicePlot
+    export getDesc
+    export invertedIndex
+    export deduplicate
+    export diffusivityTopSurface
     export TI
 end
 @reexport using .PostProcessing
