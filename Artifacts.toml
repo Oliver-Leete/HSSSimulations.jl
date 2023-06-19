@@ -1,5 +1,6 @@
 [PA2200]
 git-tree-sha1 = "d279b36b170d4b9d2686176fd4bf66cfa1f3bbbb"
+lazy = true
 
     [[PA2200.download]]
     sha256 = "04ce78e083e3eb3c0bdf3555979915d297132853ac8f12250198d71658b71795"
@@ -7,6 +8,7 @@ git-tree-sha1 = "d279b36b170d4b9d2686176fd4bf66cfa1f3bbbb"
 
 [HSS]
 git-tree-sha1 = "1354ed6941ab9f1fde943c800a97b232cc721b3b"
+lazy = true
 
     [[PA2200.download]]
     sha256 = "0b854231fdffcd382b474e8645a93df5eef2d261c4f5a88e31982b1a37cde5ff"
