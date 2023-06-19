@@ -39,8 +39,8 @@ for (i, (title, filename)) in enumerate(tutorials)
     tutorial_file = string(i, "_", splitext(filename)[1])
     notebook_filename = string(tutorial_file, ".ipynb")
 
-    binder_url = "mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/$notebook_filename"
-    nbviwer_url = "nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/$notebook_filename"
+    binder_url = "https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/$notebook_filename"
+    nbviwer_url = "https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/$notebook_filename"
 
     binder_badge = string("# [![](", binder_logo, ")](", binder_url, ")")
     nbviwer_badge = string("# [![](", nbviwer_logo, ")](", nbviwer_url, ")")
