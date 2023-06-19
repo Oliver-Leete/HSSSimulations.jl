@@ -37,23 +37,23 @@ end
 function Material.calcMatProps!(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ind,
 ) where {T<:Any,Gh<:Any,Mp<:BasicMatProp,OR<:Any,R<:Any,B<:Any}
-    mp = G.matProp
-    (; Δx, Δy, Δz, Δt) = G.geometry
+    mp = prob.matProp
+    (; Δx, Δy, Δz, Δt) = prob.geometry
 
     Threads.@threads for i in ind
         ρ = mp.ρ(0, 0)
-        G.κ[i] = mp.κ(0, pts.T[i], 0)
+        prob.κ[i] = mp.κ(0, pts.T[i], 0)
         c = mp.c(pts.T[i])
 
-        α = G.κ[i] / (ρ * c)
-        G.Fx[i] = α * (Δt / (Δx^2))
-        G.Fy[i] = α * (Δt / (Δy^2))
-        G.Fz[i] = α * (Δt / (Δz^2))
+        α = prob.κ[i] / (ρ * c)
+        prob.Fx[i] = α * (Δt / (Δx^2))
+        prob.Fy[i] = α * (Δt / (Δy^2))
+        prob.Fz[i] = α * (Δt / (Δz^2))
     end
-    @debug "material properties" _group = "mat" G.Fx[ind[end]] G.Fy[ind[end]] G.Fz[ind[end]] G.κ[ind[end]]
+    @debug "material properties" _group = "mat" prob.Fx[ind[end]] prob.Fy[ind[end]] prob.Fz[ind[end]] prob.κ[ind[end]]
     return
 end
 ```

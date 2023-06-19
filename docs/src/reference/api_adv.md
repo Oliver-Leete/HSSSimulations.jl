@@ -30,9 +30,9 @@ loadSetSolver!
 Solver.loadSetSolver!
 Types.AbstractLoadSet
 Solver.FixedLoadSet
-Solver.loadSetSolver!(::FixedLoadSet,::AbstractResult,::Int,::GVars{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+Solver.loadSetSolver!(::FixedLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 Solver.LayerLoadSet
-Solver.loadSetSolver!(::LayerLoadSet,::AbstractResult,::Int,::GVars{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+Solver.loadSetSolver!(::LayerLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
 ```@docs
@@ -57,7 +57,7 @@ MatProp(::Any,::Any,::Any,::Any,::Any,::Any,::Any,::Any,::Any,::Any,::Any,::Any,
 ```@docs
 Types.AbstractMatProp
 Material.calcMatProps!
-Material.calcMatProps!(::AbstractResult, ::AbstractResult, ::GVars{T,Gh,Mp,R,OR,B}, ::Any) where {
+Material.calcMatProps!(::AbstractResult, ::AbstractResult, ::Problem{T,Gh,Mp,R,OR,B}, ::Any) where {
     T<:Any,Gh<:Any,Mp<:AbstractMatProp,R<:Any,OR<:Any,B<:Any,
 }
 Material.meltUpdate
@@ -74,9 +74,9 @@ Types.AbstractResult
 Res.loadStepSaver
 Res.loadStepSaver(::Any, ::StructVector{T}) where {T<:Result}
 Types.AbstractOtherResults
-Res.OtherResults
+Types.OtherResults
 Res.otherResults
-Res.otherResults(::GVars{T,Gh,Mp,R,OR,B}, ::Any) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+Res.otherResults(::Problem{T,Gh,Mp,R,OR,B}, ::Any) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
 ## Custom Boundaries
@@ -99,22 +99,22 @@ Boundary.convectionFlow
 Boundary.radiationFlow
 HSSBound.AbstractPistonBoundary
 HSSBound.PistonBoundary
-HSSBound.PistonBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.PistonBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.PistonCoolBoundary
-HSSBound.PistonCoolBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.PistonCoolBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.AbstractOverheadsBoundary
 HSSBound.OverheadsBoundary
-HSSBound.OverheadsBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.OverheadsBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.OverheadsCoolBoundary
-HSSBound.OverheadsCoolBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.OverheadsCoolBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.SinterBoundary
-HSSBound.SinterBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.SinterBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.RecoatBoundary
-HSSBound.RecoatBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.RecoatBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.InkBoundary
-HSSBound.InkBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.InkBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.BlankBoundary
-HSSBound.BlankBoundary(::AbstractResult,::AbstractResult,::GVars{T,Gh,Mp,R,OR,B},::LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+HSSBound.BlankBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.loadOverheads
 ```
 

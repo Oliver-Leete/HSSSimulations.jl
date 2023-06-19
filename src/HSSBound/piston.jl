@@ -24,12 +24,12 @@ end
 function PistonBoundary(
     _::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    pistonTemp = G.params.pistonHeat(cts.t)
+    pistonTemp = prob.params.pistonHeat(cts.t)
     @debug "PistonBoundary" _group = "hss" pistonTemp
-    return PistonBoundary(pistonTemp, G.params.conductionCoef)
+    return PistonBoundary(pistonTemp, prob.params.conductionCoef)
 end
 
 """
@@ -52,14 +52,14 @@ end
 function PistonCoolBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    if isnan(G.params.coolStart)
-        coolingStart(pts.t, cts.t, G.params)
+    if isnan(prob.params.coolStart)
+        coolingStart(pts.t, cts.t, prob.params)
     end
-    tPiston = (cts.t - G.params.coolStart) + G.params.pistonCoolStart
-    pistonTemp = G.params.pistonCool(tPiston)
+    tPiston = (cts.t - prob.params.coolStart) + prob.params.pistonCoolStart
+    pistonTemp = prob.params.pistonCool(tPiston)
     @debug "PistonBoundary" _group = "hss" tPiston pistonTemp
-    return PistonCoolBoundary(pistonTemp, G.params.conductionCoef)
+    return PistonCoolBoundary(pistonTemp, prob.params.conductionCoef)
 end

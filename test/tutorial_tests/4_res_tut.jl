@@ -67,10 +67,10 @@ end
 function HSSBound.OverheadsBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
-    ls::LoadStep,
+    prob::Problem{T,Gh,Mp,R,OR,B},
+    ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}
-    param = G.params
+    param = prob.params
 
     if ls.layerNum - param.overheadLayerStep >= param.lastUpdatedOverhead
         param.lastUpdatedOverhead = ls.layerNum
@@ -84,9 +84,9 @@ function HSSBound.OverheadsBoundary(
         end
         param.overheadPower = min(max(overheadPower, 0), param.overheadMaxPower)
 
-        push!(G.otherResults.layerChanged, ls.layerNum)
-        push!(G.otherResults.timeChanged, cts.t)
-        push!(G.otherResults.newPower, param.overheadPower)
+        push!(prob.otherResults.layerChanged, ls.layerNum)
+        push!(prob.otherResults.timeChanged, cts.t)
+        push!(prob.otherResults.newPower, param.overheadPower)
 
         @debug "Overhead Power updated" _group = "hss" surfaceCurrent overheadPower
     end
@@ -95,7 +95,7 @@ function HSSBound.OverheadsBoundary(
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
@@ -104,14 +104,14 @@ function HSSBound.OverheadsBoundary(
 end
 
 function Res.otherResults(
-    G::Types.GVars{T,Gh,Mp,R,OR,B},
+    prob::Types.Problem{T,Gh,Mp,R,OR,B},
     file,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}
-    file["MeltMax"] = G.matProp.Mₘ
-    file["CoolStart"] = G.params.coolStart
-    file["Overheads/layerChanged"] = G.otherResults.layerChanged
-    file["Overheads/timeChanged"] = G.otherResults.timeChanged
-    file["Overheads/newPower"] = G.otherResults.newPower
+    file["MeltMax"] = prob.matProp.Mₘ
+    file["CoolStart"] = prob.params.coolStart
+    file["Overheads/layerChanged"] = prob.otherResults.layerChanged
+    file["Overheads/timeChanged"] = prob.otherResults.timeChanged
+    file["Overheads/newPower"] = prob.otherResults.newPower
     return
 end
 

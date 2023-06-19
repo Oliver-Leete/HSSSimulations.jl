@@ -3,7 +3,7 @@
         loadSet<:AbstractLoadSet
         initResult::AbstractResult,
         layerNum::Int,
-        G::GVars{T,Gh,Mp,R,OR,B},
+        prob::Problem{T,Gh,Mp,R,OR,B},
     ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 
 This function is run once for each `LoadSet` passed in to the problem, and dispatched on the type
@@ -38,10 +38,10 @@ function loadSetSolver!(
     loadSet::FixedLoadSet,
     initResult::AbstractResult,
     layerNum::Int,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     name = "$(loadSet.name)-$(layerNum)"
-    result = innerLoadSetSolver!(loadSet.loads, initResult, layerNum, G; name=name)
+    result = innerLoadSetSolver!(loadSet.loads, initResult, layerNum, prob; name=name)
     return result, layerNum
 end
 
@@ -66,7 +66,7 @@ function loadSetSolver!(
     loadSet::LayerLoadSet,
     initResult::AbstractResult,
     initLayerNum::Int,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
     result = initResult
     for layerNum in (initLayerNum+1):loadSet.finishLayer
@@ -75,7 +75,7 @@ function loadSetSolver!(
             loadSet.loads,
             result,
             layerNum,
-            G;
+            prob;
             name=name,
             recoat=true,
             prevLayerNum=layerNum - 1,
@@ -104,32 +104,32 @@ function innerLoadSetSolver!(
     loads::Vector{Load},
     initResult::AbstractResult,
     layerNum,
-    G::GVars;
+    prob::Problem;
     name=Date.time(),
     recoat=false,
     prevLayerNum=layerNum - recoat,
 )
     @debug "Starting Load Set t=$(name)" _group = "core"
 
-    resultSize = (G.geometry.X, G.geometry.Y, (layerNum * G.geometry.ΔH))
+    resultSize = (prob.geometry.X, prob.geometry.Y, (layerNum * prob.geometry.ΔH))
 
     resConstruct = constructorof(typeof(initResult))
     result::typeof(initResult) = resConstruct(resultSize, initResult.t, 0.0)
 
-    zInit = 1:(prevLayerNum*G.geometry.ΔH)
+    zInit = 1:(prevLayerNum*prob.geometry.ΔH)
     result.T[:, :, zInit] = initResult.T[:, :, zInit]
     result.M[:, :, zInit] = initResult.M[:, :, zInit]
     result.C[:, :, zInit] = initResult.C[:, :, zInit]
 
-    inds = Boundary.calcInds(resultSize, G.Tᵗ⁻¹, G.geometry.ΔH, recoat)
+    inds = Boundary.calcInds(resultSize, prob.Tᵗ⁻¹, prob.geometry.ΔH, recoat)
 
     for (index, load) in enumerate(loads)
         resultDirectory = "$(name)/$(index)"
-        push!(G.resultsIndex, resultDirectory)
+        push!(prob.resultsIndex, resultDirectory)
 
         loadStep = Types.LoadStep(;
             load=load,
-            time=Types.LoadTime(result.t, load.tₗ, G.geometry.Δt, load.skip),
+            time=Types.LoadTime(result.t, load.tₗ, prob.geometry.Δt, load.skip),
             size=resultSize,
             ind=inds,
             init=result,
@@ -146,9 +146,9 @@ function innerLoadSetSolver!(
             for i in eachindex(loadStep.time.unskipTimes)
         )
 
-        result = loadSolver!(loadStep, loadResults, G)
+        result = loadSolver!(loadStep, loadResults, prob)
 
-        jldopen(G.file, "a+"; compress=G.options.compress) do file
+        jldopen(prob.file, "a+"; compress=prob.options.compress) do file
             file["Results/$(resultDirectory)/name"] = loadStep.name
             loadResultsFolder = file["Results/$(resultDirectory)"]
             loadStepSaver(loadResultsFolder, loadResults)

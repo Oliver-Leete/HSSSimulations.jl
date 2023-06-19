@@ -14,104 +14,6 @@ is skipped, see [`Types.Load`](@ref) for more information on these fields.
     As all load sets are optional, you could technically define a problem with no loads, it just
     wouldn't really do anything.
 """
-Base.@kwdef struct Problem
-    "See [`Geometry`](@ref)"
-    geometry::Geometry
-    "See [`MatProp`](@ref)"
-    matProp::AbstractMatProp
-    "See [`Types.AbstractProblemParams`](@ref)"
-    params::AbstractProblemParams
-    "List of all load sets to run"
-    loadSets::Vector{AbstractLoadSet}
-    "The initial conditions. See [`Result`](@ref)"
-    init::AbstractResult
-    "The thickness of powder to use for preheat loads, given in number of layers thick"
-    initLay::Int
-    "Results struct used to save data only once at the end"
-    otherResults::AbstractOtherResults = Res.OtherResults()
-    "See [`Ink`](@ref)"
-    ink::Ink
-    "The filepath to save the results to"
-    file::String
-    "See [`Options`](@ref)"
-    options::Options = Options()
-    "A short description of what is being simulated. To help remember what the simulation results are about"
-    description::String
-end
-
-Base.show(io::IO, problem::Problem) = print(io, makeDescription(problem))
-
-"""
-$(TYPEDSIGNATURES)
-
-Primaraly used for the show method for the Problem struct, but seperated into it's own function so
-the same formatting can be used for making a string to save to the results file. This is useful
-for having a summary of the simulation setup attached to the results for quick reference (The full
-problem struct is also saved, but that requires loading the results in a julia instance to read
-properly).
-"""
-function makeDescription(problem::Problem)
-    rs = """
-    ----------------------
-    Simulation $(basename(problem.file))
-    ----------------------
-    $(problem.description)
-
-    Geometry: $(problem.geometry.name)
-    Material Propeties: $(problem.matProp.name)
-    Machine Boundaries: $(problem.params.name)
-    Ink Pattern: $(problem.ink.name)
-    Preheat Thickness in Layers: $(problem.initLay)
-    """
-    for loadSet in problem.loadSets
-        rs *= "\n"
-        rs *= "$(loadSet.name) Loads:"
-        rs *= "$(loadSet.loads)"
-    end
-    return rs
-end
-
-"""
-$(TYPEDSIGNATURES)
-
-Make an instance of [`Types.GVars`](@ref) from a [`Problem`](@ref).
-"""
-function Types.GVars(problem::Problem)
-    geomSize = (problem.geometry.X, problem.geometry.Y, problem.geometry.Z)
-    Fx = zeros(geomSize)
-    Fy = zeros(geomSize)
-    Fz = zeros(geomSize)
-    κ = zeros(geomSize)
-    Tᵗ⁻¹ = OffsetArray(zeros(geomSize .+ 2), -1, -1, -1)
-    eᵗ = fill(problem.matProp.eₚ, geomSize)
-
-    resultsIndex = Vector{String}()
-
-    return GVars{
-        typeof(Fx),
-        typeof(Tᵗ⁻¹),
-        typeof(problem.matProp),
-        typeof(problem.init),
-        typeof(problem.otherResults),
-        typeof(problem.params),
-    }(;
-        geometry     = problem.geometry,
-        matProp      = problem.matProp,
-        params       = problem.params,
-        ink          = problem.ink,
-        file         = problem.file,
-        init         = problem.init,
-        otherResults = problem.otherResults,
-        κ            = κ,
-        Tᵗ⁻¹         = Tᵗ⁻¹,
-        Fx           = Fx,
-        Fy           = Fy,
-        Fz           = Fz,
-        eᵗ           = eᵗ,
-        resultsIndex = resultsIndex,
-        options      = problem.options,
-    )
-end
 
 """
 $(TYPEDSIGNATURES)
@@ -129,10 +31,9 @@ function problemSolver(problem::Problem)
     with_logger(logger) do
         @debug "Starting Problem: $(problem)" _group = "core"
 
-        G = Types.GVars(problem)
         println("Starting simulation: Results will be saved to $(problem.file)")
 
-        jldopen(G.file, "a+"; compress=G.options.compress) do file
+        jldopen(problem.file, "a+"; compress=problem.options.compress) do file
             startMetadata(problem, file)
             return
         end
@@ -142,22 +43,22 @@ function problemSolver(problem::Problem)
 
         # Solve all of the load sets
         for loadSet in problem.loadSets
-            result, layerNum = loadSetSolver!(loadSet, result, layerNum, G)
+            result, layerNum = loadSetSolver!(loadSet, result, layerNum, problem)
         end
 
         # Save the user defined results and some final metadata
-        jldopen(G.file, "a+"; compress=G.options.compress) do file
+        jldopen(problem.file, "a+"; compress=problem.options.compress) do file
             folder = file["Results"]
-            otherResults(G, folder)
+            otherResults(problem, folder)
             return
         end
-        jldopen(G.file, "a+"; compress=G.options.compress) do file
-            finishMetadata(G, file)
+        jldopen(problem.file, "a+"; compress=problem.options.compress) do file
+            finishMetadata(problem, file)
             return
         end
 
         println("Results saved to $(problem.file)")
-        if G.options.notify
+        if problem.options.notify
             alert(
                 """
                 Simulation Finished!
@@ -177,7 +78,7 @@ Adds metadata to the results file. The data added here is stuff that is availabl
 the simulation, such as the problem description, the problem input and the start time.
 """
 function startMetadata(problem, file)
-    file["Description"] = makeDescription(problem)
+    file["Description"] = Types.makeDescription(problem)
     file["Input"] = problem
     file["Start_Time"] = string(now())
     return
@@ -189,8 +90,8 @@ $(TYPEDSIGNATURES)
 Adds metadata to the results file. The data added here is stuff that is not available until the end
 of the simulation, such as the melt max array, the results index array and the simulation end time.
 """
-function finishMetadata(G::GVars, file)
-    file["Results_Index"] = G.resultsIndex
+function finishMetadata(problem::Problem, file)
+    file["Results_Index"] = problem.resultsIndex
     file["Finish_Time"] = string(now())
     return
 end

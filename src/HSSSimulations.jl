@@ -20,11 +20,13 @@ end
 module Types
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using CodecZlib
+    using OffsetArrays
 
     include("Types/types.jl")
     include("Types/geometry.jl")
     include("Types/boundaryTypes.jl")
     include("Types/internalTypes.jl")
+    include("Types/problem.jl")
 
     # External Advanced
     export AbstractResult, AbstractOtherResults
@@ -33,15 +35,15 @@ module Types
     export boundaryHeatTransferRate
 
     # External
+    export Problem
     export Geometry, Ink
     export Options, package_groups
+    export OtherResults
 end
-@reexport using .Types: Ink, Geometry, Options, package_groups
+@reexport using .Types: Problem, Ink, Geometry, Options, package_groups
 export Types
 
 module Res
-    import ..Types.GVars
-
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Types
     using Reexport
@@ -60,8 +62,6 @@ end
 export Res
 
 module Material
-    import ..Types.GVars
-
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..MaxMin
     using ..Types
@@ -89,8 +89,6 @@ end
 export Material
 
 module Boundary
-    import ..Types.GVars
-
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material: calcMatProps!
     using ..Types
@@ -115,8 +113,6 @@ end
 export Boundary
 
 module Solver
-    import ..Types.GVars
-
     using ..Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material
@@ -128,7 +124,6 @@ module Solver
     using Dates
     using JLD2: jldopen
     using LoggingExtras
-    using OffsetArrays
     using ProgressMeter: @showprogress
     using StructArrays
     using TestItems: @testitem
@@ -151,8 +146,6 @@ end
 export Solver
 
 module HSSBound
-    import ..Types.GVars
-
     using ..Boundary
     using ..DocExt
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES

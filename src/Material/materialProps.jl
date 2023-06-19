@@ -105,14 +105,14 @@ function MatProp(ρ, c, κ, Mᵣ, Rᵣ, Hf, Hr, Ċ, eₚ, eᵢ, ε, name, geome
 end
 
 """
-    calcMatProps!(::AbstractResult, ::AbstractResult, <:GVars, ::Indices)
+    calcMatProps!(::AbstractResult, ::AbstractResult, <:Problem, ::Indices)
 
 Updates any of the material properties that change, along with the Fourier number for the current
-time step. New methods can be defined by dispatching on GVars with a different subtype of MatProp
-(for more information on this, see [`Types.AbstractMatProp`](@ref)). The two main functions called
-by this one, [`meltUpdate`](@ref) and [`consUpdate`](@ref), are both also dispatched on the type of
-the material property struct, so they can be overwritten individually for a new material property
-struct if the new material model only needs to change some of the behaviour.
+time step. New methods can be defined by dispatching on `Problem` with a different subtype of
+MatProp (for more information on this, see [`Types.AbstractMatProp`](@ref)). The two main functions
+called by this one, [`meltUpdate`](@ref) and [`consUpdate`](@ref), are both also dispatched on the
+type of the material property struct, so they can be overwritten individually for a new material
+property struct if the new material model only needs to change some of the behaviour.
 
 # Arguments
 
@@ -134,11 +134,11 @@ conductivity. These are then used to calculate the Fourier number for each axis 
 function calcMatProps!(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ind,
 ) where {T<:Any,Gh<:Any,Mp<:AbstractMatProp,R<:Any,OR<:Any,B<:Any}
-    mp = G.matProp
-    (; Δx, Δy, Δz, Δt) = G.geometry
+    mp = prob.matProp
+    (; Δx, Δy, Δz, Δt) = prob.geometry
     (; M, C) = cts
 
     Threads.@threads for i in ind
@@ -148,7 +148,7 @@ function calcMatProps!(
 
         # Update the material properties for the node
         ρ = mp.ρ(C[i], M[i])
-        G.κ[i] = mp.κ(C[i], pts.T[i], M[i])
+        prob.κ[i] = mp.κ(C[i], pts.T[i], M[i])
         c = mp.c(pts.T[i])
 
         # Adjust the temperature of the node at the previous time step based on the change in melt
@@ -158,12 +158,12 @@ function calcMatProps!(
         pts.T[i] = pts.T[i] - ΔT
 
         # Calculate the Fourier number (via diffusivity)
-        α = G.κ[i] / (ρ * c)
-        G.Fx[i] = α * (Δt / (Δx^2))
-        G.Fy[i] = α * (Δt / (Δy^2))
-        G.Fz[i] = α * (Δt / (Δz^2))
+        α = prob.κ[i] / (ρ * c)
+        prob.Fx[i] = α * (Δt / (Δx^2))
+        prob.Fy[i] = α * (Δt / (Δy^2))
+        prob.Fz[i] = α * (Δt / (Δz^2))
     end
-    @debug "material properties" _group = "mat" G.Fx[ind[end]] G.Fy[ind[end]] G.Fz[ind[end]] G.κ[ind[end]] cts.M[ind[end]] cts.C[ind[end]]
+    @debug "material properties" _group = "mat" prob.Fx[ind[end]] prob.Fy[ind[end]] prob.Fz[ind[end]] prob.κ[ind[end]] cts.M[ind[end]] cts.C[ind[end]]
     return
 end
 

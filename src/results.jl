@@ -102,17 +102,10 @@ function loadStepSaver(loadResultsFolder, loadResults::StructVector{T}) where {T
 end
 
 """
-$(TYPEDEF)
-
-The default struct stores no data and only acts as a placeholder.
-"""
-struct OtherResults <: AbstractOtherResults end
-
-"""
-    otherResults(G<:GVars, file)
+    otherResults(prob<:Problem, file)
 
 Runs at the end of the simulation to save any additional results that only need to be saved once, as
-opposed to for every nth time step. The [`Types.GVars`](@ref) type and any of its type parameters
+opposed to for every nth time step. The [`Types.Problem`](@ref) type and any of its type parameters
 can be dispatched on.
 
 For example, this will run if both the `HSSParams` parameter type, the `MatProp` material property
@@ -122,12 +115,12 @@ data, and [Tutorial 4: Saving More Results](@ref) for a detailed guide.
 
 ```julia
 function Res.otherResults(
-    G::GVars{T,Gh,M,R,OR,P},
+    prob::Problem{T,Gh,M,R,OR,P},
     file,
 ) where {T<:Any,Gh<:Any,M<:MatProp,R<:Any,OR<:MyOtherResults,P<:HSSParams}
-    file["MeltMax"] = G.matProp.Mₘ
-    file["CooldownStartTime"] = G.params.coolStart
-    file["myResult"] = G.otherResults.something_else_interesting
+    file["MeltMax"] = prob.matProp.Mₘ
+    file["CooldownStartTime"] = prob.params.coolStart
+    file["myResult"] = prob.otherResults.something_else_interesting
     return
 end
 ```
@@ -140,9 +133,9 @@ $(TYPEDSIGNATURES)
 Default [`otherResults`](@ref) method that just saves the maximum melt state reached for each node.
 """
 function otherResults(
-    G::GVars{T,Gh,Mp,R,OR,B},
+    problem::Problem{T,Gh,Mp,R,OR,B},
     file,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    file["MeltMax"] = G.matProp.Mₘ
+    file["MeltMax"] = problem.matProp.Mₘ
     return
 end

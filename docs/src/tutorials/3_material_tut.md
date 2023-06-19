@@ -3,8 +3,8 @@ EditURL = "<unknown>/docs/lit/material_tut.jl"
 ```
 
 # Tutorial 3: A Melt Rate Based Material Model
-[![](https://mybinder.org/badge_logo.svg)](<unknown>)
-[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>)
+[![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/3_material_tut.ipynb)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/3_material_tut.ipynb)
 
 ```julia
 using HSSSimulations
@@ -72,9 +72,9 @@ function MatPropTD(ρ, c, κ, Ṁ, Ṙ, Hf, Hr, Ċ, eₚ, eᵢ, ε, name, geome
     Mₘ = zeros(geomSize)
 
     return MatPropTD{
-        typeof(ρ), typeof(c), typeof(κ),
-        typeof(Ṁ), typeof(Ṙ), typeof(Hf), typeof(Hr),
-        typeof(Ċ), typeof(Mₘ),
+        typeof(ρ),typeof(c),typeof(κ),
+        typeof(Ṁ),typeof(Ṙ),typeof(Hf),typeof(Hr),
+        typeof(Ċ),typeof(Mₘ),
     }(
         ρ, c, κ,
         Ṁ, Ṙ, Hf, Hr,

@@ -32,36 +32,36 @@ end
 function RecoatBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
     param.overheadTemp =
         overheadTemp = param.overheadHeatupFunc(param.overheadPower, param.overheadTemp, cts)
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    eₗ = G.eᵗ
-    ε = G.matProp.ε
+    eₗ = prob.eᵗ
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
     # The position of the righthand side of the carriage (well, the left, but everything is reversed)
-    pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * cts.tₚ)
+    pos = ceil(Int, (param.carriageWidth + prob.geometry.Y_BUILD) * cts.tₚ)
     shadowPos = (pos - param.carriageWidth, pos)
-    shadow = movingObjOverlap(G.geometry, true, shadowPos)
+    shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
     recoatDist = pos - param.recoatOffset
-    if G.geometry.Y_OFFSET < recoatDist <= G.geometry.Y_OFFSET + G.geometry.Y
-        recoatDist = recoatDist - G.geometry.Y_OFFSET
-        recoating!(pts, cts, G, ls, recoatDist, param.powderTemp(cts.t))
-    elseif recoatDist > G.geometry.Y_OFFSET + G.geometry.Y
-        recoatDist = G.geometry.Y
-        recoating!(pts, cts, G, ls, recoatDist, param.powderTemp(cts.t))
+    if prob.geometry.Y_OFFSET < recoatDist <= prob.geometry.Y_OFFSET + prob.geometry.Y
+        recoatDist = recoatDist - prob.geometry.Y_OFFSET
+        recoating!(pts, cts, prob, ls, recoatDist, param.powderTemp(cts.t))
+    elseif recoatDist > prob.geometry.Y_OFFSET + prob.geometry.Y
+        recoatDist = prob.geometry.Y
+        recoating!(pts, cts, prob, ls, recoatDist, param.powderTemp(cts.t))
     end
     lampPos = pos - param.lampOffset
-    lamp = movingObjOverlap(G.geometry, param.recoatLamp, lampPos)
+    lamp = movingObjOverlap(prob.geometry, param.recoatLamp, lampPos)
 
     @debug "RecoatBoundary" _group = "hss" overheadTemp surfaceTemp airTemp lamp[ls.ind.iₘ[2]] shadow[ls.ind.iₘ[2]]
     return RecoatBoundary(overheadTemp, surfaceTemp, eₗ, ε, airTemp, h, lamp, shadow, Po)

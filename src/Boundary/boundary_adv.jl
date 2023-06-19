@@ -10,7 +10,7 @@ deposited starting from `[:, 1, :]` and going to `[:, end, :]`.
 function recoating!(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
     recoatDist,
     temp,
@@ -22,16 +22,16 @@ function recoating!(
     end
 
     oldiᵢ = ls.ind.iᵢ
-    updateInds!(ls.ind, recoatDist, ls.size, G.Tᵗ⁻¹)
+    updateInds!(ls.ind, recoatDist, ls.size, prob.Tᵗ⁻¹)
     newNodes = oldiᵢ ∩ ls.ind.iᵣ
     for i in newNodes
         pts.T[i] = temp
-        G.Tᵗ⁻¹[i] = temp
-        pts.M[i] = G.init.M[i]
-        pts.C[i] = G.init.C[i]
+        prob.Tᵗ⁻¹[i] = temp
+        pts.M[i] = prob.init.M[i]
+        pts.C[i] = prob.init.C[i]
     end
 
-    calcMatProps!(pts, cts, G, newNodes)
+    calcMatProps!(pts, cts, prob, newNodes)
     @debug "recoating!" _group = "b_adv" recoatDist temp newNodes
     return
 end
@@ -39,25 +39,25 @@ end
 @testitem "recoating!" begin
     using Test, HSSSimulations, JLD2
     using .Boundary
-    G, ls, pts, cts = load(joinpath(@__DIR__, "../../test/test_inputs/full_in.jld2"),
-        "G", "ls", "pts", "cts")
+    prob, ls, pts, cts = load(joinpath(@__DIR__, "../../test/test_inputs/full_in.jld2"),
+        "prob", "ls", "pts", "cts")
     temp = 50
     @testset "All top layer is imaginary at no recoat dist" begin
-        recoating!(pts, cts, G, ls, 0, temp)
+        recoating!(pts, cts, prob, ls, 0, temp)
         @test ls.ind.iᵢ == vec(CartesianIndices(pts.T)[:, :, end])
     end
     @testset "Half distance" begin
-        recoating!(pts, cts, G, ls, floor(Int, G.geometry.Y / 2), temp)
+        recoating!(pts, cts, prob, ls, floor(Int, prob.geometry.Y / 2), temp)
         @testset "Is setting everything it should" begin
             i = ls.ind.iᵣ[end]
             @test pts.T[i] == temp
-            @test G.Tᵗ⁻¹[i] == temp
-            @test pts.M[i] == G.init.M[i]
-            @test pts.C[i] == G.init.C[i]
+            @test prob.Tᵗ⁻¹[i] == temp
+            @test pts.M[i] == prob.init.M[i]
+            @test pts.C[i] == prob.init.C[i]
         end
     end
     @testset "No imaginaries at full distance" begin
-        recoating!(pts, cts, G, ls, G.geometry.Y, temp)
+        recoating!(pts, cts, prob, ls, prob.geometry.Y, temp)
         @test ls.ind.iᵢ == []
     end
 end

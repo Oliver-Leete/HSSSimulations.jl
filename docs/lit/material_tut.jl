@@ -59,9 +59,9 @@ function MatPropTD(ρ, c, κ, Ṁ, Ṙ, Hf, Hr, Ċ, eₚ, eᵢ, ε, name, geome
     Mₘ = zeros(geomSize)
 
     return MatPropTD{
-        typeof(ρ), typeof(c), typeof(κ),
-        typeof(Ṁ), typeof(Ṙ), typeof(Hf), typeof(Hr),
-        typeof(Ċ), typeof(Mₘ),
+        typeof(ρ),typeof(c),typeof(κ),
+        typeof(Ṁ),typeof(Ṙ),typeof(Hf),typeof(Hr),
+        typeof(Ċ),typeof(Mₘ),
     }(
         ρ, c, κ,
         Ṁ, Ṙ, Hf, Hr,

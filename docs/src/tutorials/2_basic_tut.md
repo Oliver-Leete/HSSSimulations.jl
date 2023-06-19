@@ -3,8 +3,8 @@ EditURL = "<unknown>/docs/lit/basic_tut.jl"
 ```
 
 # Tutorial 2: Warm-up and Cool-down only
-[![](https://mybinder.org/badge_logo.svg)](<unknown>)
-[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](<unknown>)
+[![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/2_basic_tut.ipynb)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/2_basic_tut.ipynb)
 
 ```julia
 using HSSSimulations

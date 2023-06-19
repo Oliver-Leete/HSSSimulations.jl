@@ -27,6 +27,8 @@ struct Geometry <: AbstractSimProperty
     Y::Int
     "The size of the z axis of the model in nodes"
     Z::Int
+    "Tuple of the XYZ sizes"
+    size::Tuple{Int,Int,Int}
 
     "The x axis offset of the model from the machines datum in meters"
     xoffset::Float64
@@ -128,6 +130,7 @@ function Geometry(
     X = Int(div(x, Δx, RoundNearest))
     Y = Int(div(y, Δy, RoundNearest))
     Z = Int(div(z, Δz, RoundNearest))
+    sizes = (X, Y, Z)
 
     if Δh != 0
         (isapprox(Δh % Δz, Δz; atol=atol) || isapprox(Δh % Δz, 0; atol=atol)) ||
@@ -168,6 +171,7 @@ function Geometry(
     return Geometry(
         x, y, z,
         X, Y, Z,
+        sizes,
         xoffset, yoffset,
         X_OFFSET, Y_OFFSET,
         xbuild, ybuild,

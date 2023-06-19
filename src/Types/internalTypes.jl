@@ -1,54 +1,5 @@
 """
 $(TYPEDEF)
-An internal struct used for passing the many variables around the different function, it is built
-from a given problem struct, using a constructor in the problem module. There is probably a better
-way of doing this, but it works.
-
-# Fields
-$(TFIELDS)
-"""
-Base.@kwdef struct GVars{
-    T<:AbstractArray,
-    Gh<:AbstractArray,
-    M<:AbstractMatProp,
-    R<:AbstractResult,
-    OR<:AbstractOtherResults,
-    P<:AbstractProblemParams,
-}
-    "Simulation geometry"
-    geometry::Geometry
-    "Simulation material properties"
-    matProp::M
-    "Parameters used for boundary conditions"
-    params::P
-    "Matrix of x axis Fourier numbers"
-    Fx::T
-    "Matrix of y axis Fourier numbers"
-    Fy::T
-    "Matrix of z axis Fourier numbers"
-    Fz::T
-    "Matrix of thermal conductivities"
-    κ::T
-    "Ghost node padded matrix of previous time step"
-    Tᵗ⁻¹::Gh
-    "Matrix of current emissivities"
-    eᵗ::T
-    "Matrix of final emissivities"
-    ink::Ink
-    "File name"
-    file::String
-    "Initial results"
-    init::R
-    "Results struct used to save data only once at the end"
-    otherResults::OR
-    "index of results file"
-    resultsIndex::Vector{String}
-    "Simulation options"
-    options::Options
-end
-
-"""
-$(TYPEDEF)
 Contains all of the time information for a LoadStep.
 
 # Fields
@@ -106,7 +57,7 @@ Base.@kwdef struct LoadStep{R<:AbstractResult}
     "See [`LoadTime`](@ref)"
     time::LoadTime
     """The x, y and z size in number of nodes (mostly just used for the z,
-    which may have changed from the same value in the `GVars.geometry` variable) """
+    which may have changed from the same value in the `Problem.geometry` variable) """
     size::Tuple{Int,Int,Int}
     "See [`Indices`](@ref)"
     ind::Indices

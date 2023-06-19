@@ -32,28 +32,28 @@ end
 function SinterBoundary(
     _::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
     param.overheadTemp =
         overheadTemp = param.overheadHeatupFunc(param.overheadPower, param.overheadTemp, cts)
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    e = G.eᵗ
-    ε = G.matProp.ε
+    e = prob.eᵗ
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
     # The position of the righthand side of the carriage (well, the left, but everything is reversed)
-    pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * (1 - cts.tₚ))
+    pos = ceil(Int, (param.carriageWidth + prob.geometry.Y_BUILD) * (1 - cts.tₚ))
     shadowPos = (pos - param.carriageWidth, pos)
-    shadow = movingObjOverlap(G.geometry, true, shadowPos)
+    shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
     lampPos = pos - param.lampOffset
-    lamp = movingObjOverlap(G.geometry, param.sinterLamp, lampPos)
+    lamp = movingObjOverlap(prob.geometry, param.sinterLamp, lampPos)
 
     @debug "SinterBoundary" _group = "hss" overheadTemp surfaceTemp airTemp lamp[ls.ind.iₘ[2]] shadow[ls.ind.iₘ[2]]
     return SinterBoundary(overheadTemp, surfaceTemp, e, ε, airTemp, h, lamp, shadow, Po)

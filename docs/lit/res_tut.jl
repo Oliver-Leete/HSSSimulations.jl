@@ -113,12 +113,12 @@ end
 
 # ## Saving Results at the End
 #
-# Compared to saving results for every time step, saving results at the end is much easier. The
-# downside is that we can only save things that we have access to at the end. And the only things
-# we have access to at the end are the contents of [`GVars`](@ref). Luckely, there is a placeholder
-# field in GVars called `otherResults`. To use this we can make an [`AbstractOtherResults`](@ref)
-# that stores whatever data we want. For this we'll make one that stores some information about the
-# overhead heater controller.
+# Compared to saving results for every time step, saving results at the end is much easier.
+# The downside is that we can only save things that we have access to at the end. And the
+# only things we have access to at the end are the contents of [`Problem`](@ref). Luckely,
+# there is a placeholder field in `Problem` called `otherResults`. To use this we can make an
+# [`AbstractOtherResults`](@ref) that stores whatever data we want. For this we'll make one that
+# stores some information about the overhead heater controller.
 #
 # We'll store a list of layers that caused the overhead heater to update, along with the time of the
 # update and the new power.
@@ -136,10 +136,10 @@ end
 function HSSBound.OverheadsBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
-    ls::LoadStep,
+    prob::Problem{T,Gh,Mp,R,OR,B},
+    ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}
-    param = G.params
+    param = prob.params
 
     # Overhead update logic
     if ls.layerNum - param.overheadLayerStep >= param.lastUpdatedOverhead
@@ -154,9 +154,9 @@ function HSSBound.OverheadsBoundary(
         end
         param.overheadPower = min(max(overheadPower, 0), param.overheadMaxPower)
 
-        push!(G.otherResults.layerChanged, ls.layerNum)
-        push!(G.otherResults.timeChanged, cts.t)
-        push!(G.otherResults.newPower, param.overheadPower)
+        push!(prob.otherResults.layerChanged, ls.layerNum)
+        push!(prob.otherResults.timeChanged, cts.t)
+        push!(prob.otherResults.newPower, param.overheadPower)
 
         @debug "Overhead Power updated" _group = "hss" surfaceCurrent overheadPower
     end
@@ -165,7 +165,7 @@ function HSSBound.OverheadsBoundary(
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
@@ -173,11 +173,11 @@ function HSSBound.OverheadsBoundary(
     return OverheadsBoundary(overheadTemp, surfaceTemp, ε, airTemp, h, Po)
 end
 
-# Also, the other contents of a few of GVars's fields can be customised by us, the `matProp` field
-# contains the [`AbstractMatProp`](@ref) struct for the simulation, and the `params` field contains
-# the simulation's [`AbstractProblemParams`](@ref) struct. So if we were making a new material model
-# then we could use it's struct to store something and then save it all at the end, or the same for
-# boundary conditions with the parameters struct.
+# Also, the other contents of a few of `Problem`'s fields can be customised by us, the `matProp`
+# field contains the [`AbstractMatProp`](@ref) struct for the simulation, and the `params` field
+# contains the simulation's [`AbstractProblemParams`](@ref) struct. So if we were making a new
+# material model then we could use it's struct to store something and then save it all at the end,
+# or the same for boundary conditions with the parameters struct.
 #
 # In addition to our `otherResults` struct, we will also save a couple of things that are already
 # available from the default structs. The maximum melt state is from the [`MatProp`](@ref) struct
@@ -189,14 +189,14 @@ end
 # and all of our overhead controller stuff to its own subfolder of the results.
 
 function Res.otherResults(
-    G::Types.GVars{T,Gh,Mp,R,OR,B},
+    prob::Types.Problem{T,Gh,Mp,R,OR,B},
     file,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}
-    file["MeltMax"] = G.matProp.Mₘ
-    file["CoolStart"] = G.params.coolStart
-    file["Overheads/layerChanged"] = G.otherResults.layerChanged
-    file["Overheads/timeChanged"] = G.otherResults.timeChanged
-    file["Overheads/newPower"] = G.otherResults.newPower
+    file["MeltMax"] = prob.matProp.Mₘ
+    file["CoolStart"] = prob.params.coolStart
+    file["Overheads/layerChanged"] = prob.otherResults.layerChanged
+    file["Overheads/timeChanged"] = prob.otherResults.timeChanged
+    file["Overheads/newPower"] = prob.otherResults.newPower
     return
 end
 

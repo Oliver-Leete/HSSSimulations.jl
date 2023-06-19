@@ -100,4 +100,3 @@ function coolingStart(tₚ, t, params::AbstractProblemParams)
     params.surfaceCoolStart = isnothing(surfaceCoolStart) ? 0 : surfaceCoolStart - 1
     @debug "coolingStart" _group = "hss" t params.coolStart params.pistonCoolStart params.airCoolStart params.surfaceCoolStart
 end
-

@@ -47,23 +47,22 @@ struct FixedHeatFluxBoundary <: AbstractBoundary
     # requirements detailed in the AbstractBoundary documentation. For this
     # boundary we only actually need two of the inputs, so we'll just discard
     # the rest of them.
-    function RecoatCoolBoundary(_, cts, G::GVars, _)
+    function RecoatCoolBoundary(_, cts, prob::Problem, _)
         # Normally a boundary's constructor would use the params field that we
         # gave to the problem quite a bit, so it's handy to make it easier to
         # access. In this case it will only be used once, but I'll keep this
         # here out of good habit anyway.
-        param = G.params
+        param = prob.params
 
         # The current time step (cts) is given in, so lets grab its time to use
         # in our heat flux function.
         time = cts.t
-
         heatflux = param.heatflux(time)
 
-        # Another useful field in G is the problems geometry. Here we'll use
+        # Another useful field in prob is the problems geometry. Here we'll use
         # this to find out the area of a node, to convert our heat flux into a
         # heat flux density.
-        geom = G.geometry
+        geom = prob.geometry
         # Finding the area of the face of a node parallel to the y-axis
         area = geom.X * geom.Z
         heatfluxdensity = heatflux / area
@@ -100,49 +99,49 @@ struct RecoatCoolBoundary <: AbstractBoundary
     shadow::Vector{Bool}
     Po::Float64
 
-    function RecoatCoolBoundary(pts, cts, G::GVars, ls::LoadStep)
-        param = G.params
+    function RecoatCoolBoundary(pts, cts, prob::Problem, ls::Types.LoadStep)
+        param = prob.params
 
         # Use an overhead power of 0 w
         param.overheadTemp = overheadTemp = param.overheadHeatupFunc(0.0, param.overheadTemp, cts)
 
         # If the coolStart hasn't been set, set it
-        if isnan(G.params.coolStart)
-            coolingStart(pts.t, cts.t, G.params)
+        if isnan(prob.params.coolStart)
+            coolingStart(pts.t, cts.t, prob.params)
         end
 
         # Find how far through the cooling parameters the current time step is
-        tAir = (cts.t - G.params.coolStart) + G.params.airCoolStart
-        tSurface = (cts.t - G.params.coolStart) + G.params.surfaceCoolStart
+        tAir = (cts.t - param.coolStart) + param.airCoolStart
+        tSurface = (cts.t - param.surfaceCoolStart
 
         # Use the *Cool parameters to find the air and surface temperatures
         airTemp = param.airCool(tAir)
         surfaceTemp = param.surfaceCool(tSurface)
 
         # Get the other parameters to pass through
-        eₗ = G.eᵗ
-        ε = G.matProp.ε
+        eₗ = prob.eᵗ
+        ε = prob.matProp.ε
         h = param.convectionCoef
         Po = param.percentOverhead
 
         # Calculate the position of the carriage and therefor its shadow
-        pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * cts.tₚ)
+        pos = ceil(Int, (param.carriageWidth + prob.geometry.Y_BUILD) * cts.tₚ)
         shadowPos = (pos - param.carriageWidth, pos)
-        shadow = movingObjOverlap(G.geometry, true, shadowPos)
+        shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
         # Calculate the distance across the bed the recoater has traveled, and
         # use it to set the new nodes
         recoatDist = pos - param.recoatOffset
-        if G.geometry.Y_OFFSET < recoatDist <= G.geometry.Y_OFFSET + G.geometry.Y
-            recoatDist = recoatDist - G.geometry.Y_OFFSET
-            recoating!(pts, cts, G, ls, recoatDist, surfaceTemp)
+        if prob.geometry.Y_OFFSET < recoatDist <= prob.geometry.Y_OFFSET + prob.geometry.Y
+            recoatDist = recoatDist - prob.geometry.Y_OFFSET
+            recoating!(pts, cts, prob, ls, recoatDist, surfaceTemp)
         end
 
         # Any new powder put down is set to have the machines ambient air
         # temperature as it's initial temperature
         z₂ᵣ = map(first, ls.ind.z₂)
         for i in z₂ᵣ
-            if pts.T[i] == G.init.T[i]
+            if pts.T[i] == prob.init.T[i]
                 pts.T[i] = airTemp
             end
         end
@@ -186,28 +185,28 @@ struct RecoatCoolReturnBoundary <: AbstractBoundary
     shadow::Vector{Bool}
     Po::Float64
 
-    function RecoatCoolReturnBoundary(pts, cts, G::GVars, ls::LoadStep)
-        param = G.params
+    function RecoatCoolReturnBoundary(pts, cts, prob::Problem, ls::Types.LoadStep)
+        param = prob.params
         param.overheadTemp = overheadTemp = param.overheadHeatupFunc(0.0, param.overheadTemp, cts)
 
         # We'll still call this, in case we want to use this boundary before the previous one
-        if isnan(G.params.coolStart)
-            coolingStart(pts.t, cts.t, G.params)
+        if isnan(param.coolStart)
+            coolingStart(pts.t, cts.t, param)
         end
 
-        tAir = (cts.t - G.params.coolStart) + G.params.airCoolStart
-        tSurface = (cts.t - G.params.coolStart) + G.params.surfaceCoolStart
+        tAir = (cts.t - param.coolStart) + param.airCoolStart
+        tSurface = (cts.t - param.coolStart) + param.surfaceCoolStart
         airTemp = param.airCool(tAir)
         surfaceTemp = param.surfaceCool(tSurface)
-        eₗ = G.eᵗ
-        ε = G.matProp.ε
+        eₗ = prob.eᵗ
+        ε = prob.matProp.ε
         h = param.convectionCoef
         Po = param.percentOverhead
 
         # Calculate the position of the carriage on its return stroke
-        pos = ceil(Int, (param.carriageWidth + G.geometry.Y_BUILD) * (1 - cts.tₚ))
+        pos = ceil(Int, (param.carriageWidth + prob.geometry.Y_BUILD) * (1 - cts.tₚ))
         shadowPos = (pos - param.carriageWidth, pos)
-        shadow = movingObjOverlap(G.geometry, true, shadowPos)
+        shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
         # No need to run any of the recoat logic for this one
         return new(overheadTemp, surfaceTemp, eₗ, ε, airTemp, h, shadow, Po)

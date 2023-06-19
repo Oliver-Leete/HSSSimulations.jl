@@ -41,10 +41,10 @@ end
 function OverheadsBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
     # Overhead update logic
     if ls.layerNum - param.overheadLayerStep >= param.lastUpdatedOverhead
@@ -65,7 +65,7 @@ function OverheadsBoundary(
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
@@ -121,24 +121,24 @@ end
 function OverheadsCoolBoundary(
     pts::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     _::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
-    if isnan(G.params.coolStart)
-        coolingStart(pts.t, cts.t, G.params)
+    if isnan(param.coolStart)
+        coolingStart(pts.t, cts.t, prob.params)
     end
 
-    tAir = (cts.t - G.params.coolStart) + G.params.airCoolStart
-    tSurface = (cts.t - G.params.coolStart) + G.params.surfaceCoolStart
+    tAir = (cts.t - param.coolStart) + param.airCoolStart
+    tSurface = (cts.t - param.coolStart) + param.surfaceCoolStart
 
     param.overheadTemp =
         overheadTemp = param.overheadHeatupFunc(0.0, param.overheadTemp, cts)
 
     airTemp = param.airCool(tAir)
     surfaceTemp = param.surfaceCool(tSurface)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 

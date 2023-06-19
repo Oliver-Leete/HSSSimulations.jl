@@ -12,8 +12,7 @@ end
 
 ```@docs
 Types.AbstractSimProperty
-Types.GVars
-Types.GVars(::Problem)
+Types.Problem
 Types.LoadTime
 Types.LoadTime(::Any,::Any,::Any,::Any)
 Types.LoadStep

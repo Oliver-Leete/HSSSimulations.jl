@@ -28,35 +28,35 @@ end
 function InkBoundary(
     _::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
     param.overheadTemp =
         overheadTemp = param.overheadHeatupFunc(param.overheadPower, param.overheadTemp, cts)
 
     # The position of the righthand side of the carriage (well, the left, but everything is reversed)
-    pos = ceil(Int, (param.printCarriageWidth + G.geometry.Y_BUILD) * (1 - cts.tₚ))
+    pos = ceil(Int, (param.printCarriageWidth + prob.geometry.Y_BUILD) * (1 - cts.tₚ))
     shadowPos = (pos - param.printCarriageWidth, pos)
-    shadow = movingObjOverlap(G.geometry, true, shadowPos)
+    shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
-    printDist = pos - G.geometry.Y_BUILD - param.printOffset
-    printHeight = (ls.size[3]+1-G.geometry.ΔH):ls.size[3]
-    if 0 < printDist <= G.geometry.Y
-        G.eᵗ[:, printDist:end, printHeight] .= G.ink.nodes[:, printDist:end, printHeight]
+    printDist = pos - prob.geometry.Y_BUILD - param.printOffset
+    printHeight = (ls.size[3]+1-prob.geometry.ΔH):ls.size[3]
+    if 0 < printDist <= prob.geometry.Y
+        prob.eᵗ[:, printDist:end, printHeight] .= prob.ink.nodes[:, printDist:end, printHeight]
     elseif printDist <= 0
         # As the print is in reverse direction, it is compleate when printDist <= 0
-        G.eᵗ[:, :, printHeight] .= G.ink.nodes[:, :, printHeight]
+        prob.eᵗ[:, :, printHeight] .= prob.ink.nodes[:, :, printHeight]
     end
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
-    @debug "InkBoundary" _group = "hss" cts.tₚ overheadTemp surfaceTemp airTemp shadow[ls.ind.iₘ[2]] G.eᵗ[ls.ind.iₘ] printDist
+    @debug "InkBoundary" _group = "hss" cts.tₚ overheadTemp surfaceTemp airTemp shadow[ls.ind.iₘ[2]] prob.eᵗ[ls.ind.iₘ] printDist
     return InkBoundary(overheadTemp, surfaceTemp, ε, airTemp, h, shadow, Po)
 end
 
@@ -87,24 +87,3 @@ loadInkStroke(tₗ, skip) = Load(;
     z₁   = PistonBoundary,
     z₂   = InkBoundary,
 )
-
-# @testitem "loadInkStroke" begin
-#     using Test, HSSSimulations, JLD2
-#
-#     G, ls, pts, cts = load("test/test_inputs/full_in.jld2", "G", "ls", "pts", "cts")
-#     ls = HSSSimulations.LoadStep(;
-#         load = G.buildLoads[end],
-#         time = ls.time,
-#         size = ls.size,
-#         ind = ls.ind,
-#         init = ls.init,
-#         name = "ink",
-#         layerNum = 12,
-#     )
-#     cts = Result((G.geometry.X, G.geometry.Y, G.geometry.Z), cts.t, 1.0)
-#     G.ink.nodes[:,:,12] .= 1.0
-#     HSSSimulations.padWithGhost!(pts, cts, ls, G)
-#     @testset "all ink has been laid down" begin
-#         @test all(map((x, y) -> (x == y), G.eᵗ[:,:,12], G.ink.nodes[:,:,12]))
-#     end
-# end

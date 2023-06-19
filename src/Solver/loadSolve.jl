@@ -3,16 +3,16 @@ $(TYPEDSIGNATURES)
 
 Solves a single load and returns an array of the results.
 """
-function loadSolver!(ls::Types.LoadStep, results, G::GVars)
+function loadSolver!(ls::Types.LoadStep, results, prob::Problem)
     @debug "Starting loadStep $(ls.name) t=$(ls.time.tₛ)" _group = "core"
 
     # Obey the progress bar option
-    waitTime = if G.options.showProgress == true
+    waitTime = if prob.options.showProgress == true
         0.5
-    elseif G.options.showProgress == false
+    elseif prob.options.showProgress == false
         Inf
     else
-        G.options.showProgress
+        prob.options.showProgress
     end
 
     pts::typeof(ls.init) = ls.init
@@ -23,12 +23,12 @@ function loadSolver!(ls::Types.LoadStep, results, G::GVars)
         if ls.time.times[i] in ls.time.unskipTimes
             # for unskipped loads, use the relevant index into the Results struct
             iᵣ = findfirst(==(ls.time.times[i]), ls.time.unskipTimes)
-            timeSolver!(results[iᵣ], pts, ls, G)
+            timeSolver!(results[iᵣ], pts, ls, prob)
             pts = results[iᵣ]
         else
             # for skipped nodes simply use an empty Result struct that won't be saved
             cts = resConstruct(ls.size, ls.time.times[i], ls.time.tₚ[i])
-            timeSolver!(cts, pts, ls, G)
+            timeSolver!(cts, pts, ls, prob)
             pts = cts
         end
     end

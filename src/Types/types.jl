@@ -52,11 +52,18 @@ such as is done for Mₘ in the `MatProp` struct.
 
 As the default implementation does nothing, and nothing normally dispatches on it, it can
 be replaced by another empty type to use a new method for any function that dispatches on
-[`GVars`](@ref) (I think that's all of the user facing API).
+[`Problem`](@ref) (I think that's all of the user facing API).
 
 [Tutorial 4: Saving More Results](@ref) for more details.
 """
 abstract type AbstractOtherResults <: AbstractSimProperty end
+
+"""
+$(TYPEDEF)
+
+The default struct stores no data and only acts as a placeholder.
+"""
+struct OtherResults <: AbstractOtherResults end
 
 """
 $(TYPEDEF)

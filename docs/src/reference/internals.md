@@ -18,7 +18,7 @@ Solver.fdmSolver!
 Solver.timeSolver!
 Solver.nanfiller!
 Solver.loadSolver!
-Solver.makeDescription
+Types.makeDescription
 Solver.startMetadata
 Solver.finishMetadata
 ```

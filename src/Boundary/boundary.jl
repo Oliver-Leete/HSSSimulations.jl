@@ -81,9 +81,9 @@ struct ConductionBoundary <: AbstractBoundary
     temp::Float64
     "Coefficient of contact conduction"
     coef::Float64
-    function ConductionBoundary(_, cts, G, _)
-        temp = G.boundary.condTemp[cts.t]
-        coef = G.boundary.condCoef
+    function ConductionBoundary(_, cts, prob, _)
+        temp = prob.params.condTemp[cts.t]
+        coef = prob.params.condCoef
         return new(temp, coef)
     end
 end
@@ -100,9 +100,9 @@ struct ConvectionBoundary <: AbstractBoundary
     temp::Float64
     "Convection coefficient"
     coef::Float64
-    function ConvectionBoundary(_, cts, G, _)
-        temp = G.boundary.convTemp[cts.t]
-        coef = G.boundary.convCoef
+    function ConvectionBoundary(_, cts, prob, _)
+        temp = prob.params.convTemp[cts.t]
+        coef = prob.params.convCoef
         return new(temp, coef)
     end
 end

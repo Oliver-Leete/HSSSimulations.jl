@@ -55,14 +55,14 @@ that boundary (except for the information already passed in to `Types.boundaryHe
 
 Each subtype of this should have a constructor that satisfies the following signature:
 
-    <Boundary>(pts::AbstractResult, cts::AbstractResult, G::GVars, ls::LoadStep)
+    <Boundary>(pts::AbstractResult, cts::AbstractResult, prob::Problem, ls::LoadStep)
 
 ## Arguments
 
   - `pts`  : The results from the previous timestep. See `Result`
   - `cts`  : The results from the current timestep. See `Result`
-  - `G`    : The 'global' variables of the simulation. See [`GVars`](@ref)
-  - `ls`   : The per load step variables. See [`LoadStep`](@ref)
+  - `prob` : The 'global' variables of the simulation. See [`Problem`](@ref)
+  - `ls`   : The per load step variables. See [`Types.LoadStep`](@ref)
 
 For examples see the default subtypes, and their constructors. [Boundary Recipes](@ref) has examples
 of some of the extra things that can be done with new `AbstractBoundary`s.
@@ -160,8 +160,8 @@ struct Load{
             if !hasmethod(boundaryHeatTransferRate, Tuple{Any,Any,l})
                 throw(MethodError(boundaryHeatTransferRate, Tuple{Any,Any,l}))
             end
-            if !hasmethod(l, Tuple{AbstractResult,AbstractResult,GVars,LoadStep})
-                throw(MethodError(l, Tuple{AbstractResult,AbstractResult,GVars,LoadStep}))
+            if !hasmethod(l, Tuple{AbstractResult,AbstractResult,Problem,Types.LoadStep})
+                throw(MethodError(l, Tuple{AbstractResult,AbstractResult,Problem,Types.LoadStep}))
             end
         end
         return new{x₁,x₂,y₁,y₂,z₁,z₂}(x₁, x₂, y₁, y₂, z₁, z₂, name, tₗ, skip)

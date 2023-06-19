@@ -14,12 +14,12 @@ function timeSolver!(
     cts::AbstractResult,
     pts::AbstractResult,
     ls::Types.LoadStep,
-    G::GVars,
+    prob::Problem,
 )
     @debug "Starting timestep t=$(cts.t)" _group = "core"
-    calcMatProps!(pts, cts, G, ls.ind.iᵣ)
-    Boundary.padWithGhost!(pts, cts, ls, G)
-    fdmSolver!(cts, ls.ind.iᵣ, G)
+    calcMatProps!(pts, cts, prob, ls.ind.iᵣ)
+    Boundary.padWithGhost!(pts, cts, ls, prob)
+    fdmSolver!(cts, ls.ind.iᵣ, prob)
     @debug "FDM solver" _group = "solver" cts.T[ls.ind.iₘ]
     nanfiller!(cts, ls.ind.iᵢ)
     return
@@ -27,9 +27,9 @@ end
 
 @testitem "timeSolver!" begin
     using Test, HSSSimulations, JLD2
-    G, ls, pts, cts = load(joinpath(@__DIR__, "../../test/test_inputs/full_in.jld2"),
+    prob, ls, pts, cts = load(joinpath(@__DIR__, "../../test/test_inputs/full_in.jld2"),
         "G", "ls", "pts", "cts")
-    Solver.timeSolver!(cts, pts, ls, G)
+    Solver.timeSolver!(cts, pts, ls, prob)
     @testset "Temperature changes everywhere" begin
         @test all(
             map(!=, filter(!isnan, pts.T), filter(!isnan, cts.T)),
@@ -49,14 +49,14 @@ current node (for the previous time step) multiplied by the fourier number `Fo` 
 temperature of that node for the current timestep. This is done for all nodes. As ghost nodes are
 used, this function is the same for all nodes and doesn't need special logic for boundary nodes.
 """
-function fdmSolver!(cts, indᵣ, G)
+function fdmSolver!(cts, indᵣ, p)
     Threads.@threads for index in indᵣ
         u, v, w = Tuple(index)
         cts.T[index] =
-            G.Fx[index] * (G.Tᵗ⁻¹[u-1, v, w] + G.Tᵗ⁻¹[u+1, v, w]) +
-            G.Fy[index] * (G.Tᵗ⁻¹[u, v-1, w] + G.Tᵗ⁻¹[u, v+1, w]) +
-            G.Fz[index] * (G.Tᵗ⁻¹[u, v, w-1] + G.Tᵗ⁻¹[u, v, w+1]) +
-            G.Tᵗ⁻¹[u, v, w] * (1 - (2 * G.Fx[index] + 2 * G.Fy[index] + 2 * G.Fz[index]))
+            p.Fx[index] * (p.Tᵗ⁻¹[u-1, v, w] + p.Tᵗ⁻¹[u+1, v, w]) +
+            p.Fy[index] * (p.Tᵗ⁻¹[u, v-1, w] + p.Tᵗ⁻¹[u, v+1, w]) +
+            p.Fz[index] * (p.Tᵗ⁻¹[u, v, w-1] + p.Tᵗ⁻¹[u, v, w+1]) +
+            p.Tᵗ⁻¹[u, v, w] * (1 - (2 * p.Fx[index] + 2 * p.Fy[index] + 2 * p.Fz[index]))
     end
 end
 

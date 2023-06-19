@@ -28,22 +28,22 @@ end
 function BlankBoundary(
     _::AbstractResult,
     cts::AbstractResult,
-    G::GVars{T,Gh,Mp,R,OR,B},
+    prob::Problem{T,Gh,Mp,R,OR,B},
     ls::Types.LoadStep,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-    param = G.params
+    param = prob.params
 
     param.overheadTemp =
         overheadTemp = param.overheadHeatupFunc(param.overheadPower, param.overheadTemp, cts)
 
     # The position of the righthand side of the carriage (well, the left, but everything is reversed)
-    pos = ceil(Int, (param.printCarriageWidth + G.geometry.Y_BUILD) * cts.tₚ)
+    pos = ceil(Int, (param.printCarriageWidth + prob.geometry.Y_BUILD) * cts.tₚ)
     shadowPos = (pos - param.printCarriageWidth, pos)
-    shadow = movingObjOverlap(G.geometry, true, shadowPos)
+    shadow = movingObjOverlap(prob.geometry, true, shadowPos)
 
     airTemp = param.airHeat(cts.t)
     surfaceTemp = param.surfaceHeat(cts.t)
-    ε = G.matProp.ε
+    ε = prob.matProp.ε
     h = param.convectionCoef
     Po = param.percentOverhead
 
