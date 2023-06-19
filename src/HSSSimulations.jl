@@ -170,7 +170,10 @@ module HSSBound
     include("HSSBound/recoatStroke.jl")
     include("HSSBound/blankStroke.jl")
     include("HSSBound/inkStroke.jl")
-    include("HSSBound/HSSboundary.jl")
+    include("HSSBound/HSSLoads.jl")
+
+    include("HSSBound/utils.jl")
+    include("HSSBound/HSSParams.jl")
 
     # External Advanced
     export PistonBoundary, OverheadsBoundary, loadOverheads
