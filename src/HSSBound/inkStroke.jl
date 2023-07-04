@@ -66,7 +66,7 @@ function Types.boundaryHeatTransferRate(T, i, p::InkBoundary)
     return (
         convectionFlow(T, p.airTemp, p.h) +
         radiationFlow(T, p.surfaceTemp, p.ε) * (shadow || (1 - p.Po)) +
-        radiationFlow(T, p.overheadTemp, p.ε) * ¬shadow * p.Po
+        radiationFlow(T, p.overheadTemp, p.ε) * !shadow * p.Po
     )
 end
 

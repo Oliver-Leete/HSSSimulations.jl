@@ -192,9 +192,9 @@ function meltUpdate(Mᵗ⁻¹, T, Mₘ, _, mp::AbstractMatProp)
     Mᵗ = Mᵗ⁻¹
 
     if T > mp.Mₛ
-        Mᵗ = mp.Mᵣ(T) ∨ Mᵗ⁻¹
+        Mᵗ = max(mp.Mᵣ(T), Mᵗ⁻¹)
         Δh = (Mᵗ - Mᵗ⁻¹) * mp.Hf
-        Mₘ = Mᵗ ∨ Mₘ
+        Mₘ = max(Mᵗ,  Mₘ)
     end
 
     if Mᵗ > 0.0 && T < mp.Rₑ
@@ -229,9 +229,9 @@ This finds the consolidation rate by calling `mp.Ċ` with `C`, `T` and `M` as a
 The returned values maximum is limited to 1.
 """
 consUpdate(C, M, T, Δt, mp::AbstractMatProp) =
-    if M == 0 || C == 1
+    if iszero(M) || isone(C)
         C
     else
         C = C + Δt * mp.Ċ(C, T, M)
-        C ∧ 1.0
+        min(C, 1.0)
     end

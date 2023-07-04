@@ -148,7 +148,7 @@ function Geometry(
 
     # calculate the buildsize (if not given), and then set the x and y variables for it (and the
     # node distance equivalent variables).
-    if buildSize === nothing
+    if isnothing(buildSize)
         buildSize = (offset[1] + x, offset[2] + y)
     end
     xbuild, ybuild = buildSize

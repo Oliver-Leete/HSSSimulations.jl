@@ -16,9 +16,9 @@ y[:,1,:]. z₂ is a special case where it always represents the top surface of t
 layer has not been compleatly deposited yet. y₂ is another special case, where it represents its
 normal face, but also represents the leading edge of deposited powder.
 
-The first element of the tuple in the boundary indices is the index (of the array without the ghost
-cells) for the real node and the second element is the index (of the array with the ghost cells) of
-the matching ghost node.
+The first element of the tuple in the boundary indices is the cartiesian index (of the array without
+the ghost cells) for the real node, the second is the linear index of the same point and the third
+element is the linear index (of the array with the ghost cells) of the matching ghost node.
 
 # Fields
 $(TFIELDS)
@@ -29,17 +29,17 @@ mutable struct Indices
     "List of currently imaginary nodes"
     iᵢ::Vector{CartesianIndex{3}}
     "List of real/ghost node pairs for `[1,:,:]"
-    const x₁::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    const x₁::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "List of real/ghost node pairs for `[end,:,:]"
-    const x₂::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    const x₂::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "List of real/ghost node pairs for `[:,1,:]"
-    const y₁::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    const y₁::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "List of real/ghost node pairs for `[:,end,:]"
-    y₂::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    y₂::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "List of real/ghost node pairs for `[:,:,1]"
-    const z₁::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    const z₁::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "List of real/ghost node pairs for `[:,:,end]"
-    z₂::Matrix{Tuple{CartesianIndex{3},CartesianIndex{3}}}
+    z₂::Matrix{Tuple{CartesianIndex{3},Int,Int}}
     "The middle point of z₂, and it is currently only used for debugging/logging."
     iₘ::CartesianIndex{3}
     "The same as it is in [`Geometry`](@ref), it is just copied over for convenience."

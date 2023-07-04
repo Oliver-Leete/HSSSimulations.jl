@@ -28,6 +28,6 @@
         # Check that the melt state returns to zero if temp lower than recryst temp
         lastTemp = lastLoad["T"][:, :, :, end]
         lastMelt = lastLoad["M"][:, :, :, end]
-        @test all(map(<(125), lastTemp) .<= map(==(0), lastMelt))
+        @test all(map(<(125), lastTemp) .<= map(iszero, lastMelt))
     end
 end

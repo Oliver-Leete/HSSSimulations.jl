@@ -10,13 +10,6 @@ module DocExt
     export TFIELDS
 end
 
-module MaxMin
-    ∧(a, b) = min(a, b)
-    ∨(a, b) = max(a, b)
-    ¬(a) = !a
-    export ∧, ∨, ¬
-end
-
 module Types
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using CodecZlib
@@ -63,7 +56,6 @@ export Res
 
 module Material
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
-    using ..MaxMin
     using ..Types
     using Interpolations: Flat, Line, bounds, linear_interpolation
     using JLD2
@@ -92,7 +84,6 @@ module Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material: calcMatProps!
     using ..Types
-    using ..MaxMin
     using TestItems: @testitem
 
     include("Boundary/indices.jl")
@@ -149,7 +140,6 @@ module HSSBound
     using ..Boundary
     using ..DocExt
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
-    using ..MaxMin
     using ..Solver
     using ..Types
     using Interpolations: AbstractInterpolation, Flat, bounds, linear_interpolation

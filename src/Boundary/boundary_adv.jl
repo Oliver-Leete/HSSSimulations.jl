@@ -58,7 +58,7 @@ end
     end
     @testset "No imaginaries at full distance" begin
         recoating!(pts, cts, prob, ls, prob.geometry.Y, temp)
-        @test ls.ind.iᵢ == []
+        @test isempty(ls.ind.iᵢ)
     end
 end
 
@@ -91,8 +91,8 @@ function movingObjOverlap(geometry::Geometry, movingObj, objPos::Tuple{Int,Int})
 
     ret = zeros(typeof(movingObj), geometry.Y)
 
-    start = bedLeft ∨ objLeft
-    finish = bedRight ∧ objRight
+    start = max(bedLeft, objLeft)
+    finish = min(bedRight, objRight)
     ret[start:finish] .= movingObj
     @debug "mOO non-vector" _group = "b_adv" objLeft objRight start finish
 
@@ -137,11 +137,11 @@ function movingObjOverlap(geometry::Geometry, movingObj::T, objPos::Int) where {
 
     ret = zeros(eltype(movingObj), geometry.Y)
 
-    retStart = bedLeft ∨ objLeft - bedPos
-    retFinish = bedRight ∧ objRight - bedPos
+    retStart = max(bedLeft, objLeft) - bedPos
+    retFinish = min(bedRight, objRight) - bedPos
 
-    objStart = objLeft ∨ bedLeft - objLeft + 1
-    objFinish = objRight ∧ bedRight - objLeft + 1
+    objStart = max(objLeft, bedLeft) - objLeft + 1
+    objFinish = min(objRight, bedRight) - objLeft + 1
 
     ret[retStart:retFinish] .= movingObj[objStart:objFinish]
     @debug "mOO vector" _group = "b_adv" objLeft objRight retStart retFinish objStart objFinish
@@ -184,14 +184,14 @@ function movingObjOverlap(geometry::Geometry, movingObj::T, objPos::Int) where {
 
     ret = zeros(eltype(movingObj), geometry.X, geometry.Y)
 
-    retStart = bedLeft ∨ objLeft - bedPos
-    retFinish = bedRight ∧ objRight - bedPos
+    retStart = max(bedLeft, objLeft) - bedPos
+    retFinish = min(bedRight, objRight) - bedPos
 
     objXStart = geometry.X_OFFSET + 1
     objXFinish = geometry.X_OFFSET + geometry.X
 
-    objStart = objLeft ∨ bedLeft - objLeft + 1
-    objFinish = objRight ∧ bedRight - objLeft + 1
+    objStart = max(objLeft, bedLeft) - objLeft + 1
+    objFinish = min(objRight, bedRight) - objLeft + 1
 
     ret[:, retStart:retFinish] .= movingObj[objXStart:objXFinish, objStart:objFinish]
     @debug "mOO vector" _group = "b_adv" objXStart objXFinish objLeft objRight retStart retFinish objStart objFinish

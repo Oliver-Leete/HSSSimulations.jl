@@ -67,7 +67,7 @@
         # Check that the melt state returns to zero if temp lower than recryst temp
         last = results[index[end]]["T"][:, :, :, end]
         lastMelt = results[index[end]]["M"][:, :, :, end]
-        @test all(map(<(125), last) .<= map(==(0), lastMelt))
+        @test all(map(<(125), last) .<= map(iszero, lastMelt))
 
         # Check that none of the final temperatures are NaN
         @test all(map(!isnan, last))
@@ -152,7 +152,7 @@ end
 #         # Check that the melt state returns to zero if temp lower than recryst temp
 #         last = results[index[end]]["T"][:, :, :, end]
 #         lastMelt = results[index[end]]["M"][:, :, :, end]
-#         @test all(map(x -> x < 125, last) .<= map(x -> x == 0, lastMelt))
+#         @test all(map(x -> x < 125, last) .<= map(iszero, lastMelt))
 #
 #         # Check that none of the final temperatures are NaN
 #         @test all(map(!isnan, last))
@@ -237,7 +237,7 @@ end
 #         # Check that the melt state returns to zero if temp lower than recryst temp
 #         last = results[index[end]]["T"][:, :, :, end]
 #         lastMelt = results[index[end]]["M"][:, :, :, end]
-#         @test all(map(x -> x < 125, last) .<= map(x -> x == 0, lastMelt))
+#         @test all(map(x -> x < 125, last) .<= map(iszero, lastMelt))
 #
 #         # Check that none of the final temperatures are NaN
 #         @test all(map(!isnan, last))
