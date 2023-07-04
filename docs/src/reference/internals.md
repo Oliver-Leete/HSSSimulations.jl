@@ -6,7 +6,7 @@ Documentation for any things not exported from modules.
 
 ```@docs
 Boundary.updateInds!
-Boundary.innerLoop!
+Boundary.ghostCalc!
 Boundary.boundaryTemp
 Boundary.σ
 ```

@@ -15,7 +15,7 @@ function padWithGhost!(pts::AbstractResult, cts::AbstractResult, ls, prob)
     # logic. This is done outside of the loop so that the inds lists in the loop represent the
     # updated ones.
     params = ls.load.z₂(pts, cts, prob, ls)
-    innerLoop!(prob.Tᵗ⁻¹, pts.T, params, ls.ind.z₂, Δz, prob.κ)
+    ghostCalc!(prob.Tᵗ⁻¹, pts.T, params, ls.ind.z₂, Δz, prob.κ)
     @debug "padWithGhost!" _group = "bound" ls.load.z₂ prob.Tᵗ⁻¹[ls.ind.z₂[end][1]] prob.Tᵗ⁻¹[ls.ind.z₂[end][2]]
     for (loadType, ind, gdist) in (
         (ls.load.z₁, ls.ind.z₁, Δz),
@@ -23,7 +23,7 @@ function padWithGhost!(pts::AbstractResult, cts::AbstractResult, ls, prob)
         (ls.load.y₁, ls.ind.y₁, Δy), (ls.load.y₂, ls.ind.y₂, Δy),
     )
         loopParams = loadType(pts, cts, prob, ls)
-        innerLoop!(prob.Tᵗ⁻¹, pts.T, loopParams, ind, gdist, prob.κ)
+        ghostCalc!(prob.Tᵗ⁻¹, pts.T, loopParams, ind, gdist, prob.κ)
         @debug "padWithGhost!" _group = "bound" loadType prob.Tᵗ⁻¹[ind[end][1]] prob.Tᵗ⁻¹[ind[end][2]]
     end
 end
@@ -31,15 +31,18 @@ end
 """
 $(TYPEDSIGNATURES)
 
-The inner loop of [`padWithGhost!`](@ref). This exists for no reason other than as a [function
-barrier](https://docs.julialang.org/en/v1/manual/performance-tips/#kernel-functions) to allow for
-the compiler to know the type of `params` for better dispatch.
+Fills in the ghost nodes for the boundary on the face defined by `indices` using the
+[`boundaryHeatTransferRate`](@ref) function for the type of the boundary parametre (`params`) given.
 """
-innerLoop!(Tᵗ⁻¹, T, params, ind, gdist, κ) =
-    Threads.@threads  for (i, l, g) in ind
-        ϕ⃗ = boundaryHeatTransferRate(T[l], i, params)
-        Tᵗ⁻¹[g] = boundaryTemp(ϕ⃗, T[l], κ[l], gdist)
+function ghostCalc!(Tᵗ⁻¹, T, params, indices, gdist, κ)
+    # Even if padWithGhost! is updated to only call this once, it might
+    # still be worth keeping it seperate to act as a function barrier:
+    # https://docs.julialang.org/en/v1/manual/performance-tips/#kernel-functions
+    Threads.@threads for (ci, real, ghost) in indices
+        ϕ⃗ = boundaryHeatTransferRate(T[real], ci, params)
+        Tᵗ⁻¹[ghost] = boundaryTemp(ϕ⃗, T[real], κ[real], gdist)
     end
+end
 
 @testitem "padWithGhost!" begin
     using Test, HSSSimulations, JLD2
