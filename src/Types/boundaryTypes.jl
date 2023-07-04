@@ -10,9 +10,9 @@ include all of the top layer, as powder has not been deposited there yet. `iᵢ`
 'imaginary' nodes, these are nodes that represent locations that do not currently contain powder.
 These is the same as the indices of all of the nodes minus the indicies of the real nodes (`iᵣ`).
 
-Fields with a subscript 1 (`₁`) denote the boundary at the start of that axis, and subscript
-2 (`₂`) dentoes the end of that boundary. eg. `x₂` is the boundary [end,:,:] and `y₁` is
-y[:,1,:]. z₂ is a special case where it always represents the top surface of the build, even if a
+Fields with a subscript 1 (`₁`) denote the boundary at the start of that axis, and subscript 2
+(`₂`) dentoes the end of that boundary. eg. `x₂` is the boundary `[end,:,:]` and `y₁` is
+`[:,1,:]`. z₂ is a special case where it always represents the top surface of the build, even if a
 layer has not been compleatly deposited yet. y₂ is another special case, where it represents its
 normal face, but also represents the leading edge of deposited powder.
 

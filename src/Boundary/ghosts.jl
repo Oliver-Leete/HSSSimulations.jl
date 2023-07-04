@@ -10,21 +10,19 @@ function padWithGhost!(pts::AbstractResult, cts::AbstractResult, ls, prob)
     prob.Tᵗ⁻¹[CartesianIndices(pts.T)] = pts.T
     (; Δx, Δy, Δz) = prob.geometry
 
-    # Run the z₂ boundary parameter calculator, and then calculate the ghost nodes for z₂
-    # boundary equation.
-    # The top boundary goes first as that is probably where you'll put things like recoat logic.
-    # This is done outside of the loop so that the inds lists in the loop represent the updated ones.
-    params::ls.load.z₂ = ls.load.z₂(pts, cts, prob, ls)
+    # Run the boundary parameter calculator and ghost node calculator, first for the top, then for
+    # the rest. The top boundary goes first as that is probably where you'll put things like recoat
+    # logic. This is done outside of the loop so that the inds lists in the loop represent the
+    # updated ones.
+    params = ls.load.z₂(pts, cts, prob, ls)
     innerLoop!(prob.Tᵗ⁻¹, pts.T, params, ls.ind.z₂, Δz, prob.κ)
     @debug "padWithGhost!" _group = "bound" ls.load.z₂ prob.Tᵗ⁻¹[ls.ind.z₂[end][1]] prob.Tᵗ⁻¹[ls.ind.z₂[end][2]]
-    # Iterate over every boundary and calculate the ghost nodes for that boundary using the relevant
-    # boundary equation.
     for (loadType, ind, gdist) in (
         (ls.load.z₁, ls.ind.z₁, Δz),
         (ls.load.x₁, ls.ind.x₁, Δx), (ls.load.x₂, ls.ind.x₂, Δx),
         (ls.load.y₁, ls.ind.y₁, Δy), (ls.load.y₂, ls.ind.y₂, Δy),
     )
-        loopParams::loadType = loadType(pts, cts, prob, ls)
+        loopParams = loadType(pts, cts, prob, ls)
         innerLoop!(prob.Tᵗ⁻¹, pts.T, loopParams, ind, gdist, prob.κ)
         @debug "padWithGhost!" _group = "bound" loadType prob.Tᵗ⁻¹[ind[end][1]] prob.Tᵗ⁻¹[ind[end][2]]
     end
@@ -38,9 +36,9 @@ barrier](https://docs.julialang.org/en/v1/manual/performance-tips/#kernel-functi
 the compiler to know the type of `params` for better dispatch.
 """
 innerLoop!(Tᵗ⁻¹, T, params, ind, gdist, κ) =
-    Threads.@threads for (i, g) in ind
-        ϕ⃗ = boundaryHeatTransferRate(T[i], i, params)
-        Tᵗ⁻¹[g] = boundaryTemp(ϕ⃗, T[i], κ[i], gdist)
+    Threads.@threads  for (i, l, g) in ind
+        ϕ⃗ = boundaryHeatTransferRate(T[l], i, params)
+        Tᵗ⁻¹[g] = boundaryTemp(ϕ⃗, T[l], κ[l], gdist)
     end
 
 @testitem "padWithGhost!" begin

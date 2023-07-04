@@ -9,29 +9,33 @@ See [`Types.Indices`](@ref) for more details on the struct returned by this func
 """
 function calcInds(res, ghost, ΔH, recoatLoadSet)
     ind = CartesianIndices(res)
+    linInd = LinearIndices(res)
     x, y, z = size(ind)
-    gInd = CartesianIndices(ghost)
+    gInd = LinearIndices(ghost)
 
     # Set all (but z₂) boundaries
     #!format: off
     # ^ to keep these lined up
-    x₁ = [(ind[  1, j, k], gInd[  0, j, k]) for j in 1:y, k in 1:z]
-    x₂ = [(ind[end, j, k], gInd[end, j, k]) for j in 1:y, k in 1:z]
-    y₁ = [(ind[i,   1, k], gInd[i,   0, k]) for i in 1:x, k in 1:z]
-    y₂ = [(ind[i, end, k], gInd[i, end, k]) for i in 1:x, k in 1:z]
-    z₁ = [(ind[i,   j, 1], gInd[i, j,   0]) for i in 1:x, j in 1:y]
+    x₁ = [(ind[  1, j, k], linInd[  1, j, k], gInd[  0, j, k]) for j in 1:y, k in 1:z]
+    x₂ = [(ind[end, j, k], linInd[end, j, k], gInd[end, j, k]) for j in 1:y, k in 1:z]
+    y₁ = [(ind[i,   1, k], linInd[i,   1, k], gInd[i,   0, k]) for i in 1:x, k in 1:z]
+    y₂ = [(ind[i, end, k], linInd[i, end, k], gInd[i, end, k]) for i in 1:x, k in 1:z]
+    z₁ = [(ind[i,   j, 1], linInd[i,   j, 1], gInd[i, j,   0]) for i in 1:x, j in 1:y]
     #!format: on
 
     if recoatLoadSet
         # On normal layers set the top to be imaginary
         iᵣ = vec(ind[:, :, 1:(end-ΔH)])
         iᵢ = vec(ind[:, :, (1+end-ΔH):end])
-        z₂ = [(ind[i, j, end-ΔH], gInd[i, j, (z-ΔH)+1]) for i in 1:x, j in 1:y]
+        z₂ = [
+            (ind[i, j, end-ΔH], linInd[i, j, end-ΔH], gInd[i, j, (z-ΔH)+1])
+            for i in 1:x, j in 1:y
+        ]
     else
         # On preheat and cool down layers set everything as real
         iᵣ = vec(ind)
         iᵢ = CartesianIndices([])
-        z₂ = [(ind[i, j, end], gInd[i, j, z+1]) for i in 1:x, j in 1:y]
+        z₂ = [(ind[i, j, end], linInd[i, j, end], gInd[i, j, z+1]) for i in 1:x, j in 1:y]
     end
 
     iₘ = iᵣ[cld(length(iᵣ), 2)]
@@ -111,8 +115,9 @@ been deposited in number of nodes into the simulation area).
 """
 function updateInds!(indStruct::Types.Indices, recoatDist, resSize, ghost)
     ind = CartesianIndices(resSize)
+    linInd = LinearIndices(resSize)
     x, y, z = resSize
-    gInd = CartesianIndices(ghost)
+    gInd = LinearIndices(ghost)
     recoatHeight = z - indStruct.ΔH
 
     # Update the active/inactive nodes
@@ -123,18 +128,23 @@ function updateInds!(indStruct::Types.Indices, recoatDist, resSize, ghost)
     # Update the y₂ face so that boundary isn't left dangling
     if indStruct.ΔH > 1
         indStruct.y₂ = hcat(
-            [(ind[i, end, k], gInd[i, end, k]) for i in 1:x, k in 1:(recoatHeight+1)],
             [
-                (ind[i, recoatDist, k], gInd[i, recoatDist+1, k]) for i in 1:x,
+                (ind[i, end, k], linInd[i, end, k], gInd[i, end, k]) for i in 1:x,
+                k in 1:(recoatHeight+1)
+            ],
+            [
+                (ind[i, recoatDist, k], linInd[i, recoatDist, k], gInd[i, recoatDist+1, k]) for
+                i in 1:x,
                 k in (recoatHeight+2):z
             ],
         )
     end
 
     indStruct.z₂ = hcat(
-        [(ind[i, j, end], gInd[i, j, z+1]) for i in 1:x, j in 1:recoatDist],
+        [(ind[i, j, end], linInd[i, j, end], gInd[i, j, z+1]) for i in 1:x, j in 1:recoatDist],
         [
-            (ind[i, j, recoatHeight], gInd[i, j, recoatHeight+1]) for i in 1:x,
+            (ind[i, j, recoatHeight], linInd[i, j, recoatHeight], gInd[i, j, recoatHeight+1])
+            for i in 1:x,
             j in (recoatDist+1):y
         ],
     )
