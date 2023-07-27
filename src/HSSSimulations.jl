@@ -21,13 +21,13 @@ module Types
     include("Types/internalTypes.jl")
     include("Types/problem.jl")
 
-    # External Advanced
+    # Advanced
     export AbstractResult, AbstractOtherResults
     export AbstractMatProp
     export AbstractBoundary, Load, AbstractLoadSet, AbstractProblemParams
     export boundaryHeatTransferRate
 
-    # External
+    # Reexported
     export Problem
     export Geometry, Ink
     export Options, package_groups
@@ -44,11 +44,11 @@ module Res
 
     include("results.jl")
 
-    # External Advanced
+    # Advanced
     export loadStepSaver
     export otherResults
 
-    # External
+    # Reexported
     export Result
 end
 @reexport using .Res: Result
@@ -65,7 +65,7 @@ module Material
     include("Material/materialProps.jl")
     include("Material/PA2200.jl")
 
-    # External Advanced
+    # Advanced
     export calcMatProps!
     export meltUpdate, consUpdate
     export PA_κ, PA_ρ, PA_c
@@ -73,7 +73,7 @@ module Material
     export PA_Ċ, PA_Ċ_maker
     export PA_eₚ, PA_eᵢ
 
-    # External
+    # Reexported
     export MatProp
     export PA2200
 end
@@ -92,12 +92,12 @@ module Boundary
     include("Boundary/ghosts.jl")
     include("Boundary/boundary_adv.jl")
 
-    # External Advanced
+    # Advanced
     export conductionFlow, convectionFlow, radiationFlow
     export SymetryBoundary, ConductionBoundary, ConvectionBoundary
     export recoating!, movingObjOverlap
 
-    # External
+    # Reexported
     export basicLoad, BasicProblemParams
 end
 @reexport using .Boundary: basicLoad, BasicProblemParams
@@ -125,12 +125,12 @@ module Solver
     include("Solver/loadSetSolve.jl")
     include("Solver/problemSolve.jl")
 
-    # External Advanced
+    # Advanced
     export loadSetSolver!, innerLoadSetSolver!
     export FixedLoadSet, LayerLoadSet
     export makeLogger, with_logger
 
-    # External
+    # Reexported
     export Problem, problemSolver
 end
 @reexport using .Solver: Problem, problemSolver
@@ -159,7 +159,7 @@ module HSSBound
     include("HSSBound/utils.jl")
     include("HSSBound/HSSParams.jl")
 
-    # External Advanced
+    # Advanced
     export PistonBoundary, OverheadsBoundary, loadOverheads
     export PistonCoolBoundary, OverheadsCoolBoundary, loadCooldown
     export SinterBoundary, loadSinterStroke
@@ -168,7 +168,7 @@ module HSSBound
     export InkBoundary, loadInkStroke
     export lampMaker, overheadTempFunc, coolingStart
 
-    # External
+    # Reexported
     export HSSParams, HSSLoads
 end
 @reexport using .HSSBound: HSSParams, HSSLoads

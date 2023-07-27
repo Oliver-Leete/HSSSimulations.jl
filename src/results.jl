@@ -108,22 +108,8 @@ Runs at the end of the simulation to save any additional results that only need 
 opposed to for every nth time step. The [`Types.Problem`](@ref) type and any of its type parameters
 can be dispatched on.
 
-For example, this will run if both the `HSSParams` parameter type, the `MatProp` material property
-and `MyOtherResults` are used for the simulation. It will save the maximum melt state of each node
-to a field called `MeltMax`, ect. See [`AbstractOtherResults`](@ref) for a place to store random
-data, and [Tutorial 4: Saving More Results](@ref) for a detailed guide.
-
-```julia
-function Res.otherResults(
-    prob::Problem{T,Gh,M,R,OR,P},
-    file,
-) where {T<:Any,Gh<:Any,M<:MatProp,R<:Any,OR<:MyOtherResults,P<:HSSParams}
-    file["MeltMax"] = prob.matProp.Mₘ
-    file["CooldownStartTime"] = prob.params.coolStart
-    file["myResult"] = prob.otherResults.something_else_interesting
-    return
-end
-```
+See [`AbstractOtherResults`](@ref) for a place to store random data, and [Tutorial 4: Saving More
+Results](@ref) for a detailed guide.
 """
 function otherResults end
 

@@ -10,16 +10,6 @@ end
 
 ## Types
 
-```@docs
-Types.AbstractSimProperty
-Types.Problem
-Types.LoadTime
-Types.LoadTime(::Any,::Any,::Any,::Any)
-Types.LoadStep
-Types.Indices
-Types.Geometry
-```
-
 ## Boundary
 
 ```@docs

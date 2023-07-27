@@ -92,7 +92,7 @@ DocMeta.setdocmeta!(HSSSimulations, :DocTestSetup, :(
     ); recursive=true)
 
 makedocs(;
-    sitename="Powder Model Documentation",
+    sitename="High Speed Sintering Simulations",
     modules=[
         HSSSimulations,
     ],
@@ -100,15 +100,15 @@ makedocs(;
         "Home" => "index.md",
         "Tutorials" => tut_pages,
         "Reference" => [
-            "Public API" => [
-                "Main API" => "reference/api.md",
-                "Advanced API" => "reference/api_adv.md",
-                "HSS Boundary" => "reference/BoundaryExamples.md",
-                "Post proccessing" => "reference/PostProcessing.md",
-            ],
-            "Internals" => [
-                "Internal APIs" => "reference/internal_api.md",
-                "Private Internals" => "reference/internals.md",
+            "Main API" => "reference/api.md",
+            "Modules" => [
+                "Introduction" => "reference/adv_intro.md",
+                "Types" => "reference/types.md",
+                "Res" => "reference/res.md",
+                "Material" => "reference/material.md",
+                "Boundary" => "reference/boundary.md",
+                "Solver" => "reference/solver.md",
+                "PostProcessing" => "reference/postprocessing.md",
             ],
         ],
         "Recipes" => [
