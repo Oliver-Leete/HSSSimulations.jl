@@ -1,5 +1,5 @@
 ```@meta
-EditURL = "<unknown>/docs/lit/full_tut.jl"
+EditURL = "../../lit/full_tut.jl"
 ```
 
 # Tutorial 1: Full Build

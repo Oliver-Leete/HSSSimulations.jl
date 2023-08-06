@@ -53,7 +53,7 @@ function Material.meltUpdate(Mᵗ⁻¹, T, Mₘ, Δt, mp::MatPropTD)
         ΔM = ṀR * Δt
         ΔH = ΔM * mp.Hr(Mₘ)
     end
-    Mᵗ = min(max(Mᵗ⁻¹ + ΔM, 0), 1)
+    Mᵗ = clamp(Mᵗ⁻¹ + ΔM, 0, 1)
     Mₘ = max(Mᵗ, Mₘ)
 
     return Mᵗ, Mₘ, Δh

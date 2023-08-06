@@ -1,5 +1,5 @@
 ```@meta
-EditURL = "<unknown>/docs/lit/basic_tut.jl"
+EditURL = "../../lit/basic_tut.jl"
 ```
 
 # Tutorial 2: Warm-up and Cool-down only

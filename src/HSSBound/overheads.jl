@@ -57,7 +57,7 @@ function OverheadsBoundary(
         else
             overheadPower = param.overheadPower
         end
-        param.overheadPower = min(max(overheadPower, 0), param.overheadMaxPower)
+        param.overheadPower = clamp(overheadPower, 0, param.overheadMaxPower)
         @debug "Overhead Power updated" _group = "hss" surfaceCurrent overheadPower
     end
     overheadTemp = param.overheadHeatupFunc(param.overheadPower, param.overheadTemp, cts)

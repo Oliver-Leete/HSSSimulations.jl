@@ -1,5 +1,5 @@
 ```@meta
-EditURL = "<unknown>/docs/lit/res_tut.jl"
+EditURL = "../../lit/res_tut.jl"
 ```
 
 # Tutorial 4: Saving More Results
@@ -178,7 +178,7 @@ Overhead update logic
         else
             overheadPower = param.overheadPower
         end
-        param.overheadPower = min(max(overheadPower, 0), param.overheadMaxPower)
+        param.overheadPower = clamp(overheadPower, 0, param.overheadMaxPower)
 
         push!(prob.otherResults.layerChanged, ls.layerNum)
         push!(prob.otherResults.timeChanged, cts.t)

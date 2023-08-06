@@ -1,5 +1,5 @@
 ```@meta
-EditURL = "<unknown>/docs/lit/material_tut.jl"
+EditURL = "../../lit/material_tut.jl"
 ```
 
 # Tutorial 3: A Melt Rate Based Material Model
@@ -90,7 +90,7 @@ end
 Now we have the new type, we can use it with julia's multiple dispatch to change what method
 is called when the simulation goes to update the melt state. This is done by making a new
 method for [`Material.meltUpdate`](@ref) that specifies our new type in place of the default
-[`MatProp`](@ref) type. Refer to my thesis if you need an explanation as to what has changed
+[`MatProp`](@ref) type. Refer to my thesis if you would like an explanation as to what has changed
 here from the default method.
 
 ```julia
@@ -105,7 +105,7 @@ function Material.meltUpdate(Mᵗ⁻¹, T, Mₘ, Δt, mp::MatPropTD)
         ΔM = ṀR * Δt
         ΔH = ΔM * mp.Hr(Mₘ)
     end
-    Mᵗ = min(max(Mᵗ⁻¹ + ΔM, 0), 1)
+    Mᵗ = clamp(Mᵗ⁻¹ + ΔM, 0, 1)
     Mₘ = max(Mᵗ, Mₘ)
 
     return Mᵗ, Mₘ, Δh

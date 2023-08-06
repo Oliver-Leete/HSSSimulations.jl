@@ -82,7 +82,7 @@ function HSSBound.OverheadsBoundary(
         else
             overheadPower = param.overheadPower
         end
-        param.overheadPower = min(max(overheadPower, 0), param.overheadMaxPower)
+        param.overheadPower = clamp(overheadPower, 0, param.overheadMaxPower)
 
         push!(prob.otherResults.layerChanged, ls.layerNum)
         push!(prob.otherResults.timeChanged, cts.t)
