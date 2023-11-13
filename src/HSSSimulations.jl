@@ -10,6 +10,10 @@ module DocExt
     export TFIELDS
 end
 
+"""
+Contains the main types used in the simulation, along with the abstract types used to extend the
+simulation's functionality.
+"""
 module Types
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using CodecZlib
@@ -36,6 +40,10 @@ end
 @reexport using .Types: Problem, Ink, Geometry, Options, package_groups
 export Types
 
+"""
+Contains a concrete time step and final results type and the functions needed to process the results
+for these types.
+"""
 module Res
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Types
@@ -54,6 +62,10 @@ end
 @reexport using .Res: Result
 export Res
 
+"""
+Contains a concrete material property type, the functions for running the material model, and an
+example material using this model and data collected from measuring PA2200.
+"""
 module Material
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Types
@@ -80,6 +92,10 @@ end
 @reexport using .Material: MatProp, PA2200
 export Material
 
+"""
+The functions for calculating the ghost nodes needed to solve the boundary conditions. Basic
+boundary conditions are also included.
+"""
 module Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material: calcMatProps!
@@ -103,6 +119,9 @@ end
 @reexport using .Boundary: basicLoad, BasicProblemParams
 export Boundary
 
+"""
+The core logic for setting up and solving a simulation, including the heat transfer solver.
+"""
 module Solver
     using ..Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
@@ -136,6 +155,10 @@ end
 @reexport using .Solver: Problem, problemSolver
 export Solver
 
+"""
+All additional boundary conditions requried to simulate a HSS build that are not already included in
+[`Boundary`](@ref).
+"""
 module HSSBound
     using ..Boundary
     using ..DocExt
@@ -174,6 +197,9 @@ end
 @reexport using .HSSBound: HSSParams, HSSLoads
 export HSSBound
 
+"""
+Some functions to ease the post processing of the simulation results.
+"""
 module PostProcessing
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using CodecZlib

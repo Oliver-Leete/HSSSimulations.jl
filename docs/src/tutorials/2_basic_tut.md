@@ -3,8 +3,6 @@ EditURL = "../../lit/basic_tut.jl"
 ```
 
 # Tutorial 2: Warm-up and Cool-down only
-[![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/2_basic_tut.ipynb)
-[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/2_basic_tut.ipynb)
 
 ```julia
 using HSSSimulations
@@ -47,7 +45,7 @@ material = PA2200(geometry)
 ### Boundary and Loads
 
 For the boundary conditions we will borrow some things from the boundary example
-module [High Speed Sintering Boundary Example](@ref).
+module [HSS Boundary](@ref).
 
 ```julia
 params = HSSParams(

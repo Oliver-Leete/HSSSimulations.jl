@@ -113,12 +113,12 @@ abstract type AbstractMatProp <: AbstractSimProperty end
 """
 A list of all of the log groups used in this package. They log the following things:
 
-  - "core": the start of a problem, loadstep, load or timestep has started
-  - "solver": the fdm solver
-  - "mat": material model
-  - "bound": boundary condition
-  - "b_adv": recoating and moving object boundaries
-  - "hss": HSS example functions
+  - `core`: the start of a problem, loadstep, load or timestep has started
+  - `solver`: the fdm solver
+  - `mat`: material model
+  - `bound`: boundary condition
+  - `b_adv`: recoating and moving object boundaries
+  - `hss`: HSS example functions
 """
 const package_groups = ["core", "solver", "mat", "bound", "b_adv", "hss"]
 

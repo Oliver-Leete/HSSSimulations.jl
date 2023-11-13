@@ -1,9 +1,9 @@
-# NOTE : While it might be useful to make a new subtype for non-rectangular machines if they ever become
-# available, it would require a rewrite of most functions. So I would only recomend undertaking
-# that if you have a good understanding of the entire codebase (hence why I havn't included an
-# AbstractGeometry). This is because most functions that use the geometry don't dispatch on the
-# geometry type, and a lot of functions need at least some of the geometry fields. Try grepping for
-# geom to see how much it's used.
+# NOTE : While it might be useful to make a new Geometry type for non-rectangular machines if they
+# ever become available, it would require a rewrite of most functions. So I would only recomend
+# undertaking that if you have a good understanding of the entire codebase (hence why I havn't
+# included an AbstractGeometry). This is because most functions that use the geometry don't dispatch
+# on the geometry type, and a lot of functions need at least some of the geometry fields. Try
+# grepping for geom to see how much it's used.
 
 """
 $(TYPEDEF)

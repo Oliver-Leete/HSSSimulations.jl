@@ -1,4 +1,10 @@
-# High Speed Sintering Boundary Example
+# HSS Boundary
+
+```@docs
+HSSBound
+```
+
+## External
 
 For an explanation of what exactly this boundary is doing see [High Speed
 Sintering Boundary Explanation](@ref)
@@ -9,7 +15,7 @@ HSSParams(::Geometry)
 HSSLoads
 ```
 
-## Loads
+### Loads
 
 ```@docs
 HSSBound.loadCooldown
@@ -19,7 +25,7 @@ HSSBound.loadInkStroke
 HSSBound.loadBlankStroke
 ```
 
-## Utilities
+### Utilities
 
 ```@docs
 HSSBound.lampMaker

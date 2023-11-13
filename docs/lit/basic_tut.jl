@@ -33,7 +33,7 @@ material = PA2200(geometry)
 # ### Boundary and Loads
 #
 # For the boundary conditions we will borrow some things from the boundary example
-# module [High Speed Sintering Boundary Example](@ref).
+# module [HSS Boundary](@ref).
 
 params = HSSParams(
     geometry;

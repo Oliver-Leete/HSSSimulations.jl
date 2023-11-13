@@ -1,7 +1,8 @@
 """
 $(TYPEDEF)
+
 The default implementation of [`AbstractMatProp`](@ref) used by the default
-[`Material.calcMatProps!`](@ref) method. See [Material Examples](@ref) for some premade materials.
+[`Material.calcMatProps!`](@ref) method. See [PA2200](@ref) for an exmaple of a premade materials.
 The arguments to its constructor are the same as the matching fields. The only addition is the
 geometry argument, which should just be the [`Geometry`](@ref) struct of for the simulation.
 

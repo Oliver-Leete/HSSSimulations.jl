@@ -8,8 +8,8 @@
 
 Default constructor for [`Types.Load`](@ref). All of the boundaries defaults to symetry boundaries
 (see [`Boundary.SymetryBoundary`](@ref)). See [`Boundary.ConductionBoundary`](@ref) and
-[`Boundary.ConvectionBoundary`](@ref), for some more built in loads. And [High Speed Sintering
-Boundary Example](@ref) for more complicated loads.
+[`Boundary.ConvectionBoundary`](@ref), for some more built in loads. And [HSS Boundary](@ref) for
+more complicated loads.
 
 The `z₂` load is run before any others, so any calculations that need to be done first should be
 put there, such as recoating.

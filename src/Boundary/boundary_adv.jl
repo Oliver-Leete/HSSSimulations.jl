@@ -224,7 +224,8 @@ end
 
     # All of the following conditions has to be handled. Tested for both a bool and a vector input.
     # The diagrams match to the test cases, e.g the left most diagram is the first test case, and
-    # the rightmost the last. For the left and right overlap cases there are multiple tests.
+    # the rightmost the last. For the left and right overlap cases there are multiple tests for each
+    # diagram.
     @testset "no_overlap" begin
         # ----        or        ----                 <-- moving object
         #      ----        ----                      <-- simulated area of bed
