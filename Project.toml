@@ -1,7 +1,7 @@
 name = "HSSSimulations"
 uuid = "a71e696c-90c2-4ee2-a986-0e228f88aa1f"
 authors = ["Oliver Leete <oliverleete@gmail.com>"]
-version = "1.0.0"
+version = "2.0.0"
 
 [deps]
 Alert = "28312eec-4d86-447d-83ad-bc2b262de792"

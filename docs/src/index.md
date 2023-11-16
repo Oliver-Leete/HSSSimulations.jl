@@ -23,17 +23,41 @@ ones to see if it helps.
 The API is available in the references section, it's split into three levels.
 The main API contains everything required for a normal simulation. The advanced
 API covers functions and types that can be useful for getting some more control
-over your simulations (like in the ways shown in some of the recipes). Post
-processing shows the included tools to help process the simulation output.
-And the internals cover the functions that are intended to be used purely
-internally, for if you want to have a crack at modifying the codebase itself.
+over your simulations (like in the ways shown in some of the recipes).
 
-Finally, if you want to know more about what is being simulated, why you'd want
-to simulate it, and why some of the choices have been made, check out the
-explanations section (and my thesis). There should also be a brief overview of
-the structure of the code to help if you want to modify the code to do things
-that aren't possible with the API alone. Although, as always, documentation can
-fall behind code, so trust what the code says more than the docs.
+One major deviation from the Diátaxis framework is the explanations section.
+The normal contents of this section are instead partially provided in the other
+sections, and my thesis is provided as a contiguous explanation of what is going
+on. There is also a small FAQ section to provide brief explanation of some
+things that come up often.
+
+## Tutorials
+
+```@contents
+Pages = Main.tut_pages
+Depth=1
+```
+
+## API
+
+```@contents
+Pages = api_pages
+Depth=1
+```
+
+## Recipes
+
+```@contents
+Pages = Main.recipe_pages
+Depth=1
+```
+
+## Other Pages
+
+```@contents
+Pages = ["explanation/faqs.md", "doc_index.md"]
+Depth=1
+```
 
 ## Contribution
 

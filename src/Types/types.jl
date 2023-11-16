@@ -30,8 +30,12 @@ end
 """
 $(TYPEDEF)
 
-This as the abstract type for the results from a single simulation time step. See [Tutorial 4:
-Saving More Results](@ref) and [Result Type Recipes](@ref) for how to make your own subtype.
+This as the abstract type for the results from a single simulation time step. These are save at the
+end of every load step for each of the time steps in that load step (ignoring time steps that are
+skipped over based on the load steps skip value).
+
+See [Tutorial 4: Saving More Results](@ref) and [Result Type Recipes](@ref) for how to make your own
+subtype.
 
 !!! warning
 
@@ -54,20 +58,25 @@ As the default implementation does nothing, and nothing normally dispatches on i
 be replaced by another empty type to use a new method for any function that dispatches on
 [`Problem`](@ref) (I think that's all of the user facing API).
 
-[Tutorial 4: Saving More Results](@ref) for more details.
+See [Tutorial 4: Saving More Results](@ref) and [Result Type Recipes](@ref) for how to make your own
+subtype.
 """
 abstract type AbstractOtherResults <: AbstractSimProperty end
 
 """
 $(TYPEDEF)
 
-The default struct stores no data and only acts as a placeholder.
+The default struct stores no additional data and only acts as a placeholder. When used, the
+simulation will store the maximum melt state to `Results` folder of the output file and no other
+final results (time step results are still saved each load step).
 """
 struct OtherResults <: AbstractOtherResults end
 
 """
 $(TYPEDEF)
+
 Defines the volume of the ink placement within that (and therefore hopefully the part to be made).
+See [Ink Pattern Recipes](@ref) for some example patterns.
 
 # Fields
 $(TFIELDS)

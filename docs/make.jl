@@ -7,7 +7,7 @@ using Literate
 
 using HSSSimulations.Types
 using HSSSimulations.Material
-using HSSSimulations.Res
+using HSSSimulations.Results
 using HSSSimulations.Boundary
 using HSSSimulations.Solver
 using HSSSimulations.HSSBound
@@ -77,19 +77,45 @@ for (i, (title, filename)) in enumerate(tutorials)
     Literate.script(joinpath(repo_src, filename), script_dir; name=tutorial_file, execute=false)
 
     # Generate navigation menu entries
-    push!(tut_pages, (string(i, " ", title) => string("tutorials/", tutorial_file, ".md")))
+    push!(tut_pages, string("tutorials/", tutorial_file, ".md"))
 end
 
 DocMeta.setdocmeta!(HSSSimulations, :DocTestSetup, :(
         using HSSSimulations;
         using HSSSimulations.Types;
         using HSSSimulations.Material;
-        using HSSSimulations.Res;
+        using HSSSimulations.Results;
         using HSSSimulations.Boundary;
         using HSSSimulations.Solver;
         using HSSSimulations.HSSBound;
         using HSSSimulations.PostProcessing
     ); recursive=true)
+
+tut_pages = ["tutorials/intro.md"; tut_pages]
+api_pages = [
+    "reference/api.md",
+    "reference/adv_intro.md",
+    "reference/types.md",
+    "reference/res.md",
+    "reference/material.md",
+    "reference/boundary.md",
+    "reference/solver.md",
+    "reference/hssbound.md",
+    "reference/postprocessing.md",
+]
+recipe_pages = [
+    "howtos/howto_intro.md",
+    "howtos/howto_ink.md",
+    "howtos/howto_subsets.md",
+    "howtos/howto_mat.md",
+    "howtos/howto_matprop.md",
+    "howtos/howto_result.md",
+    "howtos/howto_load.md",
+    "howtos/howto_bound.md",
+    "howtos/howto_param.md",
+    "howtos/howto_loadset.md",
+    "howtos/howto_problem.md",
+]
 
 makedocs(;
     sitename="High Speed Sintering Simulations",
@@ -97,40 +123,17 @@ makedocs(;
         HSSSimulations,
     ],
     pages=[
-        "Home" => "index.md",
+        "index.md",
         "Tutorials" => tut_pages,
         "Reference" => [
-            "Main API" => "reference/api.md",
-            "Modules" => [
-                "Introduction" => "reference/adv_intro.md",
-                "Types" => "reference/types.md",
-                "Res" => "reference/res.md",
-                "Material" => "reference/material.md",
-                "Boundary" => "reference/boundary.md",
-                "Solver" => "reference/solver.md",
-                "PostProcessing" => "reference/postprocessing.md",
-            ],
+            api_pages[1],
+            "Modules" => api_pages[2:end],
         ],
-        "Recipes" => [
-            "Ink Patterns" => "howtos/howto_ink.md",
-            "Simulate Subsets of a Build" => "howtos/howto_subsets.md",
-            "Materials" => "howtos/howto_mat.md",
-            "Material Models" => "howtos/howto_matprop.md",
-            "Results" => "howtos/howto_result.md",
-            "Loads and Load Sets" => "howtos/howto_load.md",
-            "Boundaries" => "howtos/howto_bound.md",
-            "Problem Parameters" => "howtos/howto_param.md",
-            "Load Set Types" => "howtos/howto_loadset.md",
-            "Problem Solvers" => "howtos/howto_problem.md",
-        ],
-        "Explanation" => [
-            "HSS Boundary" => "explanation/HSSBoundary.md",
-            "Material examples" => "reference/MaterialExamples.md",
-            "FAQs" => "explanation/faqs.md",
-        ],
-        "Index" => "doc_index.md",
+        "Recipes" => recipe_pages,
+        "explanation/faqs.md",
+        "doc_index.md",
     ],
-    format=Documenter.HTML(),
+    format=Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true"),
     # format = Documenter.LaTeX()
 )
 deploydocs(;

@@ -37,14 +37,14 @@ module Types
     export Options, package_groups
     export OtherResults
 end
-@reexport using .Types: Problem, Ink, Geometry, Options, package_groups
+@reexport using .Types: Problem, Ink, Geometry, Options, package_groups, OtherResults
 export Types
 
 """
 Contains a concrete time step and final results type and the functions needed to process the results
 for these types.
 """
-module Res
+module Results
     using ..DocExt: TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Types
     using Reexport
@@ -59,8 +59,8 @@ module Res
     # Reexported
     export Result
 end
-@reexport using .Res: Result
-export Res
+@reexport using .Results: Result
+export Results
 
 """
 Contains a concrete material property type, the functions for running the material model, and an
@@ -126,7 +126,7 @@ module Solver
     using ..Boundary
     using ..DocExt: SIGNATURES, TFIELDS, TYPEDEF, TYPEDSIGNATURES
     using ..Material
-    using ..Res
+    using ..Results
     using ..Types
     using ..Types: package_groups
     using Alert
@@ -146,13 +146,12 @@ module Solver
 
     # Advanced
     export loadSetSolver!, innerLoadSetSolver!
-    export FixedLoadSet, LayerLoadSet
     export makeLogger, with_logger
 
     # Reexported
-    export Problem, problemSolver
+    export Problem, problemSolver, FixedLoadSet, LayerLoadSet
 end
-@reexport using .Solver: Problem, problemSolver
+@reexport using .Solver: Problem, problemSolver, FixedLoadSet, LayerLoadSet
 export Solver
 
 """

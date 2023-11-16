@@ -3,11 +3,13 @@ EditURL = "../../lit/res_tut.jl"
 ```
 
 # Tutorial 4: Saving More Results
+[![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/4_res_tut.ipynb)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/4_res_tut.ipynb)
 
 ```julia
 using HSSSimulations
 using .Types
-using .Res
+using .Results
 using .HSSBound
 ```
 
@@ -100,21 +102,21 @@ end
 ```
 
 As well as recording the results, we also need to save them. This is done with the
-[`Res.loadStepSaver`](@ref) function. We can create a method for this function that uses our
+[`Results.loadStepSaver`](@ref) function. We can create a method for this function that uses our
 `OverheadResult` type. Although it can't be dispatched on directly, instead we dispatch on a type
 from the `StructArrays` package, with our type as its type parameter. This is handily rexported by
-the Res module, so we can use it from there.
+the Results module, so we can use it from there.
 
-The [`Res.loadStepSaver`](@ref) function is given a folder of the output file that we can then
+The [`Results.loadStepSaver`](@ref) function is given a folder of the output file that we can then
 save the contents of `loadResults` to. `loadResults` is acts as a struct who's fields are vectors
 of the fields of our `OverheadResult` struct. But we can use `stack` to turn the vectors of arrays
 into higher dimension arrays before saving them. This will make them the right format to work with
 the built in post processing functions.
 
 ```julia
-function Res.loadStepSaver(
+function Results.loadStepSaver(
     loadResultsFolder,
-    loadResults::Res.StructVector{T},
+    loadResults::Results.StructVector{T},
 ) where {T<:OverheadResult}
     loadResultsFolder["time"] = loadResults.t
     loadResultsFolder["T"] = stack(loadResults.T)
@@ -214,7 +216,7 @@ This method saves `MeltMax` and `CoolStart` to the top level results folder of t
 and all of our overhead controller stuff to its own subfolder of the results.
 
 ```julia
-function Res.otherResults(
+function Results.otherResults(
     prob::Types.Problem{T,Gh,Mp,R,OR,B},
     file,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}
@@ -229,7 +231,7 @@ end
 
 If we didn't want to store any data outside of what is incleded anyway from the material property
 or parameters struct, then we could have just made our new `AbstractOtherResults` struct empty and
-still used it to dispatch a method for [`Res.otherResults`](@ref).
+still used it to dispatch a method for [`Results.otherResults`](@ref).
 
 In fact, as the default [`OtherResults`](@ref) struct is empty and isn't used, you can replace it
 with an empty struct of your own to use to dispatch methods of other functions. So if you wanted

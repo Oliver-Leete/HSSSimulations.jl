@@ -17,20 +17,13 @@ using HSSSimulations
 # First up is the addition of a new material property struct and constructor. This is the same as
 # the default one with the only change being the name (for dispatch reasons), and changing the
 # `Mᵣ` and `Rᵣ` fields to `Ṁ` and `Ṙ`.
-#
-# !!! note
-#
-#     There is not actually any functional difference (for this use case, some of the fields have
-#     been removed so this struct wouldn't work with the normal `meltUpdate` function) between this
-#     and the built in [`MatProp`](@ref) type, other than the change of documentation. But by having
-#     a new type we can dispatch on it later on, to allow for our custom logic.
 
 struct MatPropTD{T1,T2,T3,T4,T5,T6,T7,T8,T9} <: Types.AbstractMatProp
     ρ::T1
     c::T2
     κ::T3
     """ Melting rate to temp and melt state relationship.
-    A 2d interpolation, with the first input axis being the temperature adn the
+    A 2d interpolation, with the first input axis being the temperature and the
     second the current melt state. The output is the melt rate.
     """
     Ḟ::T4

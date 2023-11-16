@@ -1,17 +1,21 @@
 # Simulation Results
 
 ```@docs
-Res
+Results
 ```
 
-## External
+## Time/Load Step Results
 
 ```@docs
 Types.AbstractResult
-Res.loadStepSaver
-Res.loadStepSaver(::Any, ::StructVector{T}) where {T<:Result}
+Results.loadStepSaver
+Results.loadStepSaver(::Any, ::StructVector{T}) where {T<:Result}
+```
+
+## End of Simulation Results
+
+```@docs
 Types.AbstractOtherResults
-Types.OtherResults
-Res.otherResults
-Res.otherResults(::Problem{T,Gh,Mp,R,OR,B}, ::Any) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
+Results.otherResults
+Results.otherResults(::Problem{T,Gh,Mp,R,OR,B}, ::Any) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```

@@ -10,9 +10,7 @@ Solver
 Solver.makeLogger
 Solver.loadSetSolver!
 Types.AbstractLoadSet
-Solver.FixedLoadSet
 Solver.loadSetSolver!(::FixedLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-Solver.LayerLoadSet
 Solver.loadSetSolver!(::LayerLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 

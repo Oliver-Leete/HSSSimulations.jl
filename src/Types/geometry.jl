@@ -70,12 +70,11 @@ end
 
 """
     Geometry(
-    simSize, Δx, Δt;
-    Δy=Δx, Δz=Δx, name="NA", Δh=0,
-    offset=(0.0, 0.0), buildSize=nothing,
-    force=false,
-
-)
+        simSize, Δx, Δt;
+        Δy=Δx, Δz=Δx, name="NA", Δh=0,
+        offset=(0.0, 0.0), buildSize=nothing,
+        force=false,
+    )
 
 Constructor for the [`Geometry`](@ref) type that is is used to store all of the geometry information
 (and time step length for some reason) for a rectangular build volume of the machine being simulated

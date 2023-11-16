@@ -13,7 +13,7 @@ Basic Material Model](@ref).
 
 As well as defining the type, it helps to have a few convenient constructors,
 some of these will be needed for the type to function in the simulation. It also
-needs an implementation of [`Res.loadStepSaver`](@ref).
+needs an implementation of [`Results.loadStepSaver`](@ref).
 
 ```julia
 struct BasicResult{P<:AbstractArray} <: AbstractResult
@@ -44,7 +44,7 @@ end
 """
 Function to save the results for each load step
 """
-function Res.loadStepSaver(loadResultsFolder, loadResults::StructVector{T}) where {T<:BasicResult}
+function Results.loadStepSaver(loadResultsFolder, loadResults::StructVector{T}) where {T<:BasicResult}
     loadResultsFolder["time"] = loadResults.t
     loadResultsFolder["T"] = stack(loadResults.T)
     return

@@ -93,10 +93,18 @@ function PA_Hr()
 end
 
 """
-Based on model from Childs and Tontowi 2001. Modified to work off of consolidation and melt states.
-Takes three coefficients and returns a consolidation rate calculator.
+Based on model from Childs and Tontowi 2001. Modified to work off of consolidation and melt states .
+Takes three coefficients (``βₛ, Aₛ, nₛ``) and returns a consolidation rate calculator that  .
+follows the equation below                                                                         .
+
+``
+\\dot{C} = (1-C^{t-1}) A_s \\exp{\\left(-\\frac{E_s}{RT^{t-1}} - \\beta_s (1-M^{t-1})^{n_s}\\right)}
+``
+
+Where ``C^{t-1}`` is the previous consolidation state, ``M^{t-1}`` is the previous melt state, and
+``T^{t-1}`` is the previous temperature.
 """
-PA_Ċ_maker(β, A, n) = (C, T, M) -> (1 - C) * A * exp(-((12_400 / (273.15 + T)) + β * (1 - M)^n))
+PA_Ċ_maker(βₛ, Aₛ, nₛ) = (C, T, M) -> (1 - C) * Aₛ * exp(-((12_400 / (273.15 + T)) + βₛ * (1 - M)^nₛ))
 
 """
 Based on model from Childs and Tontowi 2001. Modified to work off of consolidation and melt states.
@@ -123,7 +131,7 @@ PA_ε = 0.92
 $(TYPEDSIGNATURES)
 
 An example material based on PA2200, using a rate of consolidation based on melt state. With eyeball
-correction to consolidation rate.
+correction to consolidation rate. See [PA2200](@ref) for information on each of the fields.
 """
 function PA2200(geometry::Geometry)
     return MatProp(

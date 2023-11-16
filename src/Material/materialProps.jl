@@ -195,7 +195,7 @@ function meltUpdate(Mᵗ⁻¹, T, Mₘ, _, mp::AbstractMatProp)
     if T > mp.Mₛ
         Mᵗ = max(mp.Mᵣ(T), Mᵗ⁻¹)
         Δh = (Mᵗ - Mᵗ⁻¹) * mp.Hf
-        Mₘ = max(Mᵗ,  Mₘ)
+        Mₘ = max(Mᵗ, Mₘ)
     end
 
     if Mᵗ > 0.0 && T < mp.Rₑ

@@ -3,6 +3,8 @@ EditURL = "../../lit/full_tut.jl"
 ```
 
 # Tutorial 1: Full Build
+[![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/1_full_tut.ipynb)
+[![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/1_full_tut.ipynb)
 
 ```julia
 using HSSSimulations

@@ -1,10 +1,15 @@
-# API
+# Main API
 
 ```@meta
 DocTestSetup = quote
     using HSSSimulations
 end
 ```
+
+This page covers the basic API used for running simple simulations. Each
+section will also link to the relevant advanced API that can be used to further
+customise the behaviour of that part of the simulation. See [Advanced API
+Introduction](@ref) for more information on how to use the advanced API.
 
 ## Solver
 
@@ -19,33 +24,71 @@ Problem(; kwargs...)
 Geometry(::Any,::Any,::Any)
 ```
 
-## Ink
+## Ink Struct
 
 ```@docs
 Ink
 ```
 
-### Materials
+## Materials
+
+One example material is exported as part of the basic API. To see how to define
+new materials or new material models, see [Material Model](@ref).
 
 ```@docs
 PA2200
 ```
 
-## Results
+## Time Step Results
+
+The default time step/initial results struct shown below saves the data from the
+default material model and the heat transfer solver. For information on how to
+create a new result struct see [Time/Load Step Results](@ref).
 
 ```@docs
 Result
 Result(::Any,::Any,::Any,::Any,::Any,::Any)
-Result(::Any,::Any,::Any,::Any,::Any)
 Result(::Any,::Any)
+Result(::Any,::Any,::Any,::Any,::Any)
 Result(::Any,::Any,::Any)
 ```
 
-## Boundaries
+## Other Results
+
+These are results that are saved once at the end of the simulation, for when 
+
+The default final results struct shown below saves the maximum melt state from
+the default material model and nothing else. For information on how to create a
+new result struct see [End of Simulation Results](@ref).
+
+```@docs
+OtherResults
+```
+
+## Boundary Loads
+
+Two functions are provided below to create loads and load sets. The
+[`basicLoad`](@ref) function creates a single basic load that can be used
+with [`FixedLoadSet`](@ref) and [`LayerLoadSet`](@ref) to make load sets for
+the `loadSets` argument of the [`Problem`](@ref Problem(; kwargs...)). For
+information on how to make more loads, see [Boundary Model](@ref).
+
+The [`HSSLoads`](@ref) constructor creates a full list of load sets needed to
+simulate a typical HSS build. For more information on these loads, see [HSS
+Boundary](@ref).
 
 ```@docs
 basicLoad
+HSSLoads
+FixedLoadSet
+LayerLoadSet
+```
+
+## Boundary Parameters
+
+```@docs
 BasicProblemParams
+HSSParams(::Geometry)
 ```
 
 ## Settings
@@ -61,8 +104,8 @@ The last part of the API to cover is the format of the simulation results that
 are saved. These use the `JLD2` package to save to a Hierarchical Data Format
 version 5 (HDF5) based format. Most of the information stored should be readable
 by any HDF5 compatible software or libraries, except the input problem, which
-requires the software to understand julia types (the easiest way is to just use
-juila, it's mostly saved in case it needs to be rerun).
+requires the software to understand Julia types (the easiest way is to just use
+Julia, it's mostly saved in case it needs to be rerun).
 
 By default, this is stored compressed using the `ZlibCompressor` compressor.
 
@@ -120,9 +163,9 @@ Load
 
 !!! tip
     
-    [`Res.loadStepSaver`](@ref), [`Solver.otherResults`](@ref), are the two
-    functions used for saving simulation results to the file. so looking at
-    their implementation might help with if anything is not covered here.
+    [`Results.loadStepSaver`](@ref), [`Solver.otherResults`](@ref), are the
+    two functions used for saving simulation results to the file. so looking
+    at their implementation might help with if anything is not covered here.
     [`Solver.startMetadata`](@ref) and [`Solver.finishMetadata`](@ref) are also
     used to save a few extra bits of metadata to the file. I'd also recommend a
     tool like [HDFView](https://www.hdfgroup.org/downloads/hdfview/) to get an

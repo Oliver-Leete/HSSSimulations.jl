@@ -1,6 +1,6 @@
 using HSSSimulations
 using .Types
-using .Res
+using .Results
 using .HSSBound
 
 struct OverheadResult{P<:AbstractArray,V<:AbstractArray} <: AbstractResult
@@ -46,9 +46,9 @@ function overheadHeatupFunc(powerIn::Float64, prevOverheadTemp::Float64, cts)
     return overheadTemp
 end
 
-function Res.loadStepSaver(
+function Results.loadStepSaver(
     loadResultsFolder,
-    loadResults::Res.StructVector{T},
+    loadResults::Results.StructVector{T},
 ) where {T<:OverheadResult}
     loadResultsFolder["time"] = loadResults.t
     loadResultsFolder["T"] = stack(loadResults.T)
@@ -103,7 +103,7 @@ function HSSBound.OverheadsBoundary(
     return OverheadsBoundary(overheadTemp, surfaceTemp, ε, airTemp, h, Po)
 end
 
-function Res.otherResults(
+function Results.otherResults(
     prob::Types.Problem{T,Gh,Mp,R,OR,B},
     file,
 ) where {T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:OverheadContRes,B<:Any}

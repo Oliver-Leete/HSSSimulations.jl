@@ -5,7 +5,7 @@ struct MatPropTD{T1,T2,T3,T4,T5,T6,T7,T8,T9} <: Types.AbstractMatProp
     c::T2
     κ::T3
     """ Melting rate to temp and melt state relationship.
-    A 2d interpolation, with the first input axis being the temperature adn the
+    A 2d interpolation, with the first input axis being the temperature and the
     second the current melt state. The output is the melt rate.
     """
     Ḟ::T4

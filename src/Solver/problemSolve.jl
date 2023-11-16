@@ -22,7 +22,7 @@ The main function that is called to solve a simulation and the struct that
 defines the problem to simulate.
 
 Takes a fully defined problem and solves it, saving the solution to disk and returning the filename
-where it is saved. See [`Problem`](@ref) for how to define the problem.
+where it is saved. See [`Problem`](@ref Problem(; kwargs...)) for how to define the problem.
 """
 function problemSolver(problem::Problem)
     log_file = splitext(problem.file)[1] * ".log"

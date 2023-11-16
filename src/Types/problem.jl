@@ -62,17 +62,23 @@ struct Problem{
     Assemble a problem out of its components.
 
     # Arguments
-        `geometry::Geometry`: [`Geometry`](@ref)
-        `matProp::AbstractMatProp`: [`AbstractMatProp`](@ref)
-        `params::AbstractProblemParams`: [`AbstractProblemParams`](@ref)
-        `loadSets::Vector{AbstractLoadSet}`: [`AbstractLoadSet`](@ref)
-        `ink::Ink`: [`Ink`](@ref)
-        `init::AbstractResult`: [`AbstractResult`](@ref)
-        `otherResults::AbstractOtherResults=OtherResults()`: [`AbstractOtherResults`](@ref)
-        `initLay::Int`: The thickness of powder to use for preheat loads, given in number of layers thick
-        `file::String`: File name
-        `description::String=""`: A short description of what is being simulated
-        `options::Options=Options()`: Simulation options
+      - `geometry::`[`Geometry`](@ref): See [Simulation Geometry](@ref)
+      - `matProp::`[`AbstractMatProp`](@ref): See [Materials](@ref)
+      - `params::`[`AbstractProblemParams`](@ref): See [Boundary Parameters](@ref)
+      - `loadSets::Vector{`[`AbstractLoadSet`](@ref)`}`: The list of load sets to simulate, in order
+          that the need simulating. See [Boundary Loads](@ref)
+      - `ink::`[`Ink`](@ref): The locations for ink deposition. This should be the same size as the
+          finial dimension of the simulation. See [Ink Struct](@ref)
+      - `init::`[`AbstractResult`](@ref): The initial results struct. This should be the same size
+          as the finial dimension of the simulation. See [Time Step Results](@ref)
+      - `initLay::Int`: The thickness of powder deposited before the simulation starts, given in
+          number of layers thick. This must be greater than zero
+      - `file::String`: The file path and name for the output file of the simulation
+      - `description::String=""`: A short description of what is being simulated
+      - `otherResults::`[`AbstractOtherResults`](@ref)`=`[`OtherResults`](@ref)`()`: The struct to
+          save the final results to. See [Other Results](@ref)
+      - `options::`[`Options`](@ref)`=Options()`: The options to use for the simulation. See
+          [Settings](@ref)
     """
     function Problem(;
         geometry::Geometry,
