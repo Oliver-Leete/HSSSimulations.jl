@@ -89,7 +89,7 @@ will be simulated during the preheat load set.
 
 ```julia
 geomsize = (geometry.X, geometry.Y, geometry.Z)
-init = Result(geomsize, 25.0, 0.0, 0.0, 0.0, 0)
+init = Result(geomsize, 25.0, 0.0, 0.0)
 initialLayer = 30
 ```
 

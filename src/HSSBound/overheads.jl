@@ -1,4 +1,9 @@
-"$(TYPEDEF)"
+"""
+$(TYPEDEF)
+
+An abstract type, all subtypes of which can use the same boundary heat transfer rate function, but
+can have their own constructors.
+"""
 abstract type AbstractOverheadsBoundary <: AbstractBoundary end
 
 "$(TYPEDSIGNATURES)"
@@ -15,12 +20,12 @@ end
 """
 $(TYPEDEF)
 
-Boundary for the top surface of a HSS build with no lamp or print carriage movement. Assumes the
-heater controller is the same as our HSS machine where It only updates the overhead power every
-overheadLayerStep number of layers, and only once on that layer.
+Boundary for the top surface of a HSS build with no lamp or print carriage movement. This boundary
+assumes the heater controller is the same as our HSS machine where It only updates the overhead
+power every overheadLayerStep number of layers, and only once on that layer.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct OverheadsBoundary <: AbstractOverheadsBoundary
     "Temperatur of overhead heater"
@@ -74,11 +79,11 @@ function OverheadsBoundary(
 end
 
 """
-    loadNoTop(tₗ, skip)
+$(TYPEDSIGNATURES)
 
-Returns the compleate [`HSSBound.Load`](@ref) struct for a HSS build with no lamp or print carriage
-movement. This assumes that a subset of the build is being simulated and the the edge boundaries can
-be approximated as symetrical (no heat flow).
+Returns a load that represents the case where there are no carriages over top the powder bed, and
+the overhead and piston heaters are both on. This assumes that a subset of the build is being
+simulated and the the edge boundaries can be approximated as symetrical (no heat flow).
 
 Uses [`HSSBound.OverheadsBoundary`](@ref) for the top surface, [`HSSBound.PistonBoundary`](@ref) for
 the bottom surface and the default [`Boundary.SymetryBoundary`](@ref) functions for the sides.
@@ -96,11 +101,11 @@ end
 """
 $(TYPEDEF)
 
-Like the [`OverheadsBoundary`](@ref) but it sets the overhead power to 0w (turning it off). Assumes
-that once cooling starts it doesn't stop.
+Like the [`OverheadsBoundary`](@ref) but it sets the overhead power to 0w (turning it off). This
+boundary assumes that once cooling starts it doesn't stop.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct OverheadsCoolBoundary <: AbstractOverheadsBoundary
     "Temperatur of overhead heater"
@@ -149,8 +154,13 @@ end
 """
 $(TYPEDSIGNATURES)
 
-Uses [`HSSBound.OverheadsCoolBoundary`](@ref) and [`HSSBound.PistonCoolBoundary`](@ref) so that
-the overhead and piston heaters are turned off. Assumes that once cooling starts it doesn't stop.
+Returns a load that represents the case where there are no carriages over top the powder bed, and
+the overhead and piston heaters have both been turned off. This assumes that a subset of the build
+is being simulated and the the edge boundaries can be approximated as symetrical (no heat flow).
+
+Uses [`HSSBound.OverheadsCoolBoundary`](@ref) and [`HSSBound.PistonCoolBoundary`](@ref) for the
+bottom surface and the default [`Boundary.SymetryBoundary`](@ref) functions for the sides. It
+assumes that once cooling starts it doesn't stop.
 """
 function loadCooldown(tₗ, skip)
     return Load(;

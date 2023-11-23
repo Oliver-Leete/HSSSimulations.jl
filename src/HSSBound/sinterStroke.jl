@@ -5,7 +5,7 @@ Boundary for the top surface of a HSS build for when the recoat/lamp carriage is
 and the lamp is set to sinter power.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct SinterBoundary <: AbstractBoundary
     "Temperatur of overhead heater"
@@ -76,7 +76,7 @@ end
 $(TYPEDSIGNATURES)
 
 Returns the compleate [`Types.Load`](@ref) struct for a HSS build with recoat/lamp carriage over
-the build and the recoat lamp set to sinter power. This assumes that a subset of the build is being
+the build and the sinter lamp set to sinter power. This assumes that a subset of the build is being
 simulated and the the edge boundaries can be approximated as symetrical (no heat flow).
 
 Uses [`HSSBound.SinterBoundary`](@ref) for the top surface, [`HSSBound.PistonBoundary`](@ref) for

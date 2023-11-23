@@ -4,10 +4,7 @@
 HSSBound
 ```
 
-For an explanation of what exactly this boundary is doing see [High Speed
-Sintering Boundary Explanation](@ref)
-
-## Parametres
+## Parameters
 
 ```@docs
 HSSParams
@@ -16,15 +13,15 @@ HSSParams
 ## No Carriage Loads
 
 ```@docs
-HSSBound.loadCooldown
 HSSBound.loadOverheads
+HSSBound.loadCooldown
 ```
 
 ### Piston Boundaries
 
 ```@docs
-HSSBound.boundaryHeatTransferRate(::Any,::Any,::HSSBound.AbstractPistonBoundary)
 HSSBound.AbstractPistonBoundary
+HSSBound.boundaryHeatTransferRate(::Any,::Any,::HSSBound.AbstractPistonBoundary)
 HSSBound.PistonBoundary
 HSSBound.PistonBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.PistonCoolBoundary
@@ -34,15 +31,17 @@ HSSBound.PistonCoolBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,
 ### Overhead Boundaries
 
 ```@docs
-HSSBound.boundaryHeatTransferRate(::Any,::Any,::HSSBound.AbstractOverheadsBoundary)
 HSSBound.AbstractOverheadsBoundary
+HSSBound.boundaryHeatTransferRate(::Any,::Any,::HSSBound.AbstractOverheadsBoundary)
 HSSBound.OverheadsBoundary
 HSSBound.OverheadsBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 HSSBound.OverheadsCoolBoundary
 HSSBound.OverheadsCoolBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
-## Sinter Stroke
+## Carriage Loads
+
+### Sinter Stroke
 
 ```@docs
 HSSBound.loadSinterStroke
@@ -51,7 +50,7 @@ HSSBound.SinterBoundary
 HSSBound.SinterBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
-## Recoating Stroke
+### Recoating Stroke
 
 ```@docs
 HSSBound.loadRecoatStroke
@@ -60,7 +59,7 @@ HSSBound.RecoatBoundary
 HSSBound.RecoatBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
-## Printing Stroke
+### Printing Stroke
 
 ```@docs
 HSSBound.loadInkStroke
@@ -69,7 +68,7 @@ HSSBound.InkBoundary
 HSSBound.InkBoundary(::AbstractResult,::AbstractResult,::Problem{T,Gh,Mp,R,OR,B},::Types.LoadStep) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
 ```
 
-## Printhead Shadow Only Stroke
+### Printhead Shadow Only Stroke
 
 ```@docs
 HSSBound.loadBlankStroke

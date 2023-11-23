@@ -97,19 +97,19 @@ Based on model from Childs and Tontowi 2001. Modified to work off of consolidati
 Takes three coefficients (``βₛ, Aₛ, nₛ``) and returns a consolidation rate calculator that  .
 follows the equation below                                                                         .
 
-``
+```math
 \\dot{C} = (1-C^{t-1}) A_s \\exp{\\left(-\\frac{E_s}{RT^{t-1}} - \\beta_s (1-M^{t-1})^{n_s}\\right)}
-``
+```
 
 Where ``C^{t-1}`` is the previous consolidation state, ``M^{t-1}`` is the previous melt state, and
 ``T^{t-1}`` is the previous temperature.
 """
-PA_Ċ_maker(βₛ, Aₛ, nₛ) = (C, T, M) -> (1 - C) * Aₛ * exp(-((12_400 / (273.15 + T)) + βₛ * (1 - M)^nₛ))
+Ċ_maker(βₛ, Aₛ, nₛ) = (C, T, M) -> (1 - C) * Aₛ * exp(-((12_400 / (273.15 + T)) + βₛ * (1 - M)^nₛ))
 
 """
 Based on model from Childs and Tontowi 2001. Modified to work off of consolidation and melt states.
 Calibrated from dilatometry data.
-See [`Material.PA_Ċ_maker`](@ref) for how to make your own.
+See [`Material.Ċ_maker`](@ref) for how to make your own.
 """
 PA_Ċ(C, T, M) = (1 - C) * 2.11138e10 * exp(-((12_400 / (273.15 + T)) + 4.5 * (1 - M)^4.0))
 
@@ -130,8 +130,15 @@ PA_ε = 0.92
 """
 $(TYPEDSIGNATURES)
 
-An example material based on PA2200, using a rate of consolidation based on melt state. With eyeball
-correction to consolidation rate. See [PA2200](@ref) for information on each of the fields.
+An example material based on EOS's PA2200, using a rate of consolidation based on melt state. With
+eyeball correction to consolidation rate. Calling this with the [`Geometry`](@ref) struct to be used
+for the simulation as the only argument will return the relevant [`MatProp`](@ref) struct.
+
+The sources of the data used are summarized in [PA2200](@ref). For more details, check the material
+model chapter of my thesis.
+
+This is one example material. To see how to define new materials or new material models, see
+[Material Model](@ref).
 """
 function PA2200(geometry::Geometry)
     return MatProp(

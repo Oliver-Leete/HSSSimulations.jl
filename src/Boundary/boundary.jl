@@ -74,7 +74,7 @@ $(TYPEDEF)
 A boundary for a face that has a source of contact conductive heat flow.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct ConductionBoundary <: AbstractBoundary
     "Temperature of object being contacted"
@@ -93,7 +93,7 @@ $(TYPEDEF)
 A boundary for a face that has a source of convective heat flow.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct ConvectionBoundary <: AbstractBoundary
     "Air temperature"

@@ -1,4 +1,9 @@
-"$(TYPEDEF)"
+"""
+$(TYPEDEF)
+
+An abstract type, all subtypes of which can use the same boundary heat transfer rate function, but
+can have their own constructors.
+"""
 abstract type AbstractPistonBoundary <: AbstractBoundary end
 
 "$(TYPEDSIGNATURES)"
@@ -7,11 +12,11 @@ Types.boundaryHeatTransferRate(T, _, p::AbstractPistonBoundary) = conductionFlow
 """
 $(TYPEDEF)
 
-Boundary for the bottom surface of a HSS build for loads where the heater is turned on. Assumes that
-the piston maintains a constant temperature at after the initial heat up.
+Boundary for the bottom surface of a HSS build for loads where the heater is turned on. This
+boudnary assumes that the piston maintains a constant temperature at after the initial heat up.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct PistonBoundary <: AbstractPistonBoundary
     "Piston temperature"
@@ -35,11 +40,11 @@ end
 """
 $(TYPEDEF)
 
-Boundary for the bottom surface of a HSS build for cooldown loads. Assumes that once cooling starts
-it doesn't stop.
+Boundary for the bottom surface of a HSS build for cooldown loads. This boundary assumes that once
+cooling starts it doesn't stop.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct PistonCoolBoundary <: AbstractPistonBoundary
     "Piston temperature"

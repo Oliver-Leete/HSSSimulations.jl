@@ -21,7 +21,7 @@ params = HSSParams(geometry)
 loadSets = HSSLoads(1, geometry; nrPreheat=0, lenPreheat=0.0, nrCool=0, lenCool=0.0)
 
 geomsize = (geometry.X, geometry.Y, geometry.Z)
-init = Result(geomsize, 160.0, 0.0, 0.0, 1000.0, 0)
+init = Result(geomsize, 160.0, 0.0, 0.0, 1000.0)
 initialLayer = 30
 
 inkArray = fill(material.eₚ, size)

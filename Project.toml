@@ -1,7 +1,7 @@
 name = "HSSSimulations"
 uuid = "a71e696c-90c2-4ee2-a986-0e228f88aa1f"
 authors = ["Oliver Leete <oliverleete@gmail.com>"]
-version = "2.0.0"
+version = "2.0.1"
 
 [deps]
 Alert = "28312eec-4d86-447d-83ad-bc2b262de792"
@@ -28,7 +28,8 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 
 [extensions]
-PlottingExt = ["LaTeXStrings", "StatsPlots", "Measures", "Plots"]
+PlottingExt = ["LaTeXStrings", "Measures", "Plots"]
+StatsPlottingExt = ["LaTeXStrings", "StatsPlots", "Measures", "Plots"]
 
 [compat]
 Alert = "^1.2"

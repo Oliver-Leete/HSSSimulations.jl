@@ -5,7 +5,7 @@ from a given problem struct, using a constructor in the problem module. There is
 way of doing this, but it works.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct Problem{
     T<:AbstractArray,
@@ -133,6 +133,7 @@ struct Problem{
 end
 
 Base.show(io::IO, problem::Problem) = print(io, makeDescription(problem))
+
 """
 $(TYPEDSIGNATURES)
 
@@ -143,7 +144,7 @@ problem struct is also saved, but that requires loading the results in a julia i
 properly).
 """
 function makeDescription(problem::Problem)
-    rs = """
+    return_string = """
     ----------------------
     Simulation $(basename(problem.file))
     ----------------------
@@ -156,9 +157,9 @@ function makeDescription(problem::Problem)
     Preheat Thickness in Layers: $(problem.initLay)
     """
     for loadSet in problem.loadSets
-        rs *= "\n"
-        rs *= "$(loadSet.name) Loads:"
-        rs *= "$(loadSet.loads)"
+        return_string *= "\n"
+        return_string *= "$(loadSet.name) Loads:"
+        return_string *= "$(loadSet.loads)"
     end
-    return rs
+    return return_string
 end

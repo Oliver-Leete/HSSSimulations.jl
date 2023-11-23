@@ -78,25 +78,25 @@ the cooling curve it will default to starting at the end of the curve.
 
 This requires the type of `pistonCool`, `airCool` and `surfaceHeat` have methods for `findfirst`
 """
-function coolingStart(tₚ, t, params::AbstractProblemParams)
-    params.coolStart = t
+function coolingStart(tᵗ⁻¹, tᵗ, params::AbstractProblemParams)
+    params.coolStart = tᵗ
 
     pc = params.pistonCool
-    pistonOld = params.pistonHeat(tₚ)
+    pistonOld = params.pistonHeat(tᵗ⁻¹)
     pb = bounds(pc.itp)[1][1]:bounds(pc.itp)[1][2]
     pistonCoolStart = findfirst(x -> pc(x) <= pistonOld, pb)
     params.pistonCoolStart = isnothing(pistonCoolStart) ? 0 : pistonCoolStart - 1
 
     ac = params.airCool
-    airOld = params.airHeat(tₚ)
+    airOld = params.airHeat(tᵗ⁻¹)
     ab = bounds(ac.itp)[1][1]:bounds(ac.itp)[1][2]
     airCoolStart = findfirst(x -> ac(x) <= airOld, ab)
     params.airCoolStart = isnothing(airCoolStart) ? 0 : airCoolStart - 1
 
     sc = params.surfaceCool
-    surfaceOld = params.surfaceHeat(tₚ)
+    surfaceOld = params.surfaceHeat(tᵗ⁻¹)
     sb = bounds(sc.itp)[1][1]:bounds(sc.itp)[1][2]
     surfaceCoolStart = findfirst(x -> sc(x) <= surfaceOld, sb)
     params.surfaceCoolStart = isnothing(surfaceCoolStart) ? 0 : surfaceCoolStart - 1
-    @debug "coolingStart" _group = "hss" t params.coolStart params.pistonCoolStart params.airCoolStart params.surfaceCoolStart
+    @debug "coolingStart" _group = "hss" tᵗ params.coolStart params.pistonCoolStart params.airCoolStart params.surfaceCoolStart
 end

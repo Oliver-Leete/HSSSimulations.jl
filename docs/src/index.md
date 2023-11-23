@@ -1,5 +1,7 @@
 # Modelling of HSS (and related technologies)
 
+## Introduction
+
 This is the package created as a part of my (Oliver Leete) PhD thesis. Its goal
 is as the title suggests, to create a simulation of a High Speed Sintering (HSS)
 build by approximating the build volume as a single solid object. This is done
@@ -31,37 +33,78 @@ sections, and my thesis is provided as a contiguous explanation of what is going
 on. There is also a small FAQ section to provide brief explanation of some
 things that come up often.
 
-## Tutorials
+### Tutorials
 
 ```@contents
 Pages = Main.tut_pages
 Depth=1
 ```
 
-## API
+### API
 
 ```@contents
 Pages = api_pages
 Depth=1
 ```
 
-## Recipes
+### Recipes
 
 ```@contents
 Pages = Main.recipe_pages
 Depth=1
 ```
 
-## Other Pages
+### Other Pages
 
 ```@contents
 Pages = ["explanation/faqs.md", "doc_index.md"]
 Depth=1
 ```
 
-## Contribution
+### Contribution
 
 If you are reading this I have probably finished my PhD, so it is unlikely I
 will be making any major improvements to this codebase. However, I will try to
 keep an eye on the original repository (the one on my personal GitHub account),
 so if you add any cool new features feel free to open a pull request there.
+
+### Readme
+
+A package to simulate High Speed Sintering (HSS) by treating the powder bed as
+a bulk material, using the finite difference method and a quasi-solid material
+model.
+
+As this is not in the Julia general registry, you will need to dev the package
+using:
+
+```julia
+using Pkg
+Pkg.dev("https://github.com/Oliver-Leete/HSSSimulations.jl.git")
+```
+
+If you are new to Julia, I'd recommend [checking out the getting started
+documentation](https://docs.julialang.org/en/v1/manual/getting-started/)
+
+### Licence
+
+MIT License
+
+Copyright (c) 2023 Oliver Leete
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

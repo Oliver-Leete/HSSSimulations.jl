@@ -21,7 +21,7 @@ the ghost cells) for the real node, the second is the linear index of the same p
 element is the linear index (of the array with the ghost cells) of the matching ghost node.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 mutable struct Indices
     "List of currently real nodes"
@@ -81,7 +81,7 @@ of some of the extra things that can be done with new `AbstractBoundary`s.
 abstract type AbstractBoundary <: AbstractSimProperty end
 
 """
-    boundaryHeatTransferRate(T, i, p<:AbstractBoundary) -> ϕ⃗::Float64
+    $(FUNCTIONNAME)(T, i, p<:AbstractBoundary) -> ϕ⃗::Float64
 
 Used to calculate the heat flux denstity (ϕ⃗, in wm⁻²) into the model at a node on the
 relavant face for a given boundary condition. They are run per node, for each node on the face. The
@@ -112,7 +112,7 @@ function boundaryHeatTransferRate end
 $(TYPEDEF)
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 
 Each of the boundaries given must satisfy `Boundary isa Type{T} where T <: AbstractBoundary`. This
 is to say that they should be the type itself, not an instance of that type. Additionally it should
@@ -183,8 +183,14 @@ end
 
 """
 $(TYPEDEF)
-This struct holds the information for a load set, primarily the list of loads, but also some
-extra bits. Subtypes should implement a method for the `Solver.loadSetSolver!` function.
+
+This struct holds the information for a load set, primarily the list of loads to be solved, but also
+some extra bits. Subtypes should implement a method for the `Solver.loadSetSolver!` function.
+
+A simulation problem contains a list of load sets that are solved in order. Load sets of different
+types can be combined to create more complex build behavour. For example, the default HSS load sets
+include one fixed load set, for preheating; one layer load set, for all of the layers in the build;
+and another fixed load set, for cooldown after the build.
 """
 abstract type AbstractLoadSet <: AbstractSimProperty end
 

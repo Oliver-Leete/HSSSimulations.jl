@@ -94,7 +94,7 @@ A basic implementation of a [`Types.AbstractProblemParams`](@ref) struct to go a
 [`basicLoad`](@ref). For a more elaborate example see `HSSParams`
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 
 """
 struct BasicProblemParams{T1,T2} <: AbstractProblemParams

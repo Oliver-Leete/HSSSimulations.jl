@@ -22,7 +22,7 @@
     )
 
     geomSize = (geometry.X, geometry.Y, geometry.Z)
-    init = Result(geomSize, 180.0, 0.0, 0.0, 0.0, 0)
+    init = Result(geomSize, 180.0, 0.0, 0.0)
     initLay = geometry.Z - 4
 
     inkArray = fill(matProp.eₚ, geomSize)
@@ -93,7 +93,7 @@ end
 #     )
 #
 #     geomSize = (geometry.X, geometry.Y, geometry.Z)
-#     init = Result(geomSize, 25.0, 0.0, 0.0, 0.0, 0)
+#     init = Result(geomSize, 25.0, 0.0, 0.0)
 #     initLay = 30
 #
 #     inkArray = fill(material.eₚ, geomSize)
@@ -178,7 +178,7 @@ end
 #     )
 #
 #     geomSize = (geometry.X, geometry.Y, geometry.Z)
-#     init = Result(geomSize, 155.0, 0.0, 0.0, 2000.0, 0)
+#     init = Result(geomSize, 155.0, 0.0, 0.0, 2000.0)
 #     initLay = 30
 #
 #     inkArray = fill(material.eₚ, geomSize)

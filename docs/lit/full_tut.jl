@@ -72,7 +72,7 @@ loadSets = HSSLoads(4, geometry; nrPreheat=90, lenPreheat=10.0, nrCool=90, lenCo
 # will be simulated during the preheat load set.
 
 geomsize = (geometry.X, geometry.Y, geometry.Z)
-init = Result(geomsize, 25.0, 0.0, 0.0, 0.0, 0)
+init = Result(geomsize, 25.0, 0.0, 0.0)
 initialLayer = 30
 
 # The [`Ink`](@ref) struct for this problem is going to have some actual ink in

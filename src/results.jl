@@ -4,45 +4,29 @@ $(TYPEDEF)
 The results from a single timestep, use directly to create the initial conditions. Also created for
 each time step during the simulation.
 
+This saves the data from the default material model and the heat transfer solver. For information on
+how to create a new result struct see [Time/Load Step Results](@ref).
+
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct Result{P<:AbstractArray} <: AbstractResult
-    "Temperature"
+    "Temperature for each node"
     T::P
-    "Melt state"
+    "Melt state for each node"
     M::P
-    "Consolidation state"
+    "Consolidation state for each node"
     C::P
-    "Time of timestep"
+    "Time of timestep, since the start of the build"
     t::Float64
-    "The progress through the load step (0=start, 1=end)"
+    "The progress through the load step (0=start, 0.5=half way, 1=end)"
     tₚ::Float64
 end
 
 """
 $(TYPEDSIGNATURES)
 
-Re-expose the default constructor
-"""
-Result(T, M, C, t, tₚ) = Result{typeof(T)}(T, M, C, t, tₚ)
-
-"""
-$(TYPEDSIGNATURES)
-
-Create a result filled with zeros
-"""
-function Result(geomSize, t)
-    T = zeros(geomSize)
-    M = zeros(geomSize)
-    C = zeros(geomSize)
-    return Result{typeof(T)}(T, M, C, t, 0)
-end
-
-"""
-$(TYPEDSIGNATURES)
-
-Create an empty result
+Create an empty result. This is used during the simulation to create the results for each time step.
 """
 function Result(geomSize, t, tₚ)
     T = Array{Float64}(undef, geomSize...)
@@ -56,15 +40,22 @@ $(TYPEDSIGNATURES)
 
 Create a result with uniform fields
 """
-function Result(geomSize, Tᵢ, Mᵢ, Cᵢ, t, tₚ)
+Result(geomSize, Tᵢ, Mᵢ, Cᵢ) = Result(geomSize, Tᵢ, Mᵢ, Cᵢ, 0.0)
+
+"""
+$(TYPEDSIGNATURES)
+
+Create a result with uniform fields and a given time.
+"""
+function Result(geomSize, Tᵢ, Mᵢ, Cᵢ, t)
     T = fill(Tᵢ, geomSize)
     M = fill(Mᵢ, geomSize)
     C = fill(Cᵢ, geomSize)
-    return Result{typeof(T)}(T, M, C, t, tₚ)
+    return Result{typeof(T)}(T, M, C, t, 0.0)
 end
 
 """
-    loadSave(loadResultsFolder, loadResults::StructVector{T}) where {T<:AbstractResult}
+    $(FUNCTIONNAME)(loadResultsFolder, loadResults::StructVector{T}) where {T<:AbstractResult}
 
 Saves the results of a load step into the folder for the current load step in the output file of the
 problem, given by the `loadResultsFolder` argument.
@@ -102,7 +93,7 @@ function loadStepSaver(loadResultsFolder, loadResults::StructVector{T}) where {T
 end
 
 """
-    otherResults(prob<:Problem, file)
+    $(FUNCTIONNAME)(prob<:Problem, file)
 
 Runs at the end of the simulation to save any additional results that only need to be saved once, as
 opposed to for every nth time step. The [`Types.Problem`](@ref) type and any of its type parameters

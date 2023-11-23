@@ -70,12 +70,12 @@ And one to create one filled with given values, that we'll use to create our ini
 result:
 
 ```julia
-function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ, t, tₚ)
+function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ)
     T = fill(Tᵢ, geomSize)
     M = fill(Mᵢ, geomSize)
     C = fill(Cᵢ, geomSize)
     O = Vector{Float64}(undef, 1)
-    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, t, tₚ)
+    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, 0.0, 0.0)
 end
 ```
 
@@ -272,7 +272,7 @@ We also need to make sure to use our new results struct for our initial conditio
 the simulation to use it for the rest of the time steps.
 
 ```julia
-init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0, 0.0, 0)
+init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0)
 ```
 
 And the rest of it

@@ -3,7 +3,7 @@ $(TYPEDEF)
 Contains all of the time information for a LoadStep.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct LoadTime
     "Time between time steps"
@@ -51,7 +51,7 @@ $(TYPEDEF)
 An internal struct for the propeties that are constant within a load step.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 Base.@kwdef struct LoadStep{R<:AbstractResult}
     "See [`LoadTime`](@ref)"

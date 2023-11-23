@@ -4,7 +4,7 @@ Defines all of the propeties of the model, used as an input for the simulation.
 See [`problemSolver`](@ref) for how to solve the problem.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 
 The problem load arrays default to nothing, so if they aren't set then that stage of the simulation
 is skipped, see [`Types.Load`](@ref) for more information on these fields.

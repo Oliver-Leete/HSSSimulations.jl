@@ -5,7 +5,7 @@ Boundary for the top surface of a HSS build with the print head carriage over th
 on the ink deposition stroke.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct BlankBoundary <: AbstractBoundary
     "Temperatur of overhead heater"

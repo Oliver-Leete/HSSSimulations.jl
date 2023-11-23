@@ -44,7 +44,10 @@ end
 """
 Function to save the results for each load step
 """
-function Results.loadStepSaver(loadResultsFolder, loadResults::StructVector{T}) where {T<:BasicResult}
+function Results.loadStepSaver(
+    loadResultsFolder,
+    loadResults::StructVector{T},
+) where {T<:BasicResult}
     loadResultsFolder["time"] = loadResults.t
     loadResultsFolder["T"] = stack(loadResults.T)
     return

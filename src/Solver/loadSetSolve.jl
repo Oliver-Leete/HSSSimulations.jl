@@ -1,5 +1,5 @@
 """
-    loadSetSolver!(
+    $(FUNCTIONNAME)(
         loadSet<:AbstractLoadSet
         initResult::AbstractResult,
         layerNum::Int,
@@ -22,7 +22,7 @@ function loadSetSolver! end
 """
 $(TYPEDEF)
 #Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct FixedLoadSet <: AbstractLoadSet
     "Name of the load set"
@@ -48,7 +48,7 @@ end
 """
 $(TYPEDEF)
 #Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct LayerLoadSet <: AbstractLoadSet
     "Name of the load set"

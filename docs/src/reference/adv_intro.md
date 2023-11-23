@@ -12,7 +12,7 @@ so to use them you will need to either use their full address:
 
 ```@repl
 using HSSSimulations
-Solver.loadSetSolver!Tutorials
+Solver.loadSetSolver!
 ```
 
 or by using the module it is in:

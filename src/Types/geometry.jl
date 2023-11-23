@@ -12,7 +12,7 @@ Defines the geometry of the build volume (and the simulation volume within that 
 a build is being simulated).
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct Geometry <: AbstractSimProperty
     "The size of the x axis of the model in meters"
@@ -69,7 +69,7 @@ struct Geometry <: AbstractSimProperty
 end
 
 """
-    Geometry(
+    $(FUNCTIONNAME)(
         simSize, Δx, Δt;
         Δy=Δx, Δz=Δx, name="NA", Δh=0,
         offset=(0.0, 0.0), buildSize=nothing,

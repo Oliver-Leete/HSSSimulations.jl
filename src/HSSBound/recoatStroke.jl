@@ -5,7 +5,7 @@ Boundary for the top surface of a HSS build with the recoat/lamp carriage over t
 lamp set to recoat power and new powder being deposited.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct RecoatBoundary <: AbstractBoundary
     "Temperatur of overhead heater"
@@ -83,10 +83,10 @@ end
 """
 $(TYPEDSIGNATURES)
 
-Returns the compleate [`Types.Load`](@ref) struct for a HSS build with the recoat/lamp carriage over
-the build area, the lamp set to recoat power and new powder being deposited movement. This assumes
-that a subset of the build is being simulated and the the edge boundaries can be approximated as
-symetrical (no heat flow).
+Returns the compleate [`Types.Load`](@ref) struct for a HSS build with the recoat/lamp carriage
+over the build area, the lamp set to recoat power and new powder being deposited with the movement.
+This assumes that a subset of the build is being simulated and the the edge boundaries can be
+approximated as symetrical (no heat flow).
 
 Uses [`HSSBound.RecoatBoundary`](@ref) for the top surface, [`HSSBound.PistonBoundary`](@ref) for the bottom
 surface and the default [`Boundary.SymetryBoundary`](@ref) functions for the sides.

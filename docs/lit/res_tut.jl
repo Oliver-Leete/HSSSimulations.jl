@@ -55,12 +55,12 @@ end
 # And one to create one filled with given values, that we'll use to create our initial conditions
 # result:
 
-function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ, t, tₚ)
+function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ)
     T = fill(Tᵢ, geomSize)
     M = fill(Mᵢ, geomSize)
     C = fill(Cᵢ, geomSize)
     O = Vector{Float64}(undef, 1)
-    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, t, tₚ)
+    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, 0.0, 0.0)
 end
 
 # ## Recording the Time Step Results
@@ -238,7 +238,7 @@ otherResults = OverheadContRes(Vector{Int}(), Vector{Float64}(), Vector{Float64}
 # We also need to make sure to use our new results struct for our initial conditions, this will tell
 # the simulation to use it for the rest of the time steps.
 
-init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0, 0.0, 0)
+init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0)
 
 # And the rest of it
 

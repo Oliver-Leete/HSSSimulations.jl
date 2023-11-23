@@ -26,12 +26,12 @@ function OverheadResult(geomSize, t, tₚ)
     return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, t, tₚ)
 end
 
-function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ, t, tₚ)
+function OverheadResult(geomSize, Tᵢ, Mᵢ, Cᵢ)
     T = fill(Tᵢ, geomSize)
     M = fill(Mᵢ, geomSize)
     C = fill(Cᵢ, geomSize)
     O = Vector{Float64}(undef, 1)
-    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, t, tₚ)
+    return OverheadResult{typeof(T),typeof(O)}(T, M, C, O, 0.0, 0.0)
 end
 
 function overheadHeatupFunc(powerIn::Float64, prevOverheadTemp::Float64, cts)
@@ -129,7 +129,7 @@ geometry = Geometry(
 params = HSSParams(geometry; overheadHeatupFunc=overheadHeatupFunc)
 otherResults = OverheadContRes(Vector{Int}(), Vector{Float64}(), Vector{Float64}())
 
-init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0, 0.0, 0)
+init = OverheadResult((geometry.X, geometry.Y, geometry.Z), 25.0, 0.0, 0.0)
 
 loadSets = HSSLoads(4, geometry; nrPreheat=90, lenPreheat=10.0, nrCool=90, lenCool=10.0)
 material = PA2200(geometry)

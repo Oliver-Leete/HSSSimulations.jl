@@ -6,6 +6,13 @@ The default implementation of [`AbstractMatProp`](@ref) used by the default
 The arguments to its constructor are the same as the matching fields. The only addition is the
 geometry argument, which should just be the [`Geometry`](@ref) struct of for the simulation.
 
+The default material model behaviour can be used to simulate similar materials
+by simply changing the contents of this struct. The [PA2200](@ref) section
+should provide some ideas on how to measure these values.
+
+If the same consolidation model is used, [`Ċ_maker`](@ref) can be used to make a new consolidation
+rate function with new coefficients.
+
 !!! warning
 
     The maximum melt state is never reset, so if a node goes from the melt region to the
@@ -13,7 +20,7 @@ geometry argument, which should just be the [`Geometry`](@ref) struct of for the
     properly.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 """
 struct MatProp{T1,T2,T3,T4,T5,T6,T7,T8,T9} <: AbstractMatProp
     """ Density.
@@ -78,11 +85,10 @@ struct MatProp{T1,T2,T3,T4,T5,T6,T7,T8,T9} <: AbstractMatProp
 end
 
 """
-$(TYPEDSIGNATURES)
+ $(TYPEDSIGNATURES)
 
-Default constructor for [`MatProp`](@ref).
-
-"""
+ Default constructor for [`MatProp`](@ref).
+ """
 function MatProp(ρ, c, κ, Mᵣ, Rᵣ, Hf, Hr, Ċ, eₚ, eᵢ, ε, name, geometry)
     geomSize = (geometry.X, geometry.Y, geometry.Z)
     Mₛ, Mₑ = bounds(Mᵣ.itp)[1][1], bounds(Mᵣ.itp)[1][2]
@@ -127,10 +133,17 @@ function calcMatProps! end
 $(TYPEDSIGNATURES)
 
 The default material model, designed to be used with [`MatProp`](@ref), but should work with any
-[`Types.AbstractMatProp`](@ref) that shares [`MatProp`](@ref)'s `ρ`, `c`, `κ` and `Mₘ` fields. 
+[`Types.AbstractMatProp`](@ref) that shares [`MatProp`](@ref)'s `ρ`, `c`, `κ` and `Mₘ` fields.
 
 Updates melt and consolidation state, and then uses those to update the density, heat capacity and
 conductivity. These are then used to calculate the Fourier number for each axis for this time step.
+
+The [`meltUpdate`](@ref) and [`consUpdate`](@ref) state updater of the default material model can
+be modified separately from the this function itself. The default methods are [`meltUpdate`](@ref
+meltUpdate(::Any, ::Any, ::Any, ::Any, ::AbstractMatProp)) and [`consUpdate`](@ref consUpdate(::Any,
+::Any, ::Any, ::Any, ::AbstractMatProp)). An example of this can be seen in [Tutorial 3: A Melt Rate
+Based Material Model](@ref).
+
 """
 function calcMatProps!(
     pts::AbstractResult,
@@ -169,7 +182,7 @@ function calcMatProps!(
 end
 
 """
-    meltUpdate(Mᵗ⁻¹, T, Mₘ, Δt, mp::AbstractMatProp) -> Mᵗ, Mₘ, Δh
+    $(FUNCTIONNAME)(Mᵗ⁻¹, T, Mₘ, Δt, mp::AbstractMatProp) -> Mᵗ, Mₘ, Δh
 
 Calculates the new melt state of a single node. It is given the melt state and temperature of the
 node in the previous time step, the maximum melt state the node has reached so far, the duration of
@@ -210,7 +223,7 @@ function meltUpdate(Mᵗ⁻¹, T, Mₘ, _, mp::AbstractMatProp)
 end
 
 """
-    consUpdate(C, M, T, Δt, mp::AbstractMatProp) -> C
+    $(FUNCTIONNAME)(C, M, T, Δt, mp::AbstractMatProp) -> C
 
 Calculates the new consolidation state of a single node. It is given the current consolidation
 state, melt state and temperature of the node, the duration of the current time step and the

@@ -13,8 +13,9 @@ using HSSSimulations.Solver
 using HSSSimulations.HSSBound
 using HSSSimulations.PostProcessing
 
+latex = haskey(ENV, "LATEX_DOCS")
+
 tutorials = [
-    # ("Partial Build", "part_tut")
     ("Full Build", "full_tut.jl"),
     ("Warm-up and Cool-down only", "basic_tut.jl"),
     ("A Melt Rate Based Material Model", "material_tut.jl"),
@@ -61,8 +62,11 @@ for (i, (title, filename)) in enumerate(tutorials)
 
     # Generate markdown
     function preprocess_docs(content)
-        return string(tutorial_title, "\n", binder_badge, "\n", nbviwer_badge, "\n\n", content)
-        # return string(tutorial_title, "\n\n", content)
+        if latex
+            return string(tutorial_title, "\n\n", content)
+        else
+            return string(tutorial_title, "\n", binder_badge, "\n", nbviwer_badge, "\n\n", content)
+        end
     end
     Literate.markdown(
         joinpath(repo_src, filename),
@@ -91,7 +95,8 @@ DocMeta.setdocmeta!(HSSSimulations, :DocTestSetup, :(
         using HSSSimulations.PostProcessing
     ); recursive=true)
 
-tut_pages = ["tutorials/intro.md"; tut_pages]
+tut_intro = latex ? "tutorials/intro-pdf.md" : "tutorials/intro.md"
+tut_pages = [tut_intro; tut_pages]
 api_pages = [
     "reference/api.md",
     "reference/adv_intro.md",
@@ -99,8 +104,8 @@ api_pages = [
     "reference/res.md",
     "reference/material.md",
     "reference/boundary.md",
-    "reference/solver.md",
     "reference/hssbound.md",
+    "reference/solver.md",
     "reference/postprocessing.md",
 ]
 recipe_pages = [
@@ -117,25 +122,29 @@ recipe_pages = [
     "howtos/howto_problem.md",
 ]
 
+reference_pages = latex ? api_pages : [api_pages[1], "Modules" => api_pages[2:end]]
+
 makedocs(;
-    sitename="High Speed Sintering Simulations",
-    modules=[
-        HSSSimulations,
+    sitename = "High Speed Sintering Simulations",
+    modules  = [
+    HSSSimulations
     ],
-    pages=[
-        "index.md",
-        "Tutorials" => tut_pages,
-        "Reference" => [
-            api_pages[1],
-            "Modules" => api_pages[2:end],
-        ],
-        "Recipes" => recipe_pages,
-        "explanation/faqs.md",
-        "doc_index.md",
+    pages    = [
+    "index.md",
+    "Tutorials" => tut_pages,
+    "Reference" => reference_pages,
+    "Recipes" => recipe_pages,
+    "explanation/faqs.md",
+    "doc_index.md",
     ],
-    format=Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true"),
-    # format = Documenter.LaTeX()
+    format   = latex ? Documenter.LaTeX() : Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true"),
 )
-deploydocs(;
-    repo="github.com/Oliver-Leete/HSSSimulations.jl",
-)
+if latex
+    mv(
+        joinpath(@__DIR__, "build/HighSpeedSinteringSimulations.pdf"),
+        joinpath(@__DIR__, "../HighSpeedSinteringSimulations.pdf"),
+        force=true,
+    )
+else
+    deploydocs(; repo="github.com/Oliver-Leete/HSSSimulations.jl")
+end

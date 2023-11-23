@@ -79,7 +79,7 @@ Defines the volume of the ink placement within that (and therefore hopefully the
 See [Ink Pattern Recipes](@ref) for some example patterns.
 
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 
 This is the emmisivity relative to the lamp. So the emmisivity of the ink over the range of the
 wavelengths that the lamp outputs, scaled by the relative output power of the lamp at those
@@ -134,7 +134,7 @@ const package_groups = ["core", "solver", "mat", "bound", "b_adv", "hss"]
 """
 $(TYPEDEF)
 # Fields
-$(TFIELDS)
+$(TYPEDFIELDS)
 
 The `debug` option is passed to the logGroups option of `Solver.makeLogger`, check that out
 for more information and [`package_groups`](@ref) for what log groups are available by default.
@@ -148,7 +148,7 @@ for more information and [`package_groups`](@ref) for what log groups are availa
 Base.@kwdef struct Options
     """How to compress the results file, can be set to true (to compress),
     false (to leave uncompressed) or to a specific compression algorithm (see [the JLD2
-    documentation](https://juliaio.github.io/JLD2.jl/dev/compression/ @ref) for more details)"""
+    documentation](https://juliaio.github.io/JLD2.jl/dev/compression/) for more details)"""
     compress::Union{Bool,supertype(CodecZlib.CompressorCodec)} = true
 
     """Whether or not to log debug information, can accept a list of strings to select only some

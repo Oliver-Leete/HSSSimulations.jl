@@ -71,7 +71,7 @@ cooldownLoads = vcat(
 # instead of in meters).
 
 geomSize = (geometry.X, geometry.Y, geometry.Z)
-init = Result(geomSize, 25.0, 0.0, 0.0, 0.0, 0)
+init = Result(geomSize, 25.0, 0.0, 0.0)
 initLay = geometry.Z
 
 # The initial condition (made as a [`Result`](@ref)) here will set all the

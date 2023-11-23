@@ -11,7 +11,7 @@ section will also link to the relevant advanced API that can be used to further
 customise the behaviour of that part of the simulation. See [Advanced API
 Introduction](@ref) for more information on how to use the advanced API.
 
-## Solver
+## [Solver](@id main_api_solver)
 
 ```@docs
 problemSolver
@@ -32,30 +32,22 @@ Ink
 
 ## Materials
 
-One example material is exported as part of the basic API. To see how to define
-new materials or new material models, see [Material Model](@ref).
-
 ```@docs
 PA2200
 ```
 
 ## Time Step Results
 
-The default time step/initial results struct shown below saves the data from the
-default material model and the heat transfer solver. For information on how to
-create a new result struct see [Time/Load Step Results](@ref).
-
 ```@docs
 Result
-Result(::Any,::Any,::Any,::Any,::Any,::Any)
-Result(::Any,::Any)
+Result(::Any,::Any,::Any,::Any)
 Result(::Any,::Any,::Any,::Any,::Any)
 Result(::Any,::Any,::Any)
 ```
 
 ## Other Results
 
-These are results that are saved once at the end of the simulation, for when 
+These are results that are saved once at the end of the simulation, for when
 
 The default final results struct shown below saves the maximum melt state from
 the default material model and nothing else. For information on how to create a
@@ -79,9 +71,9 @@ Boundary](@ref).
 
 ```@docs
 basicLoad
-HSSLoads
 FixedLoadSet
 LayerLoadSet
+HSSLoads
 ```
 
 ## Boundary Parameters

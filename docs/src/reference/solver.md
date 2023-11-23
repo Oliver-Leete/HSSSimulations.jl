@@ -4,25 +4,33 @@
 Solver
 ```
 
-## External
-
-```@docs
-Solver.makeLogger
-Solver.loadSetSolver!
-Types.AbstractLoadSet
-Solver.loadSetSolver!(::FixedLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-Solver.loadSetSolver!(::LayerLoadSet,::AbstractResult,::Int,::Problem{T,Gh,Mp,R,OR,B}) where { T<:Any,Gh<:Any,Mp<:Any,R<:Any,OR<:Any,B<:Any}
-```
+All the public functions in this module have been covered already in the [main
+API section](@ref main_api_solver), and the [Load Sets](@ref) section.
 
 ## Internal
 
 ```@docs
-innerLoadSetSolver!
-Solver.fdmSolver!
+Solver.makeLogger
+```
+
+### Load Step Solver
+
+```@docs
+Solver.loadSolver!
+```
+
+### Time Step Solver
+
+```@docs
 Solver.timeSolver!
 Solver.nanfiller!
-Solver.loadSolver!
-Types.makeDescription
+Solver.fdmSolver!
+```
+
+### Metadata Saving
+
+```@docs
 Solver.startMetadata
 Solver.finishMetadata
+Types.makeDescription
 ```

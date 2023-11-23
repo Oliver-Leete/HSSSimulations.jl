@@ -90,7 +90,7 @@ instead of in meters).
 
 ```julia
 geomSize = (geometry.X, geometry.Y, geometry.Z)
-init = Result(geomSize, 25.0, 0.0, 0.0, 0.0, 0)
+init = Result(geomSize, 25.0, 0.0, 0.0)
 initLay = geometry.Z
 ```
 
