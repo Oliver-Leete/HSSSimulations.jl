@@ -77,7 +77,7 @@ function loadSetSolver!(
             layerNum,
             prob;
             name=name,
-            recoat=true,
+            isRecoatLoadSet=true,
             prevLayerNum=layerNum - 1,
         )
     end
@@ -106,8 +106,8 @@ function innerLoadSetSolver!(
     layerNum,
     prob::Problem;
     name=Date.time(),
-    recoat=false,
-    prevLayerNum=layerNum - recoat,
+    isRecoatLoadSet=false,
+    prevLayerNum=layerNum - isRecoatLoadSet,
 )
     @debug "Starting Load Set t=$(name)" _group = "core"
 
@@ -121,7 +121,8 @@ function innerLoadSetSolver!(
     result.M[:, :, zInit] = initResult.M[:, :, zInit]
     result.C[:, :, zInit] = initResult.C[:, :, zInit]
 
-    inds = Boundary.calcInds(resultSize, prob.Tᵗ⁻¹, prob.geometry.ΔH, recoat)
+    ghostSize = size(prob.Tᵗ⁻¹)
+    inds = Boundary.calcInds(resultSize, ghostSize, prob.geometry.ΔH, isRecoatLoadSet)
 
     for (index, load) in enumerate(loads)
         resultDirectory = "$(name)/$(index)"

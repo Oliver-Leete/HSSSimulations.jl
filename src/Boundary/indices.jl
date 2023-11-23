@@ -1,17 +1,24 @@
+# TODO : This probably should just be a constructor for Indices
 """
 $(TYPEDSIGNATURES)
 
 Calculates the indices at the start of a load. For build load sets this includes 'imaginary' nodes
-that don't yet represent a volume with powder in it (but will after recoat). `recoatLoadSet` should
-be set to true if the current load set includes powder recoating, and false if it does not.
+that don't yet represent a volume with powder in it (but will after recoat). `isRecoatLoadSet`
+should be set to true if the current load set includes powder recoating, and false if it does not.
+`ΔH` is the same as that found in the [`Geometry`](@ref) struct.
 
 See [`Types.Indices`](@ref) for more details on the struct returned by this function.
 """
-function calcInds(res, ghost, ΔH, recoatLoadSet)
-    ind = CartesianIndices(res)
-    linInd = LinearIndices(res)
-    x, y, z = size(ind)
-    gInd = LinearIndices(ghost)
+function calcInds(
+    resultsArray::AbstractArray,
+    ghostArray::AbstractArray,
+    ΔH::Int,
+    isRecoatLoadSet::Bool,
+)
+    x, y, z = size(resultsArray)
+    ind = CartesianIndices(resultsArray)
+    linInd = LinearIndices(resultsArray)
+    gInd = LinearIndices(ghostArray)
 
     # Set all (but z₂) boundaries
     #!format: off
@@ -23,7 +30,7 @@ function calcInds(res, ghost, ΔH, recoatLoadSet)
     z₁ = [(ind[i,   j, 1], linInd[i,   j, 1], gInd[i, j,   0]) for i in 1:x, j in 1:y]
     #!format: on
 
-    if recoatLoadSet
+    if isRecoatLoadSet
         # On normal layers set the top to be imaginary
         iᵣ = vec(ind[:, :, 1:(end-ΔH)])
         iᵢ = vec(ind[:, :, (1+end-ΔH):end])
@@ -48,11 +55,11 @@ end
     using OffsetArrays
     using .Types, .Boundary
     CI = CartesianIndex
-    res = (2, 2, 3)
+    res = zeros(2, 2, 3)
     ghost = OffsetArray(zeros(4, 4, 6), -1, -1, -1)
     @testset "any_load" begin
         ΔH = 1
-        inds = calcInds(res, ghost, ΔH, Types.PreheatLoadSet)
+        inds = Boundary.calcInds(res, ghost, ΔH, false)
         @test inds.x₁ == [
             (CI(1, 1, 1), CI(0, 1, 1))  (CI(1, 1, 2), CI(0, 1, 2))  (CI(1, 1, 3), CI(0, 1, 3))
             (CI(1, 2, 1), CI(0, 2, 1))  (CI(1, 2, 2), CI(0, 2, 2))  (CI(1, 2, 3), CI(0, 2, 3))
@@ -76,7 +83,7 @@ end
     end
     @testset "other_loads_only" begin
         ΔH = 1
-        inds = calcInds(res, ghost, ΔH, Types.PreheatLoadSet)
+        inds = Boundary.calcInds(res, ghost, ΔH, false)
         @test inds.z₂ == [
             (CI(1, 1, 3), CI(1, 1, 4))  (CI(1, 2, 3), CI(1, 2, 4))
             (CI(2, 1, 3), CI(2, 1, 4))  (CI(2, 2, 3), CI(2, 2, 4))
@@ -86,7 +93,7 @@ end
     end
     @testset "build_loads_only" begin
         ΔH = 1
-        inds = calcInds(res, ghost, ΔH, Types.BuildLoadSet)
+        inds = Boundary.calcInds(res, ghost, ΔH, true)
         @test inds.z₂ == [
             (CI(1, 1, 2), CI(1, 1, 3))  (CI(1, 2, 2), CI(1, 2, 3))
             (CI(2, 1, 2), CI(2, 1, 3))  (CI(2, 2, 2), CI(2, 2, 3))
@@ -96,7 +103,7 @@ end
     end
     @testset "build_loads_thick_layer" begin
         ΔH = 2
-        inds = calcInds(res, ghost, ΔH, Types.BuildLoadSet)
+        inds = Boundary.calcInds(res, ghost, ΔH, true)
         @test inds.z₂ == [
             (CI(1, 1, 1), CI(1, 1, 2))  (CI(1, 2, 1), CI(1, 2, 2))
             (CI(2, 1, 1), CI(2, 1, 2))  (CI(2, 2, 1), CI(2, 2, 2))
@@ -113,11 +120,16 @@ Updates an indices struct during a load step. Used to update the real and imagin
 recoat of the powder layer based on the `recoatDist` (how far through the layer the powder has
 been deposited in number of nodes into the simulation area).
 """
-function updateInds!(indStruct::Types.Indices, recoatDist, resSize, ghost)
-    ind = CartesianIndices(resSize)
-    linInd = LinearIndices(resSize)
-    x, y, z = resSize
-    gInd = LinearIndices(ghost)
+function updateInds!(
+    indStruct::Types.Indices,
+    resultsArray::AbstractArray,
+    ghostArray::AbstractArray,
+    recoatDist::Int,
+)
+    x, y, z = size(resultsArray)
+    ind = CartesianIndices(resultsArray)
+    linInd = LinearIndices(resultsArray)
+    gInd = LinearIndices(ghostArray)
     recoatHeight = z - indStruct.ΔH
 
     # Update the active/inactive nodes
@@ -159,18 +171,18 @@ end
     using OffsetArrays
     using .Types, .Boundary
     CI = CartesianIndex
-    res = (2, 2, 3)
+    res = zeros(2, 2, 3)
     ghost = OffsetArray(zeros(4, 4, 6), -1, -1, -1)
     @testset "thin_layer_partial" begin
         ΔH = 1
-        inds = calcInds(res, ghost, ΔH, Types.BuildLoadSet)
-        oldy = copy(inds.y₂)
-        Boundary.updateInds!(inds, 1, res, ghost)
+        inds = Boundary.calcInds(res, ghost, ΔH, true)
+        old_y = copy(inds.y₂)
+        Boundary.updateInds!(inds, res, ghost, 1)
         @test inds.z₂ == [
             (CI(1, 1, 3), CI(1, 1, 4))  (CI(1, 2, 2), CI(1, 2, 3))
             (CI(2, 1, 3), CI(2, 1, 4))  (CI(2, 2, 2), CI(2, 2, 3))
         ]
-        @test inds.y₂ == oldy
+        @test inds.y₂ == old_y
         @test inds.iᵣ ==
               vcat(vec(CartesianIndices(res)[:, :, 1:2]), vec(CartesianIndices(res)[:, 1, 3]))
         @test inds.iᵢ == vec(CartesianIndices(res)[:, 2, 3])
@@ -179,8 +191,8 @@ end
     end
     @testset "thin_layer_full" begin
         ΔH = 1
-        inds = calcInds(res, ghost, ΔH, Types.BuildLoadSet)
-        Boundary.updateInds!(inds, 2, res, ghost)
+        inds = Boundary.calcInds(res, ghost, ΔH, true)
+        Boundary.updateInds!(inds, res, ghost, 2)
         @test inds.z₂ == [
             (CI(1, 1, 3), CI(1, 1, 4))  (CI(1, 2, 3), CI(1, 2, 4))
             (CI(2, 1, 3), CI(2, 1, 4))  (CI(2, 2, 3), CI(2, 2, 4))
@@ -196,8 +208,8 @@ end
     end
     @testset "thick_layer" begin
         ΔH = 2
-        inds = calcInds(res, ghost, ΔH, Types.BuildLoadSet)
-        Boundary.updateInds!(inds, 1, res, ghost)
+        inds = Boundary.calcInds(res, ghost, ΔH, true)
+        Boundary.updateInds!(inds, res, ghost, 1)
         @test inds.z₂ == [
             (CI(1, 1, 3), CI(1, 1, 4))  (CI(1, 2, 1), CI(1, 2, 2))
             (CI(2, 1, 3), CI(2, 1, 4))  (CI(2, 2, 1), CI(2, 2, 2))

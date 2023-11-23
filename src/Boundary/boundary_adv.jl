@@ -22,7 +22,8 @@ function recoating!(
     end
 
     oldiᵢ = ls.ind.iᵢ
-    updateInds!(ls.ind, recoatDist, ls.size, prob.Tᵗ⁻¹)
+    ghostSize = size(prob.Tᵗ⁻¹)
+    updateInds!(ls.ind, recoatDist, ls.size, ghostSize)
     newNodes = oldiᵢ ∩ ls.ind.iᵣ
     for i in newNodes
         pts.T[i] = temp
