@@ -124,27 +124,34 @@ recipe_pages = [
 
 reference_pages = latex ? api_pages : [api_pages[1], "Modules" => api_pages[2:end]]
 
-makedocs(;
-    sitename = "High Speed Sintering Simulations",
-    modules  = [
-    HSSSimulations
-    ],
-    pages    = [
+pages = [
     "index.md",
     "Tutorials" => tut_pages,
     "Reference" => reference_pages,
     "Recipes" => recipe_pages,
     "explanation/faqs.md",
     "doc_index.md",
-    ],
-    format   = latex ? Documenter.LaTeX() : Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true"),
-)
-if latex
-    mv(
-        joinpath(@__DIR__, "build/HighSpeedSinteringSimulations.pdf"),
-        joinpath(@__DIR__, "../HighSpeedSinteringSimulations.pdf"),
-        force=true,
+]
+if !haskey(ENV, "DOCTEST_ONLY")
+    makedocs(;
+        sitename="High Speed Sintering Simulations",
+        pages=pages,
+        modules=[HSSSimulations],
+        format=if latex
+            Documenter.LaTeX()
+        else
+            Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true")
+        end,
     )
+    if latex
+        mv(
+            joinpath(@__DIR__, "build/HighSpeedSinteringSimulations.pdf"),
+            joinpath(@__DIR__, "../HighSpeedSinteringSimulations.pdf");
+            force=true,
+        )
+    else
+        deploydocs(; repo="github.com/Oliver-Leete/HSSSimulations.jl")
+    end
 else
-    deploydocs(; repo="github.com/Oliver-Leete/HSSSimulations.jl")
+    doctest(HSSSimulations; fix=haskey(ENV, "DOCTEST_FIX"))
 end

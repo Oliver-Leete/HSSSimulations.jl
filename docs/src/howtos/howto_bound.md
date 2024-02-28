@@ -36,10 +36,10 @@ end
 Let's raise the stakes a little (but not much), we'll make a new boundary that
 has a heat flux density that changes depending only on the current time of the
 simulation. We'll have to make a new [`AbstractProblemParams`](@ref) (the one
-used here is from [A Variable Heat Flux Parameter Set](@ref))
+used here is from [A Variable Heat Flux Parameter Set](@ref) )
 
 ```julia
-struct FixedHeatFluxBoundary <: AbstractBoundary
+struct FixedHeatFluxBoundary <: Types.AbstractBoundary
     # All we need for this one is the heat flux we want to.
     heatFluxDensity::Float64
 
@@ -88,7 +88,7 @@ the start time of the cool down stage is set. And the lamp is turned off (even
 if there is a recoat lamp power set).
 
 ```julia
-struct RecoatCoolBoundary <: AbstractBoundary
+struct RecoatCoolBoundary <: Types.AbstractBoundary
     # All of the parameters we need to pass into the boundaryHeatTransferRate function
     overheadTemp::Float64
     surfaceTemp::Float64
@@ -112,9 +112,9 @@ struct RecoatCoolBoundary <: AbstractBoundary
 
         # Find how far through the cooling parameters the current time step is
         tAir = (cts.t - param.coolStart) + param.airCoolStart
-        tSurface = (cts.t - param.surfaceCoolStart
+        tSurface = (cts.t - param.surfaceCoolStart)
 
-        # Use the *Cool parameters to find the air and surface temperatures
+        # Use the Cool parameters to find the air and surface temperatures
         airTemp = param.airCool(tAir)
         surfaceTemp = param.surfaceCool(tSurface)
 

@@ -23,3 +23,6 @@ join_lines_based_on_source = true
 indent_submodule = true
 separate_kwargs_with_semicolon = true
 surround_whereop_typeparameters = true
+
+# don't format autogen files
+ignore = ["docs/src/tutorials/*_*.md", "test/tutorial_tests"]

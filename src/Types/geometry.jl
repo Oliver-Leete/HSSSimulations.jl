@@ -118,12 +118,15 @@ function Geometry(
     atol = tolerance
 
     # Checks for divisibility of the simulation size by the node spacing
-    (isapprox(x % Δx, Δx; atol=atol) || isapprox(x % Δx, 0; atol=atol)) ||
+    if !isapprox(x % Δx, Δx; atol=atol) && !isapprox(x % Δx, 0; atol=atol)
         notDivFun("x must be divisible by Δx")
-    (isapprox(y % Δy, Δy; atol=atol) || isapprox(y % Δy, 0; atol=atol)) ||
+    end
+    if !isapprox(y % Δy, Δy; atol=atol) && !isapprox(y % Δy, 0; atol=atol)
         notDivFun("y must be divisible by Δy")
-    (isapprox(z % Δz, Δz; atol=atol) || isapprox(z % Δz, 0; atol=atol)) ||
+    end
+    if !isapprox(z % Δz, Δz; atol=atol) && !isapprox(z % Δz, 0; atol=atol)
         notDivFun("z must be divisible by Δz")
+    end
 
     # Convert mm dimensions to number of nodes
     X = Int(div(x, Δx, RoundNearest))
@@ -132,12 +135,14 @@ function Geometry(
     sizes = (X, Y, Z)
 
     if Δh != 0
-        (isapprox(Δh % Δz, Δz; atol=atol) || isapprox(Δh % Δz, 0; atol=atol)) ||
+        if !isapprox(Δh % Δz, Δz; atol=atol) && !isapprox(Δh % Δz, 0; atol=atol)
             notDivFun("Δh must be divisible by Δz")
+        end
 
         # Check the z axis of the simulation size is divisible by the layer height
-        (isapprox(z % Δh, Δh; atol=atol) || isapprox(z % Δh, 0; atol=atol)) ||
+        if !isapprox(z % Δh, Δh; atol=atol) && !isapprox(z % Δh, 0; atol=atol)
             notDivFun("z must be divisible by Δh")
+        end
         Nₗ = Int(div(z, Δh, RoundNearest))
     else
         Nₗ = 0

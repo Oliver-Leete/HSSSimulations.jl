@@ -1,4 +1,3 @@
-# TODO : move general post processing (non plottng) stuff in to their own file
 # TODO : Refactor to use loadsets and steps seperatly
 struct TI
     loadStep::String
