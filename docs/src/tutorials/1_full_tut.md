@@ -3,7 +3,6 @@ EditURL = "../../lit/full_tut.jl"
 ```
 
 # Tutorial 1: Full Build
-
 [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/1_full_tut.ipynb)
 [![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/1_full_tut.ipynb)
 
@@ -45,7 +44,7 @@ nicely on to `Δh`, which is the layer thickness in meters (100 microns in this
 case).
 
 !!! note
-    
+
     A `Δy` argument can also be given to override the node spacing in the
     y-axis. There is no equivalent for the x-axis, instead just give the desired
     spacing as the default and use the `Δz` and `Δy` overrides to get the desired
@@ -72,7 +71,7 @@ have, along with how long they should be (so preheat time in this case is 90x10,
 for 900 seconds total).
 
 !!! note
-    
+
     Multiple short loads are used in cases where the load case stays the same
     for a while. The solver only saves results from memory to disk in between
     loads, so splitting it up reduces the memory requirement (at the cost of a
@@ -136,13 +135,13 @@ resultFile, finalResults = problemSolver(problem)
 ```
 
 !!! tip "Performance Tips"
-    
+
     The simulation will only run on one proccessor, but will run on as many
     threads as you can give it. So if you haven't already, try starting juila
     with the `--threads=auto` flag to give the simulation more threads to work
     with. If you are using a notebook you will need to look into how to make a
     kernel that uses multiple threads.
-    
+
     If it is still running too slow you can try playing around with the geometry
     sizes, the x and y-axis node spacing or the time step (just be aware that
     changing node spacing and time step can lead to unstable simulations,
@@ -150,6 +149,7 @@ resultFile, finalResults = problemSolver(problem)
     issues you can try increasing the value of `skip` ([Why We Skip Some
     Results](@ref)).
 
-* * *
+---
 
 *This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+

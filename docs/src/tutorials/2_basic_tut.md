@@ -3,7 +3,6 @@ EditURL = "../../lit/basic_tut.jl"
 ```
 
 # Tutorial 2: Warm-up and Cool-down only
-
 [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Oliver-Leete/HSSSimulations.jl/main?filepath=examples/2_basic_tut.ipynb)
 [![](https://img.shields.io/badge/show-nbviewer-579ACA.svg)](https://nbviewer.org/github/Oliver-Leete/HSSSimulations.jl/blob/main/examples/2_basic_tut.ipynb)
 
@@ -117,7 +116,7 @@ results to and then create the [`Problem`](@ref) (ignore the `geometry.Z`, we'll
 [Tutorial 1: Full Build](@ref)).
 
 !!! note
-    
+
     The file path given here will save the results to the temporary directory on a Unix based
     system. If you are using windows, or want to save the file elsewhere then you should change
     the path.
@@ -162,6 +161,7 @@ the `finalResult` variable. Just in case you quickly need the end results.
 Now we have solved the problem, we should probably have a look at what the
 results were. Firstly we can get a good overview of the results using the
 
-* * *
+---
 
 *This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+
