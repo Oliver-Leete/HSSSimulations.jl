@@ -46,17 +46,20 @@ results using ghost cell boundary conditions.
 In simple terms this takes the avarage for all nodes for the one around the one being calculated
 (from the previous time step), and uses the difference between that and the temperature of the
 current node (for the previous time step) multiplied by the fourier number `Fo` to calculate the
-temperature of that node for the current timestep. This is done for all nodes. As ghost nodes are
-used, this function is the same for all nodes and doesn't need special logic for boundary nodes.
+temperature of that node for the current timestep. This is done for all real nodes. The ghost node
+padding of Tᵗ⁻¹ allows for this function to be run for all real nodes without having to change
+its behaviour for boudnary nodes.
 """
-function fdmSolver!(cts, indᵣ, p)
-    Threads.@threads for index in indᵣ
-        u, v, w = Tuple(index)
-        cts.T[index] =
-            p.Fx[index] * (p.Tᵗ⁻¹[u-1, v, w] + p.Tᵗ⁻¹[u+1, v, w]) +
-            p.Fy[index] * (p.Tᵗ⁻¹[u, v-1, w] + p.Tᵗ⁻¹[u, v+1, w]) +
-            p.Fz[index] * (p.Tᵗ⁻¹[u, v, w-1] + p.Tᵗ⁻¹[u, v, w+1]) +
-            p.Tᵗ⁻¹[u, v, w] * (1 - (2 * p.Fx[index] + 2 * p.Fy[index] + 2 * p.Fz[index]))
+function fdmSolver!(cts::AbstractResult, indᵣ::Vector{CartesianIndex{3}}, p::Problem)
+    x₁ = CartesianIndex(1, 0, 0)
+    y₁ = CartesianIndex(0, 1, 0)
+    z₁ = CartesianIndex(0, 0, 1)
+    Threads.@threads for i in indᵣ
+        cts.T[i] =
+            p.Fx[i] * (p.Tᵗ⁻¹[i-x₁] + p.Tᵗ⁻¹[i+x₁]) +
+            p.Fy[i] * (p.Tᵗ⁻¹[i-y₁] + p.Tᵗ⁻¹[i+y₁]) +
+            p.Fz[i] * (p.Tᵗ⁻¹[i-z₁] + p.Tᵗ⁻¹[i+z₁]) +
+            p.Tᵗ⁻¹[i] * (1 - 2(p.Fx[i] + p.Fy[i] + p.Fz[i]))
     end
 end
 
@@ -69,7 +72,7 @@ both allows for a check to see if the cell has been initialised and makes them n
 This needs to be called on all loads (not just recoat loads) as on the loads before recoat there are
 still imaginary nodes that need filling (for pretty plotting).
 """
-nanfiller!(cts, indᵢ) = Threads.@threads for i in indᵢ
+nanfiller!(cts::AbstractResult, indᵢ::Vector{CartesianIndex{3}}) = Threads.@threads for i in indᵢ
     cts.T[i] = NaN
     cts.M[i] = NaN
     cts.C[i] = NaN
