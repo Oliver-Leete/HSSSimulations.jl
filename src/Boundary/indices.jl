@@ -51,6 +51,7 @@ function calcInds(
 end
 
 @testitem "calcInds" begin
+    # TODO : Fix these tests to use the new calcInds output
     using HSSSimulations, Test
     using OffsetArrays
     using .Types, .Boundary

@@ -19,6 +19,7 @@ geometry = Geometry(
     (0.010, 0.010, 0.030),
     0.0005,
     0.001;
+    Δh=0.0010, 
     name="Basic Simulation Tutorial",
 )
 
@@ -47,10 +48,8 @@ params = HSSParams(
 # Solver Recipes](@ref)).
 
 skipper = 20
-cooldownLoads = vcat(
-    [HSSBound.loadOverheads(3.0, skipper) for _ in 1:2],
-    [HSSBound.loadCooldown(3.0, skipper) for _ in 1:2],
-)
+heatingLoads = FixedLoadSet("Heating", [HSSBound.loadOverheads(3.0, skipper) for _ in 1:2])
+coolingLoads = FixedLoadSet("Cooling", [HSSBound.loadCooldown(3.0, skipper) for _ in 1:2])
 
 # Next we make an array of the load conditions we want to simulate. For this
 # example we will be putting all of our loads in the cooldown loads, as we aren't
@@ -72,7 +71,7 @@ cooldownLoads = vcat(
 
 geomSize = (geometry.X, geometry.Y, geometry.Z)
 init = Result(geomSize, 25.0, 0.0, 0.0)
-initLay = geometry.Z
+initLay = geometry.Z ÷ geometry.ΔH
 
 # The initial condition (made as a [`Result`](@ref)) here will set all the
 # simulation to 25 °C and set the melt state and consolidation state to zero.
@@ -99,20 +98,19 @@ ink = Ink(inkArray, "No ink")
 #     system. If you are using windows, or want to save the file elsewhere then you should change
 #     the path.
 
-file = tempname()
 description = "A basic simulation to teach us how to use this package"
 problem = Problem(;
     geometry=geometry,
     matProp=material,
     params=params,
-    cooldownLoads=cooldownLoads,
+    loadSets=Types.AbstractLoadSet[heatingLoads, coolingLoads],
     init=init,
-    initLay=geometry.Z,
+    initLay=initLay,
     ink=ink,
-    file=file,
+    file=tempname(),
     description=description,
 )
-
+    
 # ## Solving the Problem
 #
 # Now the complicated bit. We need to run the following:

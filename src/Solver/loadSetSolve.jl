@@ -121,8 +121,7 @@ function innerLoadSetSolver!(
     result.M[:, :, zInit] = initResult.M[:, :, zInit]
     result.C[:, :, zInit] = initResult.C[:, :, zInit]
 
-    ghostSize = size(prob.Tᵗ⁻¹)
-    inds = Boundary.calcInds(resultSize, ghostSize, prob.geometry.ΔH, isRecoatLoadSet)
+    inds = Boundary.calcInds(result.T, prob.Tᵗ⁻¹, prob.geometry.ΔH, isRecoatLoadSet)
 
     for (index, load) in enumerate(loads)
         resultDirectory = "$(name)/$(index)"

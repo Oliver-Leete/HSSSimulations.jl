@@ -59,9 +59,9 @@ struct Geometry <: AbstractSimProperty
 
     "The number of layers in the model"
     Nₗ::Int
-    "The layer height in nodes"
-    Δh::Float64
     "The layer height in meters"
+    Δh::Float64
+    "The layer height in nodes"
     ΔH::Int
 
     "Just used for future reference of results"
